@@ -1,0 +1,19 @@
+.flexbox{
+    display: flex;
+    
+}
+.item-center{
+    align-items: center;
+    justify-content: center;
+}
+
+.left{
+    background-color: green;
+    height: 100vh;
+    width: 50vw;
+}
+.right{
+    background-color: green;
+    height: 100vh;
+    width: 50vw;
+}

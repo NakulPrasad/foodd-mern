@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { URLs } from "../configs/URLs";
+import { URLs } from "../../configs/URLs";
+import './Login.css'
 
 const Login = () => {
   const [credentials, setcredentials] = useState({ email: "", password: "" });
@@ -9,7 +10,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(URLs.loginUser);
       const response = await fetch(URLs.loginUser, {
         method: "POST",
         headers: {
@@ -91,6 +91,7 @@ const Login = () => {
         </form>
       </div>
     </div>
+ 
   );
 };
 
