@@ -12,7 +12,6 @@ import Signup from './screens/Signup';
 import { CartProvider } from './components/ContextReducer'
 import MyOrder from './screens/MyOrder';
 
-//wrapping router inside cartprovider gives universal access to dispatch from contexReducer
 function App() {
   return (
     <CartProvider>

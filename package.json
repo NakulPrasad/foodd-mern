@@ -4,13 +4,17 @@
   "description": "This a Project Devloped to Learn BootStrap",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev-backend": "nodemon index.js",
-    "dev-frontend":"cd client && react-scripts start"
+    "start": "ts-node index.ts",
+    "dev-backend": "nodemon --watch 'src/**/*.ts' --exec",
+    "dev-frontend": "cd client && yarn start"
   },
   "author": "Nakul Prasad",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "@typescript-eslint/parser": "^7.1.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.2",
@@ -19,6 +23,10 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.3.0",
     "morgan": "^1.10.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4",
+    "vite-tsconfig-paths": "^4.3.1"
   }
 }

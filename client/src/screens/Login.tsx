@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { URLs } from "../configs/URLs";
+
 const Login = () => {
   const [credentials, setcredentials] = useState({ email: "", password: "" });
+
   let navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    //post request using fetch
-    const response = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/loginuser`,
-      {
+    try {
+      console.log(URLs.loginUser);
+      const response = await fetch(URLs.loginUser, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -18,33 +19,34 @@ const Login = () => {
           email: credentials.email,
           password: credentials.password,
         }),
+      });
+      const json = await response.json();
+      console.log(JSON.stringify({
+        email: credentials.email,
+        password: credentials.password,
+      }),);
+      if (!json.success) {
+        alert("Enter vaild credentials");
       }
-    );
-    const json = await response.json();
-    // console.log(json);
-    if (!json.success) {
-      alert("Enter vaild credentials");
-    }
 
-    if (json.success) {
-      //saving to local storage
-      localStorage.setItem("authToken", json.authToken);
-      //saving email in local storage
-      localStorage.setItem("userEmail", credentials.email);
+      if (json.success) {
+        localStorage.setItem("authToken", json.authToken);
 
-      // console.log(localStorage.getItem("authToken"));
-      navigate("/");
+        localStorage.setItem("userEmail", credentials.email);
+
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const onChange = (event) => {
-    //this should be added to all input feilds
     setcredentials({ ...credentials, [event.target.name]: event.target.value });
   };
   return (
     <div>
       <div className="container mt-5">
-        {/* on clicking submite call handlesubmit function */}
         <form onSubmit={handleSubmit}>
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="form2Example3">
@@ -80,7 +82,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* <!-- Submit button --> */}
           <button type="submit" className="btn btn-primary btn-block m-3">
             Login
           </button>

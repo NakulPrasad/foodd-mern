@@ -1,6 +1,7 @@
 import React from "react";
 import { useCart, useDispatchCart } from "../components/ContextReducer";
 import deleteItemPNG from "./deleteItem.png";
+import { URLs } from "../configs/URLs";
 
 export default function Cart() {
   let data = useCart();
@@ -15,12 +16,11 @@ export default function Cart() {
     );
   }
 
-  //checkout functionality
   const handleCheckOut = async () => {
     let userEmail = localStorage.getItem("userEmail");
     // console.log(data,localStorage.getItem("userEmail"),new Date())
     let response = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/orderData`,
+      URLs.postOrder,
       {
         method: "POST",
         headers: {
@@ -33,6 +33,11 @@ export default function Cart() {
         }),
       }
     );
+    console.log(JSON.stringify({
+      order_data: data,
+      email: userEmail,
+      order_date: new Date().toUTCString(),
+    }),);
     // console.log("JSON RESPONSE:::::", response.status);
     if (response.status === 200) {
       dispatch({ type: "DROP" });
