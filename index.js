@@ -3,9 +3,9 @@ import * as dotenv from 'dotenv';
 import cors from "cors";
 import morgan from "morgan";
 import { join } from 'path';
-import  {connectToDB} from "./db.js";
+import  {connectToDB} from "./backend/db.js";
 
-import { apiRouter } from './server.js';
+import { apiRouter } from './backend/server.js';
 
 dotenv.config();
 

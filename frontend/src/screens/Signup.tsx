@@ -33,12 +33,6 @@ const Signup = () => {
         }),
       }
     );
-    console.log(JSON.stringify({
-
-      name: credentials.name,
-      email: credentials.email,
-      password: credentials.password,
-      location: credentials.geolocation,}));
     const json = await response.json();
 
     if (!json.success) {

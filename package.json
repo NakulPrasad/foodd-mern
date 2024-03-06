@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node index.ts",
     "dev-backend": "nodemon --watch 'src/**/*.ts' --exec",
-    "dev-frontend": "cd client && yarn start"
+    "dev-frontend": "cd frontend && yarn start"
   },
   "author": "Nakul Prasad",
   "license": "ISC",

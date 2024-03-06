@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Signup from './screens/Signup';
 import { CartProvider } from './components/ContextReducer'
 import MyOrder from './screens/MyOrder';
+import Login2 from './screens/Login/Login2';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/createuser' element={<Signup />} />
             <Route path='/myOrder' element={<MyOrder />} />
+            <Route path='/login2' element={<Login2 />} />
+            
 
 
           </Routes>
