@@ -7,6 +7,10 @@ import dbConfig from "./configs/dbConfig2.js";
 import passport, { passportRoutes } from "./configs/passportConfig.js";
 import corsMiddleware from "./middleware/corsMiddleware.js";
 import rateLimiter from "./middleware/rateLimitter.js";
+import root from "./graphql/resolvers.js";
+import schema from "./graphql/schema.js";
+import  {createHandler} from "graphql-http/lib/use/express"
+import {ruruHTML} from "ruru/server"
 
 const app = express();
 
@@ -38,6 +42,15 @@ app.use(passport.session());
 const dbconfig = new dbConfig();
 dbconfig.connect();
 
+// Create and use the GraphQL handler.
+app.all(
+  "/graphql",
+  createHandler({
+    schema: schema,
+    rootValue: root,
+  })
+)
+
 /**
  * Routes
  */
@@ -49,4 +62,10 @@ app.use("/apiv1", apiRouter);
 
 passportRoutes(app);
 
+app.get("/graph", (_req, res) => {
+  res.type("html")
+  res.end(ruruHTML({ endpoint: "/graphql" }))
+})
+
 export default app;
+

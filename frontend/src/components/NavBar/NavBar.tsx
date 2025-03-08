@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 
 import {
@@ -26,10 +26,11 @@ import IconNonVeg from "/icons/non-veg-icon.png";
 import IconVeg from "/icons/veg-icon.png";
 import Logo from "/img/LOGO-bgremove.png";
 import KFC from "/img/kfc.jpg";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const { removeUser } = useUser();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { isAuthenticated, user } = useAppSelector(
     (state: RootState) => state.auth,
   );
@@ -44,16 +45,16 @@ const NavBar = () => {
   };
 
   const handleCartClick = () => {
-    // if (!isAuthenticated) {
-    //   toast.info("Please Login before continue");
-    //   return;
-    // }
-    // navigate("/checkout");
+    if (!isAuthenticated) {
+      toast.info("Please Login before continue");
+      return;
+    }
+    navigate("/checkout");
   };
 
   const theme = useMantineTheme();
   const avatarUrl = user?.avatarUrl;
-  console.log(avatarUrl);
+  // console.log(avatarUrl);
 
   return (
     <Box>
