@@ -7,3 +7,4 @@ export const GOOGLE_CLIENTID = process.env.GOOLE_CLIENTID;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const FRONTEND_URL = process.env.FRONTEND_URL;
 export const BACKEND_URL = process.env.BACKEND_URL;
+// export const GOOGLE_LOCATION_API_KEY = process.env.GOOGLE_LOCATION_API_KEY; 

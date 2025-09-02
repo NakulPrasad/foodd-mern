@@ -17,9 +17,12 @@ import Biryani from "/img/biryani.png";
 import Burger from "/img/burger.png";
 import Chinese from "/img/chinese.png";
 import CityHeader from "/img/city_header.png";
+import { useLocation } from "../../hooks/useLocation";
 
 const City = () => {
   const theme = useMantineTheme();
+
+  const {city} = useLocation();
 
   return (
     <section id="city">
@@ -32,7 +35,7 @@ const City = () => {
           <Box className={classes.mw}>
             <Title order={1} textWrap="balance" className="h1">
               Order Food <br />
-              Online in Hyderabad
+              Online in {city}
             </Title>
             <svg
               width="128px"

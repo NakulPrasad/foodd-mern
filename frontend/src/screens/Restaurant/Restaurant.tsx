@@ -43,7 +43,7 @@ const Restaurant = () => {
   ));
 
   return (
-    <>
+    <section>
       <main id="restraunt" className={classes.section_m}>
         <Title py={theme.spacing.md} order={2}>
           Domino's Pizza
@@ -107,7 +107,7 @@ const Restaurant = () => {
           {items}
         </Accordion>
       </section>
-    </>
+    </section>
   );
 };
 

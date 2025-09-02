@@ -77,21 +77,21 @@ const amberColors: MantineColorsTuple = [
 ];
 
 const shadcnTheme = createTheme({
+  breakpoints: {
+    xs: "36em",
+    sm: "48em",
+    md: "62em",
+    lg: "75em",
+    xl: "88em",
+  },
   colors: {
-
-
     gray: grayColors,
-
     red: redColors,
-
     orange: orangeColors,
-
-
     primary: orangeColors,
-
     error: redColors,
     warning: amberColors,
-
+    secondary: grayColors,
   },
   focusRing: "never",
   scale: 1,

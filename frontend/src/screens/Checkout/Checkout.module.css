@@ -1,0 +1,71 @@
+.section {
+  background-color: var(--mantine-color-gray-4);
+  padding: var(--padding-sm);
+}
+
+.rootGrid {
+  margin: var(--section-sm);
+}
+
+.gridColumn {
+  background-color: var(--mantine-color-gray-0);
+  padding: var(--padding-md);
+}
+
+.restaurantLogo {
+  height: var(--icon-h-md);
+  margin-right: var(--margin-md);
+}
+
+.icon {
+  height: var(--icon-veg-h);
+  width: var(--icon-veg-w);
+}
+
+.infomsg {
+  padding: var(--padding-sm);
+}
+
+.addressGrid {
+  margin: var(--margin-sm) 0;
+}
+
+@media (min-width: var(--mantine-breakpoint-md)) {
+  .rootGrid {
+    margin: var(--section-md);
+  }
+
+  .section {
+    padding: var(--padding-md);
+  }
+
+  .infomsg {
+    padding: var(--padding-md);
+  }
+
+  .addressGrid {
+    margin: var(--margin-md) 0;
+  }
+}
+
+@media (min-width: var(--mantine-breakpoint-lg)) {
+  .rootGrid {
+    margin: var(--section-lg);
+  }
+
+  .section {
+    padding: var(--padding-lg);
+  }
+
+  .infomsg {
+    padding: var(--padding-lg);
+  }
+
+  .gridColumn {
+    padding: var(--padding-lg);
+  }
+
+  .addressGrid {
+    margin: var(--margin-lg) 0;
+  }
+}

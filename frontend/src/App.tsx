@@ -17,6 +17,7 @@ import Checkout from "./screens/Checkout/Checkout";
 import Error from "./screens/Error/Error";
 import Home from "./screens/Home/Home";
 import Partner from "./screens/Partner/Partner";
+import Profile from "./screens/Profile/Profile";
 import Restaurant from "./screens/Restaurant/Restaurant";
 import Theme from "./theme/theme";
 
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
         path: "/restraunt/*",
         element: <Restaurant />,
       },
+      {
+        path: "/my-account/*",
+        element: <Profile />,
+      },
     ],
   },
   {
@@ -76,8 +81,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-],
-);
+]);
 
 function App() {
   return (

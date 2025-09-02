@@ -11,7 +11,8 @@ const URLs = {
   postOrder: `${BASE_URL}/order/orderCheckout`,
   getOrders: `${BASE_URL}/order/getMyOrders`,
   addUser: `${BASE_URL}/user/addUser`,
-  checkAuth: `${BASE_URL}/auth/check`
+  checkAuth: `${BASE_URL}/auth/check`,
+  getLocation : `${BASE_URL}/home/getLocation`
 }
 
 

@@ -11,13 +11,16 @@ import {
   Group,
   HoverCard,
   Image,
+  Loader,
   Menu,
   Text,
   useMantineTheme,
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useCart } from "../../hooks/useCart";
+import { useLocation } from "../../hooks/useLocation";
 import { clearAuth } from "../../redux/slices/authSlice";
 import { RootState } from "../../redux/store";
 import LoginDrawer from "../Drawer/LoginDrawer";
@@ -26,7 +29,7 @@ import IconNonVeg from "/icons/non-veg-icon.png";
 import IconVeg from "/icons/veg-icon.png";
 import Logo from "/img/LOGO-bgremove.png";
 import KFC from "/img/kfc.jpg";
-import { toast } from "react-toastify";
+import Spinner from "../Loader/Spinner";
 
 const NavBar = () => {
   const { removeUser } = useUser();
@@ -56,17 +59,39 @@ const NavBar = () => {
   const avatarUrl = user?.avatarUrl;
   // console.log(avatarUrl);
 
+  /**
+   * @description Fetches current location of user
+   */
+
+  const { getLocation, loading } = useLocation();
+  const handleLocationBtnClick = () => {
+    // console.log("LocationButtonClik");
+    getLocation();
+    toast.success("Fetching Location");
+ 
+  };
+
   return (
     <Box>
       <header className={`${classes.header} section-mx`}>
         <Group justify="space-between" h="100%">
-          <Image src={Logo} className={classes.logo} />
+          <Group>
+            <Link to="/">
+              <Image src={Logo} className={classes.logo} />
+            </Link>
+            <Text
+              style={{ cursor: "pointer" }}
+              onClick={handleLocationBtnClick}
+            >
+              Wrong Location ?
+            </Text>
+            {loading && <Spinner/>}
+          </Group>
 
           <Group h="100%" gap={0} visibleFrom="sm">
             <Link to="/" className={classes.link}>
               Home
             </Link>
-
 
             <HoverCard
               width={600}
@@ -116,16 +141,20 @@ const NavBar = () => {
                       <Flex direction={"column"}>
                         {cartItems.map((item) => {
                           return (
-                            <Flex key={item.id} justify={"space-between"} pb={theme.spacing.sm}>
+                            <Flex
+                              key={item.id}
+                              justify={"space-between"}
+                              pb={theme.spacing.sm}
+                            >
                               <Flex>
                                 <Image
-                                mx={6}
+                                  mx={6}
                                   className={classes.icon}
                                   src={item.is_veg ? IconNonVeg : IconVeg}
                                 />
-                              <Text>
-                                {item.name} x {item.quantity}
-                              </Text>
+                                <Text>
+                                  {item.name} x {item.quantity}
+                                </Text>
                               </Flex>
                               <Text>{item.price}</Text>
                             </Flex>
@@ -136,7 +165,6 @@ const NavBar = () => {
                       <Flex justify={"space-between"}>
                         <Text fw={700}>SubTotal : </Text>
                         <Text fw={700}>{cart.price}</Text>
-
                       </Flex>
                       <Button>CHECKOUT</Button>
                     </Flex>
@@ -149,19 +177,21 @@ const NavBar = () => {
           <Group visibleFrom="sm">
             {isAuthenticated ? (
               <>
-                              <Menu
+                <Menu
                   trigger="hover"
                   openDelay={100}
                   closeDelay={400}
                   shadow="md"
                   width={300}
                 >
-                  <Avatar  size="sm" src={avatarUrl} alt="it's me" />
+                  <Avatar size="sm" src={avatarUrl} alt="it's me" />
                   <Menu.Target>
                     <Text fw={600}>{user?.name}</Text>
                   </Menu.Target>
                   <Menu.Dropdown className={classes.dropdownMenu} fw={600}>
-                    <Menu.Item>Profile</Menu.Item>
+                    <Menu.Item onClick={() => navigate("/my-account")}>
+                      Profile
+                    </Menu.Item>
                     <Menu.Item>Orders</Menu.Item>
                     <Menu.Item>Logout</Menu.Item>
                   </Menu.Dropdown>
