@@ -1,6 +1,7 @@
 export interface IFoodItem {
   id: string;
   restaurantId: string;
+  restaurantName: string;
   name: string;
   description: string;
   price: number;
@@ -24,6 +25,7 @@ export interface IValue {
 export interface ICartItem{
     id: string;
     restaurantId: string;
+    restaurantName: string;
     name: string;
     price: number;
     image_url?: string;

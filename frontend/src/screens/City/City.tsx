@@ -106,7 +106,7 @@ const City = () => {
         <SimpleGrid
           cols={4}
           spacing={theme.spacing.xl}
-          onClick={(e) => console.log(e.target)}
+          // onClick={(e) => console.log(e.target)}
         >
           {restraunts.map((restraunt, index) => {
             return <RestaurantCard restraunt={restraunt} key={index} />;

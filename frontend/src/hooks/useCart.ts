@@ -8,8 +8,8 @@ export const useCart = () => {
 
   const addItem = (cartItem: ICartItem) => {
     dispatch(addToCart(cartItem));
-    // setCartItems(JSON.stringify(cartItem))
   };
+
   const removeItem = (cartItem: ICartItem) => {
     dispatch(removeFromCart(cartItem));
   };
@@ -18,7 +18,8 @@ export const useCart = () => {
     (state: RootState) => state.cart.selectedRestaurant,
   );
 
-  const cart = useAppSelector((state : RootState)=> state.cart)
+  const cart = useAppSelector((state: RootState) => state.cart);
+  const {cartItems} = useAppSelector((state: RootState) => state.cart);
 
-  return { addItem, removeItem, currentRestaurant, cart };
+  return { addItem, removeItem, currentRestaurant, cart, cartItems };
 };

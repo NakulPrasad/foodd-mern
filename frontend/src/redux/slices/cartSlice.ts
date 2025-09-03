@@ -1,33 +1,39 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICartItem, IFoodItem } from '../../types/cart.types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { ICartItem } from "../../types/cart.types";
 
 interface ICartState {
-    cartItems: ICartItem[]
-    totalItems: number,
-    price: number,
-    selectedRestaurant: string | null, 
+  cartItems: ICartItem[];
+  totalItems: number;
+  price: number;
+  selectedRestaurant: string | null;
 }
 
-const initialState :ICartState = {
-    cartItems: [], 
-    totalItems: 0,
-    price: 0,
-    selectedRestaurant: null, 
-}
-
+const initialState: ICartState = {
+  cartItems: [],
+  totalItems: 0,
+  price: 0,
+  selectedRestaurant: null,
+};
 
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action:PayloadAction<ICartItem>) => {
-      const { id, price, restaurantId } = action.payload;
-      const existingItem = state.cartItems.find(item => item.id === id);
+    addToCart: (state, action: PayloadAction<ICartItem>) => {
+      const { id, price, restaurantId, restaurantName } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id);
 
       // Validate restaurant context
-      if (state.selectedRestaurant && state.selectedRestaurant !== restaurantId) {
-        
-        return ; // Optionally, show an error message
+      if (
+        state.selectedRestaurant &&
+        state.selectedRestaurant !== restaurantId
+      ) {
+        toast.warning(
+          "Your cart contains items from other restaurant. Please Remove to continue",
+        );
+        // return;
+        throw new Error("Your cart contains items from other restaurant.");
       }
 
       if (existingItem) {
@@ -43,11 +49,12 @@ const cartSlice = createSlice({
 
       state.totalItems += 1;
       state.price += price;
-      state.selectedRestaurant = restaurantId;
+      state.selectedRestaurant = restaurantName;
+      // console.log(state);
     },
     removeFromCart: (state, action) => {
       const { id, price, quantity } = action.payload;
-      state.cartItems = state.cartItems.filter(item => item.id !== id);
+      state.cartItems = state.cartItems.filter((item) => item.id !== id);
       state.totalItems -= quantity;
       state.price -= price * quantity;
     },

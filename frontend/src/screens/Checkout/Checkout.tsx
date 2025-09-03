@@ -12,11 +12,17 @@ import {
   Title,
 } from "@mantine/core";
 import AddressCard from "../../components/Cards/AddressCard/AddressCard";
+import { useCart } from "../../hooks/useCart";
 import classes from "./Checkout.module.css";
 import IconVeg from "/icons/veg-icon.png";
 import RestrauntLogo from "/img/pizzahut.jpg";
 
 const Checkout = () => {
+  // const {cartItems} = useSelector((state: RootState) => state.cart)
+  const { cartItems, currentRestaurant } = useCart();
+  // toast.info(cartItems);
+  // console.log(cartItems, currentRestaurant);
+
   return (
     <section id="checkout" className={classes.section}>
       <Grid justify="space-between" className={classes.rootGrid}>
@@ -34,6 +40,9 @@ const Checkout = () => {
             <AddressCard />
             <AddressCard />
           </SimpleGrid>
+          <Flex justify={"center"}>
+            <Button className={classes.payButton}>Proceed To Pay</Button>
+          </Flex>
         </Grid.Col>
         <Grid.Col
           span={{ base: 12, md: 5.5, lg: 3.5 }}
@@ -43,10 +52,10 @@ const Checkout = () => {
             <Flex align={"center"} justify={"start"}>
               <Image src={RestrauntLogo} className={classes.restaurantLogo} />
 
-              <Text>
-                <Title order={3}>The Restraunt</Title>
+              <Flex direction={"column"}>
+                <Title order={3}>{currentRestaurant}</Title>
                 <Title order={5}>Hyderabad</Title>
-              </Text>
+              </Flex>
             </Flex>
             <Group>
               <Flex align={"center"}>
@@ -81,7 +90,7 @@ const Checkout = () => {
 
             <Group>
               <Image src={IconVeg} className={"foodIcon"} />
-              <Text >Apply Coupon</Text>
+              <Text>Apply Coupon</Text>
             </Group>
             <Title order={4}>Bill Details</Title>
             <Group justify="space-between">
@@ -97,7 +106,7 @@ const Checkout = () => {
               <Text>14</Text>
             </Group>
             <Group justify="space-between">
-              <Title order={5} >Total</Title>
+              <Title order={5}>Total</Title>
               <Title order={5}>585</Title>
             </Group>
           </Stack>

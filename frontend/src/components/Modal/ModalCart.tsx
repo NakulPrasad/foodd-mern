@@ -2,6 +2,7 @@ import {
   Button,
   Checkbox,
   Flex,
+  Group,
   Modal,
   Radio,
   Text,
@@ -25,6 +26,7 @@ const ModalCart = (props: IModalCartProps) => {
   const {addItem} = useCart();
 
   const dispatch = useAppDispatch();
+  // console.log(props.item)
 
   const title = (
     <Flex direction={"column"}>
@@ -44,6 +46,7 @@ const ModalCart = (props: IModalCartProps) => {
   const cartItem = {
     id: props.item.id,
     restaurantId: props.item.restaurantId,
+    restaurantName : props.item.restaurantName,
     name: props.item.name,
     price: totalPrice,
     options: value,
@@ -66,7 +69,7 @@ const ModalCart = (props: IModalCartProps) => {
     addItem(cartItem)
     toast.success("Item Added successfully")
     // console.log(value);
-    // console.log(cartItem);
+    console.log(cartItem);
 
     close();
   };
@@ -165,10 +168,10 @@ const ModalCart = (props: IModalCartProps) => {
           ))}
         </Flex>
 
-        <Flex>
+        <Group>
           {totalPrice}
           <Button onClick={handleAddToCart}>Add Item to cart</Button>
-        </Flex>
+        </Group>
       </Modal>
 
       <Button onClick={handleAddClick}>ADD</Button>

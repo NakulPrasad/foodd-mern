@@ -43,6 +43,7 @@ const MenuCard = (props: IMenuCardProps) => {
         <Image radius={theme.radius.sm} src={Pizza} className={classes.img} />
         <Flex direction={"column"} className={classes.translate}>
           <ModalCart item={props.foodItem} />
+          
           <Text className="description_sm">Customisable</Text>
         </Flex>
       </Flex>

@@ -30,7 +30,13 @@
   margin: var(--margin-sm) 0;
 }
 
-@media (min-width: var(--mantine-breakpoint-md)) {
+.payButton {
+  background-color: green;
+  border-radius: 0%;
+  margin: var(--margin-sm);
+}
+
+@media (min-width: var(--mantine-breakpoints-md)) {
   .rootGrid {
     margin: var(--section-md);
   }
@@ -48,7 +54,7 @@
   }
 }
 
-@media (min-width: var(--mantine-breakpoint-lg)) {
+@media (min-width: var(--mantine-breakpoints-lg)) {
   .rootGrid {
     margin: var(--section-lg);
   }
@@ -67,5 +73,11 @@
 
   .addressGrid {
     margin: var(--margin-lg) 0;
+  }
+
+  .payButton {
+    background-color: green;
+    border-radius: 0%;
+    margin: var(--margin-lg);
   }
 }

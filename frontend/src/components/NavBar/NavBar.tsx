@@ -11,7 +11,6 @@ import {
   Group,
   HoverCard,
   Image,
-  Loader,
   Menu,
   Text,
   useMantineTheme,
@@ -24,12 +23,13 @@ import { useLocation } from "../../hooks/useLocation";
 import { clearAuth } from "../../redux/slices/authSlice";
 import { RootState } from "../../redux/store";
 import LoginDrawer from "../Drawer/LoginDrawer";
+import Spinner from "../Loader/Spinner";
+import { SubText } from "../Mantine/Subtext/SubText";
 import classes from "./NavBar.module.css";
 import IconNonVeg from "/icons/non-veg-icon.png";
 import IconVeg from "/icons/veg-icon.png";
 import Logo from "/img/LOGO-bgremove.png";
 import KFC from "/img/kfc.jpg";
-import Spinner from "../Loader/Spinner";
 
 const NavBar = () => {
   const { removeUser } = useUser();
@@ -47,11 +47,12 @@ const NavBar = () => {
     dispatch(clearAuth());
   };
 
-  const handleCartClick = () => {
+  const handleCheckout = () => {
     if (!isAuthenticated) {
       toast.info("Please Login before continue");
       return;
     }
+    
     navigate("/checkout");
   };
 
@@ -63,12 +64,11 @@ const NavBar = () => {
    * @description Fetches current location of user
    */
 
-  const { getLocation, loading } = useLocation();
+  const { city, getLocation, loading } = useLocation();
   const handleLocationBtnClick = () => {
     // console.log("LocationButtonClik");
     getLocation();
     toast.success("Fetching Location");
- 
   };
 
   return (
@@ -79,13 +79,17 @@ const NavBar = () => {
             <Link to="/">
               <Image src={Logo} className={classes.logo} />
             </Link>
-            <Text
-              style={{ cursor: "pointer" }}
-              onClick={handleLocationBtnClick}
-            >
-              Wrong Location ?
-            </Text>
-            {loading && <Spinner/>}
+            <Flex direction={"column"}>
+              <Text>{city}</Text>
+              <SubText
+                className={classes.subText}
+                style={{ cursor: "pointer" }}
+                onClick={handleLocationBtnClick}
+              >
+                Wrong Location ?
+              </SubText>
+            </Flex>
+            {loading && <Spinner />}
           </Group>
 
           <Group h="100%" gap={0} visibleFrom="sm">
@@ -102,7 +106,7 @@ const NavBar = () => {
             >
               <HoverCard.Target>
                 {/* <Link to="/checkout" className={classes.link} onClick={handleCartClick}> */}
-                <Box onClick={handleCartClick} className={classes.link}>
+                <Box className={classes.link}>
                   <Box component="span" mr={5}>
                     {cartItems.length > 0 && (
                       <Text span c={theme.primaryColor}>
@@ -166,7 +170,7 @@ const NavBar = () => {
                         <Text fw={700}>SubTotal : </Text>
                         <Text fw={700}>{cart.price}</Text>
                       </Flex>
-                      <Button>CHECKOUT</Button>
+                        <Button onClick={handleCheckout}>CHECKOUT</Button>
                     </Flex>
                   </Box>
                 )}
