@@ -13,6 +13,7 @@ import {
   Image,
   Menu,
   Text,
+  Title,
   useMantineTheme,
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
@@ -31,14 +32,24 @@ import IconVeg from "/icons/veg-icon.png";
 import Logo from "/img/LOGO-bgremove.png";
 import KFC from "/img/kfc.jpg";
 
+/**
+ * @description Main Navigation bar of the app
+ * 
+ * Features
+ * - Sticks to the top
+ * - Contains logo, nav links and user menu
+ * - Collapses to a burger menu on mobile
+ * 
+ */
+
 const NavBar = () => {
   const { removeUser } = useUser();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAppSelector(
     (state: RootState) => state.auth,
   );
-  const { cartItems } = useAppSelector((state: RootState) => state.cart);
-  const { currentRestaurant, cart } = useCart();
+  // const { cart.cartItems } = useAppSelector((state: RootState) => state.cart);
+  const { cart } = useCart();
 
   const dispatch = useAppDispatch();
 
@@ -52,7 +63,7 @@ const NavBar = () => {
       toast.info("Please Login before continue");
       return;
     }
-    
+
     navigate("/checkout");
   };
 
@@ -64,159 +75,168 @@ const NavBar = () => {
    * @description Fetches current location of user
    */
 
-  const { city, getLocation, loading } = useLocation();
+  const { city, getLocation, loading, error } = useLocation();
+
+
   const handleLocationBtnClick = () => {
-    // console.log("LocationButtonClik");
     getLocation();
-    toast.success("Fetching Location");
+    // toast.success("Fetching Location");
   };
 
+  /**
+   * @description Handles Order Button Functionality
+   */
+
+  const handleOrderBtn = () => {
+    navigate("/order");
+  };
   return (
-    <Box>
-      <header className={`${classes.header} section-mx`}>
-        <Group justify="space-between" h="100%">
-          <Group>
-            <Link to="/">
-              <Image src={Logo} className={classes.logo} />
-            </Link>
-            <Flex direction={"column"}>
-              <Text>{city}</Text>
-              <SubText
-                className={classes.subText}
-                style={{ cursor: "pointer" }}
-                onClick={handleLocationBtnClick}
-              >
-                Wrong Location ?
-              </SubText>
-            </Flex>
-            {loading && <Spinner />}
-          </Group>
-
-          <Group h="100%" gap={0} visibleFrom="sm">
-            <Link to="/" className={classes.link}>
-              Home
-            </Link>
-
-            <HoverCard
-              width={600}
-              position="bottom"
-              radius="md"
-              shadow="md"
-              withinPortal
+    <header className={`${classes.header} section-mx`}>
+      <Group justify="space-between" h="100%">
+        <Group>
+          <Link to="/">
+            <Image src={Logo} className={classes.logo} />
+          </Link>
+          <Flex direction={"column"}>
+            <Text>{city}</Text>
+            <SubText
+              className={classes.subText}
+              style={{ cursor: "pointer" }}
+              onClick={handleLocationBtnClick}
             >
-              <HoverCard.Target>
-                {/* <Link to="/checkout" className={classes.link} onClick={handleCartClick}> */}
-                <Box className={classes.link}>
-                  <Box component="span" mr={5}>
-                    {cartItems.length > 0 && (
-                      <Text span c={theme.primaryColor}>
-                        {" "}
-                        {cartItems.length}{" "}
-                      </Text>
-                    )}
-                    Cart
-                  </Box>
-                  <IconChevronDown size={16} color={theme.colors.blue[6]} />
-                </Box>
-                {/* </Link> */}
-              </HoverCard.Target>
+              Wrong Location ?
+            </SubText>
+          </Flex>
+          {loading && <Spinner />}
+          {error && toast.error(error)}
 
-              <HoverCard.Dropdown style={{ overflow: "hidden" }}>
-                {cartItems.length === 0 && (
-                  <Box className={classes.dropdownFooter}>
-                    <Text fw={500} fz="sm">
-                      Cart Empty
-                    </Text>
-                    <Text size="xs" c="dimmed">
-                      Good food is always cooking! Go ahead, order some yummy
-                      items from the menu.
-                    </Text>
-                  </Box>
-                )}
-                {cartItems.length > 0 && (
-                  <Box className={classes.dropdownFooter_sm}>
-                    <Flex direction={"column"}>
-                      <Flex justify={"space-between"} pb={theme.spacing.sm}>
-                        <Image src={KFC} className={classes.img} />
-                        {/* <Text>{currentRestaurant}</Text> */}
-                        <Text>Pizza Hut</Text>
-                      </Flex>
-                      <Divider p={theme.spacing.sm} />
-                      <Flex direction={"column"}>
-                        {cartItems.map((item) => {
-                          return (
-                            <Flex
-                              key={item.id}
-                              justify={"space-between"}
-                              pb={theme.spacing.sm}
-                            >
-                              <Flex>
-                                <Image
-                                  mx={6}
-                                  className={classes.icon}
-                                  src={item.is_veg ? IconNonVeg : IconVeg}
-                                />
-                                <Text>
-                                  {item.name} x {item.quantity}
-                                </Text>
-                              </Flex>
-                              <Text>{item.price}</Text>
-                            </Flex>
-                          );
-                        })}
-                      </Flex>
-                      <Divider p={theme.spacing.sm} />
-                      <Flex justify={"space-between"}>
-                        <Text fw={700}>SubTotal : </Text>
-                        <Text fw={700}>{cart.price}</Text>
-                      </Flex>
-                        <Button onClick={handleCheckout}>CHECKOUT</Button>
-                    </Flex>
-                  </Box>
-                )}
-              </HoverCard.Dropdown>
-            </HoverCard>
-          </Group>
 
-          <Group visibleFrom="sm">
-            {isAuthenticated ? (
-              <>
-                <Menu
-                  trigger="hover"
-                  openDelay={100}
-                  closeDelay={400}
-                  shadow="md"
-                  width={300}
-                >
-                  <Avatar size="sm" src={avatarUrl} alt="it's me" />
-                  <Menu.Target>
-                    <Text fw={600}>{user?.name}</Text>
-                  </Menu.Target>
-                  <Menu.Dropdown className={classes.dropdownMenu} fw={600}>
-                    <Menu.Item onClick={() => navigate("/my-account")}>
-                      Profile
-                    </Menu.Item>
-                    <Menu.Item>Orders</Menu.Item>
-                    <Menu.Item>Logout</Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-                <Button
-                  onClick={() =>
-                    (window.location.href =
-                      "https://mern-dashboard-blond.vercel.app")
-                  }
-                >
-                  Dashboard
-                </Button>
-                <Button onClick={handleLogout}>Sign Out</Button>
-              </>
-            ) : (
-              <LoginDrawer variant="default" title="Sign In" />
-            )}
-          </Group>
         </Group>
-      </header>
-    </Box>
+
+        <Group h="100%" gap={0} visibleFrom="sm">
+          <Link to="/" className={classes.link}>
+            Home
+          </Link>
+
+          <HoverCard
+            width={600}
+            position="bottom"
+            radius="md"
+            shadow="md"
+            withinPortal
+          >
+            <HoverCard.Target>
+              {/* <Link to="/checkout" className={classes.link} onClick={handleCartClick}> */}
+              <Box className={classes.link}>
+                <Box component="span" mr={5}>
+                  {cart.cartItems.length > 0 && (
+                    <Text span c={theme.primaryColor}>
+                      {" "}
+                      {cart.cartItems.length}{" "}
+                    </Text>
+                  )}
+                  Cart
+                </Box>
+                <IconChevronDown size={16} color={theme.colors.blue[6]} />
+              </Box>
+              {/* </Link> */}
+            </HoverCard.Target>
+
+            <HoverCard.Dropdown style={{ overflow: "hidden" }}>
+              {cart.cartItems.length === 0 && (
+                <Box className={classes.dropdownFooter}>
+                  <Text fw={500} fz="sm">
+                    Cart Empty
+                  </Text>
+                  <SubText>
+                    Good food is always cooking! Go ahead, order some yummy
+                    items from the menu.
+                  </SubText>
+                </Box>
+              )}
+              {cart.cartItems.length > 0 && (
+                <Box className={classes.dropdownFooter_sm}>
+                  <Flex direction={"column"}>
+                    <Flex justify={"space-between"} pb={theme.spacing.sm}>
+                      <Image src={KFC} className={classes.img} />
+                      {/* <Text>{currentRestaurant}</Text> */}
+                      <Title order={5}>{cart.selectedRestaurant}</Title>
+                    </Flex>
+                    <Divider p={theme.spacing.sm} />
+                    <Flex direction={"column"}>
+                      {cart.cartItems.map((item) => {
+                        return (
+                          <Flex
+                            key={item.id}
+                            justify={"space-between"}
+                            pb={theme.spacing.sm}
+                          >
+                            <Flex>
+                              <Image
+                                mx={6}
+                                className={classes.icon}
+                                src={item.is_veg ? IconNonVeg : IconVeg}
+                              />
+                              <Text>
+                                {item.name} x {item.quantity}
+                              </Text>
+                            </Flex>
+                            <Text>{item.price}</Text>
+                          </Flex>
+                        );
+                      })}
+                    </Flex>
+                    <Divider p={theme.spacing.sm} />
+                    <Flex justify={"space-between"}>
+                      <Text fw={700}>SubTotal : </Text>
+                      <Text fw={700}>{cart.price}</Text>
+                    </Flex>
+                    <Button onClick={handleCheckout}>CHECKOUT</Button>
+                  </Flex>
+                </Box>
+              )}
+            </HoverCard.Dropdown>
+          </HoverCard>
+        </Group>
+
+        <Group visibleFrom="sm">
+          {isAuthenticated ? (
+            <>
+              <Menu
+                trigger="hover"
+                openDelay={100}
+                closeDelay={400}
+                shadow="md"
+                width={300}
+              >
+                <Avatar size="sm" src={avatarUrl} alt="it's me" />
+                <Menu.Target>
+                  <Text fw={600}>{user?.name}</Text>
+                </Menu.Target>
+                <Menu.Dropdown className={classes.dropdownMenu} fw={600}>
+                  <Menu.Item onClick={() => navigate("/my-account")}>
+                    Profile
+                  </Menu.Item>
+                  <Menu.Item onClick={handleOrderBtn}>Orders</Menu.Item>
+                  <Menu.Item>Logout</Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+              <Button
+                onClick={() =>
+                  (window.location.href =
+                    "https://mern-dashboard-blond.vercel.app")
+                }
+              >
+                Dashboard
+              </Button>
+              <Button onClick={handleLogout}>Sign Out</Button>
+            </>
+          ) : (
+            <LoginDrawer variant="default" title="Sign In" />
+          )}
+        </Group>
+      </Group>
+    </header>
   );
 };
 

@@ -200,6 +200,7 @@ const shadcnTheme = createTheme({
         background: "var(--mantine-primary-color-filled)",
         hover: "var(--mantine-primary-color-filled-hover)",
         color: "var(--mantine-primary-color-contrast)",
+        
       };
     }
 

@@ -36,7 +36,7 @@
   margin: var(--margin-sm);
 }
 
-@media (min-width: var(--mantine-breakpoints-md)) {
+@media (min-width: $mantine-breakpoint-md) {
   .rootGrid {
     margin: var(--section-md);
   }
@@ -54,7 +54,7 @@
   }
 }
 
-@media (min-width: var(--mantine-breakpoints-lg)) {
+@media (min-width: $mantine-breakpoint-lg) {
   .rootGrid {
     margin: var(--section-lg);
   }

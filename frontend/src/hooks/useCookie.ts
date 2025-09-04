@@ -1,6 +1,15 @@
 import Cookies from "js-cookie";
 
+/**
+ * @description Helps to manage cookies 
+ * @returns none
+ */
 export const useCookie = () => {
+  /**
+   * 
+   * @param name - Name
+   * @param value 
+   */
   const setItem = (name: string, value: JSON | string | undefined | null) => {
     if(!value){
       throw new Error ("setItem : value is empty")

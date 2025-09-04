@@ -1,8 +1,6 @@
 .header {
   height: 60px;
 
-  padding-left: var(--mantine-spacing-md);
-  padding-right: var(--mantine-spacing-md);
   border-bottom: 1px solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
@@ -69,7 +67,6 @@
     light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5));
 }
 
-
 .logo {
   height: var(--mantine-spacing-logo);
 }
@@ -82,8 +79,7 @@
   height: 6rem;
 }
 
-.icon{
+.icon {
   height: var(--icon-veg-h);
   width: var(--icon-veg-w);
-  
 }

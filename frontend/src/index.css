@@ -5,7 +5,7 @@
   --section-m: calc(2%) calc(10% + 36px);
   --section-sm: calc(2%) calc(12% + 36px);
   --section-md: calc(2%) calc(10% + 36px);
-  --section-lg: calc(2%) calc(8% + 36px);
+  --section-lg: calc(2%) calc(10% + 36px);
 
   /* Spacing */
   --space-xs: 0.25rem; /* 4px */

@@ -1,3 +1,8 @@
+/**
+ * Not In Use, For Testing OAuth Google Login
+ */
+
+
 import React, { useEffect, useState } from "react";
 
 function Auth() {
@@ -7,13 +12,13 @@ function Auth() {
     fetch("http://localhost:3000/auth/profile", {
       credentials: "include",
     })
-      .then((response) => response.json())
+    .then((response) => response.json())
       .then((data) => setUser(data))
       .catch(() => setUser(null));
 
       console.log("user", user);
       
-  }, []);
+    }, []);
 
   const handleLogin = () => {
     window.location.href = "http://localhost:3000/auth/google";
@@ -31,14 +36,16 @@ function Auth() {
       <button onClick={()=>console.log(user)}>print</button>
       {user ? (
         <div>
-          <p>Welcome, {user.displayName}</p>
+        <p>Welcome, {user.displayName}</p>
           <button onClick={handleLogout}>Logout</button>
+          </div>
+        ) : (
+          <button onClick={handleLogin}>Login with Google</button>
+        )}
         </div>
-      ) : (
-        <button onClick={handleLogin}>Login with Google</button>
-      )}
-    </div>
-  );
-}
+      );
+    }
+    
+    export default Auth;
 
-export default Auth;
+
