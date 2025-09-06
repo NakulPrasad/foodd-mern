@@ -1,7 +1,3 @@
-import { memo } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../../hooks/useUser";
-
 import {
   Avatar,
   Box,
@@ -12,15 +8,19 @@ import {
   HoverCard,
   Image,
   Menu,
+  Stack,
   Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
+import { memo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useCart } from "../../hooks/useCart";
 import { useLocation } from "../../hooks/useLocation";
+import { useUser } from "../../hooks/useUser";
 import { clearAuth } from "../../redux/slices/authSlice";
 import { RootState } from "../../redux/store";
 import LoginDrawer from "../Drawer/LoginDrawer";
@@ -33,13 +33,14 @@ import Logo from "/img/LOGO-bgremove.png";
 import KFC from "/img/kfc.jpg";
 
 /**
- * @description Main Navigation bar of the app
- * 
- * Features
+ * Main Navigation bar of the app
+ *
+ * @remarks
  * - Sticks to the top
- * - Contains logo, nav links and user menu
+ * - Contains logo, current location, nav links and user menu
  * - Collapses to a burger menu on mobile
- * 
+ *
+ * @returns Navbar Component
  */
 
 const NavBar = () => {
@@ -53,7 +54,7 @@ const NavBar = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleLogout = () => {
+  const handleLogoutBtn = () => {
     removeUser();
     dispatch(clearAuth());
   };
@@ -76,7 +77,6 @@ const NavBar = () => {
    */
 
   const { city, getLocation, loading, error } = useLocation();
-
 
   const handleLocationBtnClick = () => {
     getLocation();
@@ -109,8 +109,6 @@ const NavBar = () => {
           </Flex>
           {loading && <Spinner />}
           {error && toast.error(error)}
-
-
         </Group>
 
         <Group h="100%" gap={0} visibleFrom="sm">
@@ -163,7 +161,7 @@ const NavBar = () => {
                       <Title order={5}>{cart.selectedRestaurant}</Title>
                     </Flex>
                     <Divider p={theme.spacing.sm} />
-                    <Flex direction={"column"}>
+                    <Stack>
                       {cart.cartItems.map((item) => {
                         return (
                           <Flex
@@ -185,11 +183,11 @@ const NavBar = () => {
                           </Flex>
                         );
                       })}
-                    </Flex>
+                    </Stack>
                     <Divider p={theme.spacing.sm} />
                     <Flex justify={"space-between"}>
-                      <Text fw={700}>SubTotal : </Text>
-                      <Text fw={700}>{cart.price}</Text>
+                      <Text fw={"var(--font-weight-bold)"}>SubTotal : </Text>
+                      <Text fw={"var(--font-weight-bold)"}>{cart.price}</Text>
                     </Flex>
                     <Button onClick={handleCheckout}>CHECKOUT</Button>
                   </Flex>
@@ -209,19 +207,27 @@ const NavBar = () => {
                 shadow="md"
                 width={300}
               >
-                <Avatar size="sm" src={avatarUrl} alt="it's me" />
                 <Menu.Target>
-                  <Text fw={600}>{user?.name}</Text>
+                  <Group onClick={handleOrderBtn}>
+                    <Avatar size="sm" src={avatarUrl} alt="it's me" />
+                    <Text fw={"var(--font-weight-semi-bold)"}>
+                      {user?.name}
+                    </Text>
+                  </Group>
                 </Menu.Target>
-                <Menu.Dropdown className={classes.dropdownMenu} fw={600}>
-                  <Menu.Item onClick={() => navigate("/my-account")}>
+                <Menu.Dropdown
+                  className={classes.dropdownMenu}
+                  fw={"var(--font-weight-semi-bold)"}
+                >
+                  <Menu.Item onClick={handleOrderBtn}>
                     Profile
                   </Menu.Item>
                   <Menu.Item onClick={handleOrderBtn}>Orders</Menu.Item>
-                  <Menu.Item>Logout</Menu.Item>
+                  <Menu.Item onClick={handleLogoutBtn}>Logout</Menu.Item>
                 </Menu.Dropdown>
               </Menu>
               <Button
+                variant="subtle"
                 onClick={() =>
                   (window.location.href =
                     "https://mern-dashboard-blond.vercel.app")
@@ -229,7 +235,6 @@ const NavBar = () => {
               >
                 Dashboard
               </Button>
-              <Button onClick={handleLogout}>Sign Out</Button>
             </>
           ) : (
             <LoginDrawer variant="default" title="Sign In" />

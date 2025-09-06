@@ -27,7 +27,7 @@ interface PrivateRouteProps {
 }
 
 /**
- * @description This function checks for authentication before accessing to user.
+ * Checks for authentication before accessing to user.
  * @param element React Component
  * @returns React Component if authenticated else redirected to /login
  */

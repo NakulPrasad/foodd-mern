@@ -4,7 +4,8 @@ import { useAuth } from "../../hooks/useAuth";
 import NavBar from "../NavBar/NavBar";
 
 /**
- * @remarks Displays navbar in other components and handles google authentication
+ * Displays navbar in other components and handles google authentication
+ * @remarks 
  * @returns Navbar, Outlet component
  */
 const Root = () => {

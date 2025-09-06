@@ -407,6 +407,24 @@ export const foodItems_category = [
       },
     ],
   },
+  {
+    category: "Biryani",
+    items: [
+      {
+        id: "11",
+        restaurantId: "2",
+        name: "Chocolate Lava Cake",
+        restaurantName: "Biryani House",
+        description:
+          "Warm chocolate cake with a molten chocolate center, served with vanilla ice cream.",
+        price: 199,
+        image_url: "https://github.com/NakulPrasad/foodd-mern/blob/development/frontend/public/img/biryani.png?raw=true",
+        rating: 4.9,
+        is_veg: true,
+        options: [],
+      },
+    ],
+  },
 ];
 
 export const coupons: ICoupon[] = [
@@ -493,3 +511,5 @@ export const coupons: ICoupon[] = [
     days_of_week: ["Saturday", "Sunday"],
   },
 ];
+
+
