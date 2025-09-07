@@ -4,47 +4,70 @@ import {
   Box,
   Divider,
   Flex,
-  Input,
   Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
 import IconStar from "../../assets/icons/starFilled.svg?react";
+import IconwaveLeft from "../../assets/icons/waveLeft.svg?react";
+import IconwaveRight from "../../assets/icons/waveRight.svg?react";
 import MenuCard from "../../components/Cards/MenuCard/MenuCard";
 import CustomCrousel from "../../components/Carousel/Carousel";
 import CouponCard from "../../components/CouponCard/CouponCard";
+import { coupons, foodItems_category } from "../../utils/dummyData";
 import classes from "./Restaurant.module.css";
-import  IconwaveLeft from "../../assets/icons/waveLeft.svg?react"
-import { foodItems, foodItems_category } from "../../utils/dummyData";
-import IconwaveRight from "../../assets/icons/waveRight.svg?react"
-import { coupons } from "../../utils/dummyData";
+
+export interface IRestaurant {
+  id: string;
+  name: string;
+  description: string;
+  cuisine: string[];
+  location: {
+    address: string;
+    area: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  rating: number;
+  image: string;
+  isVeg: boolean;
+  priceRange: string;
+  deliveryTime: string;
+  contact: {
+    phone: string;
+    email: string;
+  };
+  timing: {
+    open: string;
+    close: string;
+  };
+}
+
 const Restaurant = () => {
   const theme = useMantineTheme();
 
   const items = foodItems_category.map((item, index) => (
-
     <Accordion.Item key={index} value={item.category}>
       <Accordion.Control>
         <Title order={3}>{item.category}</Title>
       </Accordion.Control>
-      {
-        item.items.map((food, index)=>{
-          return(<Accordion.Panel key={index}>
-            <MenuCard foodItem = {food}/>
+      {item.items.map((food, index) => {
+        return (
+          <Accordion.Panel key={index}>
+            <MenuCard foodItem={food} />
             <Divider my="md" />
           </Accordion.Panel>
-          )
+        );
+      })}
 
-        })
-      }
-      
       <Divider my="md" />
     </Accordion.Item>
   ));
 
   return (
     <section>
-      <main id="restraunt" className={classes.section_m}>
+      <main id="restaurant" className={classes.section_m}>
         <Title py={theme.spacing.md} order={2}>
           Domino's Pizza
         </Title>
@@ -74,15 +97,13 @@ const Restaurant = () => {
             slidesToScroll={2}
             className="px-5"
           >
-            {coupons.map((coupon, index)=>{
-              return(
-
+            {coupons.map((coupon, index) => {
+              return (
                 <Carousel.Slide key={index}>
-               <CouponCard coupon={coupon} />
-             </Carousel.Slide>
-              )
+                  <CouponCard coupon={coupon} />
+                </Carousel.Slide>
+              );
             })}
-           
           </CustomCrousel>
         </Box>
       </main>
@@ -92,11 +113,11 @@ const Restaurant = () => {
           justify={"center"}
           className={classes.menu_text_div}
         >
-          <IconwaveLeft/>
+          <IconwaveLeft />
           <Title order={5} className={classes.menu_text}>
             MENU
           </Title>
-          <IconwaveRight/>
+          <IconwaveRight />
         </Flex>
 
         {/* <Input.Wrapper>

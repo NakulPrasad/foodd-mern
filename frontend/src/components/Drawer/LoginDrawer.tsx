@@ -28,6 +28,7 @@ import InputPassword from "../Inputs/InputPassword";
 import InputPasswordReq from "../Inputs/InputPasswordReq";
 import Spinner from "../Loader/Spinner";
 import classes from "./LoginDrawer.module.css";
+import { useLocation } from "../../hooks/useLocation";
 
 interface DrawerProps {
   variant: string;
@@ -46,6 +47,8 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
 
   const { addUser } = useUser();
 
+  const {city} = useLocation();
+
   const dispatch = useAppDispatch();
 
   const toggleIsLoggedIn = () => {
@@ -57,6 +60,7 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
       email: "",
       name: "",
       password: "",
+      location: city,
     },
     validateInputOnChange: true,
 
@@ -85,7 +89,7 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
       "By creating an account, I accept the Terms & Conditions & Privacy Policy",
   };
 
-  const handleSubmit = async () => {
+  const handleLoginBtn = async () => {
     console.log("Current values:", form.values);
     if (isNewUser) {
       await handleSignUp();
@@ -119,6 +123,9 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
       console.log("User Registered Successfully");
       toast.success("User Registered Successfully");
     }
+    else{
+      toast.error(response?.error.data.message)
+    }
   };
 
   return (
@@ -141,7 +148,7 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
           {isNewUser ? RegisterUser.subTitle : LoginUser.subTitle}
         </Anchor>
         <Divider className={classes.my_4} />
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form onSubmit={form.onSubmit(handleLoginBtn)}>
           <InputEmail form={form} />
           {!isNewUser && <InputPassword form={form} />}
           {isNewUser && (

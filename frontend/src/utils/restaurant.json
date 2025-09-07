@@ -12,7 +12,7 @@
       "zipCode": "500033"
     },
     "rating": 4.5,
-    "image": "https://via.placeholder.com/150",
+    "image": "/img/restaurant/TheGourmetKitchen.jpg",
     "isVeg": false,
     "priceRange": "₹₹",
     "deliveryTime": "30-40 min",
@@ -38,7 +38,7 @@
       "zipCode": "500032"
     },
     "rating": 4.8,
-    "image": "https://via.placeholder.com/150",
+    "image": "/img/restaurant/SpiceSymphony.jpg",
     "isVeg": false,
     "priceRange": "₹₹₹",
     "deliveryTime": "20-30 min",
@@ -64,7 +64,7 @@
       "zipCode": "500034"
     },
     "rating": 4.2,
-    "image": "https://via.placeholder.com/150",
+    "image": "/img/restaurant/GreenLeafVeganCafe.jpg",
     "isVeg": true,
     "priceRange": "₹₹",
     "deliveryTime": "25-35 min",
@@ -90,7 +90,7 @@
       "zipCode": "500081"
     },
     "rating": 4.7,
-    "image": "https://via.placeholder.com/150",
+    "image": "/img/restaurant/SushiHaven.jpg",
     "isVeg": false,
     "priceRange": "₹₹₹",
     "deliveryTime": "40-50 min",
@@ -116,7 +116,7 @@
       "zipCode": "500081"
     },
     "rating": 3.9,
-    "image": "https://via.placeholder.com/150",
+    "image": "/img/restaurant/BurgerTown.jpg",
     "isVeg": false,
     "priceRange": "₹",
     "deliveryTime": "15-20 min",
@@ -128,5 +128,32 @@
       "open": "10:00 AM",
       "close": "12:00 AM"
     }
+  },
+  {
+  "id": "6",
+  "name": "KFC",
+  "description": "World-famous fried chicken, crunchy fries, and refreshing beverages.",
+  "cuisine": ["Fast Food", "American", "Chicken"],
+  "location": {
+    "address": "Plot No. 21, Hitech City Main Road",
+    "area": "Hitech City",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "zipCode": "500081"
+  },
+  "rating": 4.2,
+  "image": "/img/restaurant/kfc.jpg",
+  "isVeg": false,
+  "priceRange": "₹₹",
+  "deliveryTime": "20-25 min",
+  "contact": {
+    "phone": "9876543210",
+    "email": "support@kfc.in"
+  },
+  "timing": {
+    "open": "11:00 AM",
+    "close": "11:00 PM"
   }
+}
+
 ]

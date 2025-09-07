@@ -29,8 +29,8 @@ import { SubText } from "../Mantine/Subtext/SubText";
 import classes from "./NavBar.module.css";
 import IconNonVeg from "/icons/non-veg-icon.png";
 import IconVeg from "/icons/veg-icon.png";
-import Logo from "/img/LOGO-bgremove.png";
-import KFC from "/img/kfc.jpg";
+import Logo from "/img/logo/LOGO-bgremove.png";
+import KFC from "/img/restaurant/kfc.jpg";
 
 /**
  * Main Navigation bar of the app
@@ -219,9 +219,7 @@ const NavBar = () => {
                   className={classes.dropdownMenu}
                   fw={"var(--font-weight-semi-bold)"}
                 >
-                  <Menu.Item onClick={handleOrderBtn}>
-                    Profile
-                  </Menu.Item>
+                  <Menu.Item onClick={handleOrderBtn}>Profile</Menu.Item>
                   <Menu.Item onClick={handleOrderBtn}>Orders</Menu.Item>
                   <Menu.Item onClick={handleLogoutBtn}>Logout</Menu.Item>
                 </Menu.Dropdown>

@@ -10,7 +10,7 @@ export const foodItems = [
       "Classic pizza with mozzarella cheese, fresh basil, and tomato sauce.",
     price: 299.0,
     category: "Pizza",
-    image_url: "https://via.placeholder.com/150",
+    image_url: "/img/foodItem/pizza.jpg",
     rating: 4.5,
     is_veg: true,
     options: [
@@ -56,6 +56,189 @@ export const foodItems = [
     rating: 4.7,
     is_veg: false,
     options: [],
+  },
+  {
+    id: "4",
+    restaurantId: "1",
+    name: "Pepperoni Pizza",
+    restaurantName: "The Gourmet Kitchen",
+    description: "A pizza topped with pepperoni slices and mozzarella cheese.",
+    price: 349.0,
+    category: "Pizza",
+    image_url: "https://via.placeholder.com/150",
+    rating: 4.6,
+    is_veg: false,
+    options: [
+      {
+        name: "Size",
+        type: "select",
+        values: ["Small", "Medium", "Large"],
+      },
+      {
+        name: "Crust",
+        type: "select",
+        values: ["Thin", "Regular", "Cheese Stuffed"],
+      },
+    ],
+  },
+  {
+    id: "5",
+    restaurantId: "1",
+    name: "Pasta Alfredo",
+    restaurantName: "The Gourmet Kitchen",
+    description: "Creamy Alfredo sauce with penne pasta, served hot.",
+    price: 199.0,
+    category: "Pasta",
+    image_url: "https://via.placeholder.com/150",
+    rating: 4.3,
+    is_veg: true,
+    options: [],
+  },
+  {
+    id: "6",
+    restaurantId: "1",
+    name: "Cheese Burger",
+    restaurantName: "The Gourmet Kitchen",
+    description:
+      "Juicy beef patty with melted cheese, lettuce, tomato, and a soft bun.",
+    price: 189.0,
+    category: "Burger",
+    image_url: "https://via.placeholder.com/150",
+    rating: 4.4,
+    is_veg: false,
+    options: [],
+  },
+  {
+    id: "7",
+    restaurantId: "1",
+    name: "Garlic Bread",
+    restaurantName: "The Gourmet Kitchen",
+    description: "Soft bread topped with garlic butter and herbs.",
+    price: 99.0,
+    category: "Side",
+    image_url: "https://via.placeholder.com/150",
+    rating: 4.1,
+    is_veg: true,
+    options: [],
+  },
+  {
+    id: "8",
+    restaurantId: "1",
+    name: "Caesar Salad",
+    restaurantName: "The Gourmet Kitchen",
+    description:
+      "Crisp romaine lettuce with Caesar dressing, croutons, and parmesan.",
+    price: 159.0,
+    category: "Salad",
+    image_url: "https://via.placeholder.com/150",
+    rating: 4.5,
+    is_veg: true,
+    options: [],
+  },
+  {
+    id: "9",
+    restaurantId: "1",
+    name: "BBQ Chicken Pizza",
+    restaurantName: "The Gourmet Kitchen",
+    description:
+      "Pizza with BBQ sauce, grilled chicken, red onions, and mozzarella.",
+    price: 399.0,
+    category: "Pizza",
+    image_url: "https://via.placeholder.com/150",
+    rating: 4.8,
+    is_veg: false,
+    options: [
+      {
+        name: "Size",
+        type: "select",
+        values: ["Small", "Medium", "Large"],
+      },
+      {
+        name: "Crust",
+        type: "select",
+        values: ["Thin", "Regular", "Cheese Stuffed"],
+      },
+    ],
+  },
+  {
+    id: "10",
+    restaurantId: "1",
+    name: "Chocolate Lava Cake",
+    restaurantName: "The Gourmet Kitchen",
+    description:
+      "Warm chocolate cake with a molten chocolate center, served with vanilla ice cream.",
+    price: 199.0,
+    category: "Dessert",
+    image_url: "https://via.placeholder.com/150",
+    rating: 4.9,
+    is_veg: true,
+    options: [],
+  },
+];
+export const foodItems2 = [
+  {
+    TheGourmetKitchen: {
+      id: "1",
+      restaurantId: "1",
+      name: "Margherita Pizza",
+      restaurantName: "The Gourmet Kitchen",
+      description:
+        "Classic pizza with mozzarella cheese, fresh basil, and tomato sauce.",
+      price: 299.0,
+      category: "Pizza",
+      image_url: "/img/foodItem/pizza.jpg",
+      rating: 4.5,
+      is_veg: true,
+      options: [
+        {
+          name: "Size",
+          type: "select",
+          values: ["Small", "Medium", "Large"],
+        },
+        {
+          name: "Crust",
+          type: "select",
+          values: ["Thin", "Regular", "Cheese Stuffed"],
+        },
+        {
+          name: "Extra Toppings",
+          type: "checkbox",
+          values: ["Olives", "Mushrooms", "Onions", "Peppers"],
+        },
+      ],
+    },
+  },
+  {
+    SpiceSymphony: {
+      id: "1",
+      restaurantId: "2",
+      name: "Veg Burger",
+      restaurantName: "Spice Symphony",
+      description:
+        "Delicious veggie patty with lettuce, tomato, and a soft bun.",
+      price: 149.0,
+      category: "Burger",
+      image_url: "https://via.placeholder.com/150",
+      rating: 4.2,
+      is_veg: true,
+      options: [],
+    },
+  },
+  {
+    ChickenWings: {
+      id: "1",
+      restaurantId: "3",
+      name: "Chicken Wings",
+      restaurantName: "The Gourmet Kitchen",
+      description:
+        "Spicy and crispy chicken wings served with a dipping sauce.",
+      price: 249.0,
+      category: "Starter",
+      image_url: "https://via.placeholder.com/150",
+      rating: 4.7,
+      is_veg: false,
+      options: [],
+    },
   },
   {
     id: "4",
@@ -418,7 +601,8 @@ export const foodItems_category = [
         description:
           "Warm chocolate cake with a molten chocolate center, served with vanilla ice cream.",
         price: 199,
-        image_url: "https://github.com/NakulPrasad/foodd-mern/blob/development/frontend/public/img/biryani.png?raw=true",
+        image_url:
+          "https://github.com/NakulPrasad/foodd-mern/blob/development/frontend/public/img/biryani.png?raw=true",
         rating: 4.9,
         is_veg: true,
         options: [],
@@ -511,5 +695,3 @@ export const coupons: ICoupon[] = [
     days_of_week: ["Saturday", "Sunday"],
   },
 ];
-
-

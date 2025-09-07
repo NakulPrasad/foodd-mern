@@ -16,11 +16,11 @@ import Auth from "./screens/Auth/Auth";
 import Checkout from "./screens/Checkout/Checkout";
 import Error from "./screens/Error/Error";
 import Home from "./screens/Home/Home";
+import Order from "./screens/Order/Order";
 import Partner from "./screens/Partner/Partner";
 import Profile from "./screens/Profile/Profile";
 import Restaurant from "./screens/Restaurant/Restaurant";
 import Theme from "./theme/theme";
-import Order from "./screens/Order/Order";
 
 interface PrivateRouteProps {
   element: React.ReactElement;
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         element: <Partner />,
       },
       {
-        path: "/restraunt/*",
+        path: "/restaurant/*",
         element: <Restaurant />,
       },
       {

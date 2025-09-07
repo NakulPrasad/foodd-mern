@@ -11,18 +11,18 @@ import {
 import CollectionCard from "../../components/Cards/CollectionCard/CollectionCard";
 import RestaurantCard from "../../components/Cards/RestaurantCard/RestaurantCard";
 import CustomCarousel from "../../components/Carousel/Carousel";
-import restraunts from "../../utils/restraunt.json";
-import classes from "./City.module.css";
-import Biryani from "/img/biryani.png";
-import Burger from "/img/burger.png";
-import Chinese from "/img/chinese.png";
-import CityHeader from "/img/city_header.png";
 import { useLocation } from "../../hooks/useLocation";
+import restaurants from "../../utils/restaurant.json";
+import classes from "./City.module.css";
+import Biryani from "/img/foodCategory/biryani.png";
+import Burger from "/img/foodCategory/burger.png";
+import Chinese from "/img/foodCategory/chinese.png";
+import CityHeader from "/img/homepage/city_header.png";
 
 const City = () => {
   const theme = useMantineTheme();
 
-  const {city} = useLocation();
+  const { city } = useLocation();
 
   return (
     <section id="city">
@@ -89,17 +89,17 @@ const City = () => {
           slidesToScroll={2}
           className="px-5"
         >
-          {restraunts.map((restraunt, index) => {
+          {restaurants.map((restaurant, index) => {
             return (
               <Carousel.Slide key={index}>
-                <RestaurantCard restraunt={restraunt} />
+                <RestaurantCard restaurant={restaurant} />
               </Carousel.Slide>
             );
           })}
         </CustomCarousel>
       </section>
       <Divider className={classes.divider} />
-      <section id="restraunts" className={classes.section_m}>
+      <section id="restaurants" className={classes.section_m}>
         <Title order={2} py={theme.spacing.md}>
           Restaurants with online food delivery in Hyderabad
         </Title>
@@ -108,8 +108,8 @@ const City = () => {
           spacing={theme.spacing.xl}
           // onClick={(e) => console.log(e.target)}
         >
-          {restraunts.map((restraunt, index) => {
-            return <RestaurantCard restraunt={restraunt} key={index} />;
+          {restaurants.map((restaurant, index) => {
+            return <RestaurantCard restaurant={restaurant} key={index} />;
           })}
         </SimpleGrid>
       </section>
