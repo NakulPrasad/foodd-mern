@@ -15,7 +15,7 @@ import AddressCard from "../../components/Cards/AddressCard/AddressCard";
 import { useCart } from "../../hooks/useCart";
 import classes from "./Checkout.module.css";
 import IconVeg from "/icons/veg-icon.png";
-import RestrauntLogo from "/img/pizzahut.jpg";
+import RestrauntLogo from "/img/restaurant/pizzahut.jpg";
 
 const Checkout = () => {
   // const {cartItems} = useSelector((state: RootState) => state.cart)

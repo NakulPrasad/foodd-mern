@@ -20,13 +20,27 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  avatarUrl: {
+    type :String,
+    require : false,
+  }
 });
 
 export interface userInterface {
   name: string;
-  location: string;
+  location?: string;
   email: string;
   password: string;
   date?: Date;
+  avatarUrl?:String;
+}
+
+export interface userInterfaceOAuth {
+  name: string;
+  location?: string;
+  email: string;
+  password?: string;
+  date?: Date;
+  avatarUrl?:String;
 }
 export default model("user", UserSchema);

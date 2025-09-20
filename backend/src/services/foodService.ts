@@ -1,6 +1,8 @@
 import { Response } from "express";
+import { Types } from "mongoose";
 import FoodCategory, { foodCategoryInterface } from "../models/foodCategory.js";
-import FoodItem, { foodItemInterface } from "../models/foodModel.js";
+import FoodItem, { IFoodItem } from "../models/foodModel.js";
+import restaurantModel from "../models/restaurantModel.js";
 
 /**
  * @description This class manages all the operations related to food data.
@@ -24,26 +26,28 @@ export default class foodService {
 
   /**
    * @description fetches all the food items
-   * @returns foodItemInterface []
+   * @returns IFoodItem []
    */
 
-  async getAllFoodItems(res: Response): Promise<Response> {
+  async getAllFoodItems(
+    id: Types.ObjectId | string,
+  ): Promise<boolean | IFoodItem[]> {
     try {
-      const foodItems = await FoodItem.find({});
+      const foodItems = await FoodItem.findById(id);
       if (!foodItems || foodItems.length === 0) {
-        throw new Error("No Food Items");
+        console.error("Empty Food Items");
+        return false;
       }
-      return res.status(200).json({ data: foodItems });
+      return foodItems;
     } catch (error: any) {
-      return res
-        .status(500)
-        .json({ message: "Failed To get All FoodItem", error: error.message });
+      console.error("Error while fetching food items", error.message);
+      return false;
     }
   }
 
   /**
    * @description delete a foodItem
-   * @returns foodItemInterface []
+   * @returns IFoodItem []
    */
 
   async deleteFoodItemByName(
@@ -68,19 +72,20 @@ export default class foodService {
    * @returns
    */
 
-  async addFoodItem(food: foodItemInterface, res: Response): Promise<Response> {
+  async addFoodItem(foodItem: IFoodItem) : Promise<boolean> {
     try {
-      const foodAdded = await FoodItem.create(food);
-      if (!foodAdded) {
-        return res
-          .status(500)
-          .json({ message: "Failed to add FoodItem, invalid food inputs" });
+      const restaurantId = foodItem.restaurantId
+      const restaurant = await restaurantModel.findById(restaurantId);
+      if(!restaurant){
+        console.error("Restaurant Not Found by this id")
+        return false;
       }
-      return res.status(200).json({ message: "Food Added Successfully" });
+      restaurant.menu.push(foodItem);
+      await restaurant.save();
+      return true;
     } catch (error: any) {
-      return res
-        .status(500)
-        .json({ message: "Failed To add FoodItem", error: error.message });
+      console.error("Error while adding food item to menu", error.message);
+      return false;
     }
   }
 

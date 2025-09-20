@@ -21,10 +21,10 @@ passport.use(
       clientSecret: CLIENT_SEC,
       callbackURL: `${BACKEND_URL}/auth/google/callback`,
     },
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       // Handle user information (e.g., save to DB)
       // console.log(profile); // Log the profile for reference
-      // UserService.registerUser(profile)
+
       done(null, profile);
     },
   ),
@@ -53,7 +53,7 @@ export const passportRoutes = (app: any) => {
     },
   );
 
-  app.get("/auth/profile", (req: Request, res: Response) => {
+  app.get("/apiv1/auth/profile", (req: Request, res: Response) => {
     if (req.isAuthenticated()) {
       res.json(req.user);
     } else {
@@ -61,7 +61,7 @@ export const passportRoutes = (app: any) => {
     }
   });
   app.get(
-    "/auth/google",
+    "/apiv1/auth/google",
     passport.authenticate("google", { scope: ["profile", "email"] }),
   );
 
@@ -71,12 +71,19 @@ export const passportRoutes = (app: any) => {
     passport.authenticate("google", {
       failureRedirect: FRONTEND_URL,
     }),
-    (req: GoogleOAuthLoginRequest, res: Response) => {
+    async (req: GoogleOAuthLoginRequest, res: Response) => {
       const payload = {
         id: req.user.id, // Use a unique identifier from the user object
         name: req.user.displayName,
         email: req.user.emails[0].value,
-        avatarUrl: req.user.photos[0].value, // Extract email
+        avatarUrl: req.user.photos[0].value,
+      };
+
+      const userOAuth = {
+        name: req.user.displayName,
+        email: req.user.emails[0].value,
+        avatarUrl: req.user.photos[0].value,
+        password: "dummy",
       };
 
       const options = { expiresIn: "24h" };
@@ -88,6 +95,10 @@ export const passportRoutes = (app: any) => {
       }
       // const authToken = jwt.sign(req.user._json, JWT_KEY, options);
       const authToken = jwt.sign(payload, JWT_KEY, options);
+
+      // await UserService.registerUser(userOAuth);
+      await UserService.registerUserOAuth(userOAuth);
+      // console.log(response);
 
       return res.redirect(`${FRONTEND_URL}?token=${authToken}`);
       // res.redirect("/profile");

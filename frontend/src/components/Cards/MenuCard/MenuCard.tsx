@@ -4,7 +4,7 @@ import { IFoodItem } from "../../../types/cart.types";
 import ModalCart from "../../Modal/ModalCart";
 import classes from "./MenuCard.module.css";
 import IconVeg from "/icons/veg-icon.png";
-import Pizza from "/img/pizza.jpg";
+import Pizza from "/img/foodItem/pizza.jpg";
 
 interface IMenuCardProps {
   foodItem: IFoodItem;
@@ -24,7 +24,9 @@ const MenuCard = (props: IMenuCardProps) => {
         <Title order={3} pb={theme.spacing.xs}>
           {props.foodItem.name}
         </Title>
-        <Title order={4} pb={theme.spacing.xs}>₹{props.foodItem.price}</Title>
+        <Title order={4} pb={theme.spacing.xs}>
+          ₹{props.foodItem.price}
+        </Title>
         <Flex pb={theme.spacing.xs}>
           <IconStarFilled color="green" size={14} />
 
@@ -43,7 +45,7 @@ const MenuCard = (props: IMenuCardProps) => {
         <Image radius={theme.radius.sm} src={Pizza} className={classes.img} />
         <Flex direction={"column"} className={classes.translate}>
           <ModalCart item={props.foodItem} />
-          
+
           <Text className="description_sm">Customisable</Text>
         </Flex>
       </Flex>

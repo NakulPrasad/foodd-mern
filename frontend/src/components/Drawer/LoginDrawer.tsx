@@ -29,6 +29,7 @@ import InputPasswordReq from "../Inputs/InputPasswordReq";
 import Spinner from "../Loader/Spinner";
 import classes from "./LoginDrawer.module.css";
 import { useLocation } from "../../hooks/useLocation";
+import URLs from "../../configs/URLs";
 
 interface DrawerProps {
   variant: string;
@@ -90,7 +91,7 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
   };
 
   const handleLoginBtn = async () => {
-    console.log("Current values:", form.values);
+    // console.log("Current values:", form.values);
     if (isNewUser) {
       await handleSignUp();
     } else {
@@ -114,7 +115,8 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
 
   const handleLoginGoogle = () => {
     // navigate("http://localhost:3000/auth/google");
-    window.location.href = "http://localhost:3000/auth/google";
+    // window.location.href = "http://localhost:3000/apiv1/auth/google";
+    window.location.href = URLs.googleAuth;
   };
 
   const handleSignUp = async () => {

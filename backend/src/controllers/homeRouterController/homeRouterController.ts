@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 export const homeTest = (req: Request, res: Response) => {
-  return res.status(200).json({ message: "Working 111" });
+  return res.status(200).json({ message: "Working home route" });
 };
 
 export const getLocation = async (req: Request, res: Response) => {
@@ -15,6 +15,6 @@ export const getLocation = async (req: Request, res: Response) => {
   });
   const data = await response.json();
   // res.json(data);
-  console.log(res);
+  // console.log(res);
   return res.status(200).json(data);
 };

@@ -1,17 +1,35 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
+import { foodItemSchema, IFoodItem } from "./foodModel.js";
 
-interface IRestaurant extends Document {
+export interface IRestaurant extends Document {
   name: string;
+  ownerName: string;
   description: string;
+  cuisine: string[];
   location: ILocation;
   createdAt: Date;
   updatedAt: Date;
+  image: string;
+  isVeg: boolean;
+  priceRange: string;
+  deliveryTime: string;
+  contact: {
+    phone: string;
+    email: string;
+  };
+  rating: number;
+  timing: {
+    open: number;
+    close: number;
+  };
+  menu: [IFoodItem];
 }
 
-interface ILocation extends Document {
+export interface ILocation {
   address: string;
   city: string;
   state: string;
+  area: string;
   postalCode: string;
 }
 
@@ -22,6 +40,11 @@ const LocationSchema: Schema = new Schema<ILocation>({
     trim: true,
   },
   city: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  area: {
     type: String,
     required: true,
     trim: true,
@@ -45,13 +68,50 @@ const RestaurantSchema: Schema<IRestaurant> = new Schema<IRestaurant>(
       required: true,
       trim: true,
     },
+    ownerName: String,
     description: {
       type: String,
       trim: true,
     },
+    cuisine: {
+      type: [String],
+      required: true,
+    },
     location: {
       type: LocationSchema,
       required: true,
+    },
+    rating: {
+      type: Number,
+    },
+    image: {
+      type: String,
+    },
+    isVeg: {
+      type: Boolean,
+    },
+    priceRange: {
+      type: String,
+    },
+    deliveryTime: {
+      type: String,
+    },
+    contact: {
+      type: {
+        phone: String,
+        email: String,
+      },
+      required: true,
+    },
+    timing: {
+      type: {
+        open: Number,
+        close: Number,
+      },
+      required: true,
+    },
+    menu: {
+      type: [foodItemSchema],
     },
   },
   {
@@ -59,9 +119,10 @@ const RestaurantSchema: Schema<IRestaurant> = new Schema<IRestaurant>(
   },
 );
 
-const RestaurantModel: Model<IRestaurant> = mongoose.model<IRestaurant>(
-  "IRestaurant",
-  RestaurantSchema,
-);
+// export const RestaurantModel: Model<IRestaurant> = mongoose.model<IRestaurant>(
+//   "IRestaurant",
+//   RestaurantSchema,
+// );
 
-export { IRestaurant, RestaurantModel };
+// export { IRestaurant, RestaurantModel };
+export default model<IRestaurant>("restaurant", RestaurantSchema);

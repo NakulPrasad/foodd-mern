@@ -177,39 +177,55 @@ export const foodItems = [
 ];
 export const foodItems2 = [
   {
-    TheGourmetKitchen: {
-      id: "1",
-      restaurantId: "1",
-      name: "Margherita Pizza",
-      restaurantName: "The Gourmet Kitchen",
-      description:
-        "Classic pizza with mozzarella cheese, fresh basil, and tomato sauce.",
-      price: 299.0,
-      category: "Pizza",
-      image_url: "/img/foodItem/pizza.jpg",
-      rating: 4.5,
-      is_veg: true,
-      options: [
-        {
-          name: "Size",
-          type: "select",
-          values: ["Small", "Medium", "Large"],
-        },
-        {
-          name: "Crust",
-          type: "select",
-          values: ["Thin", "Regular", "Cheese Stuffed"],
-        },
-        {
-          name: "Extra Toppings",
-          type: "checkbox",
-          values: ["Olives", "Mushrooms", "Onions", "Peppers"],
-        },
-      ],
-    },
+    1: [
+      {
+        id: "1",
+        restaurantId: "1",
+        name: "Margherita Pizza",
+        restaurantName: "The Gourmet Kitchen",
+        description:
+          "Classic pizza with mozzarella cheese, fresh basil, and tomato sauce.",
+        price: 299.0,
+        category: "Pizza",
+        image_url: "/img/foodItem/pizza.jpg",
+        rating: 4.5,
+        is_veg: true,
+        options: [
+          {
+            name: "Size",
+            type: "select",
+            values: ["Small", "Medium", "Large"],
+          },
+          {
+            name: "Crust",
+            type: "select",
+            values: ["Thin", "Regular", "Cheese Stuffed"],
+          },
+          {
+            name: "Extra Toppings",
+            type: "checkbox",
+            values: ["Olives", "Mushrooms", "Onions", "Peppers"],
+          },
+        ],
+      },
+      {
+        id: "2",
+        restaurantId: "1",
+        name: "Chocolate Lava Cake",
+        restaurantName: "The Gourmet Kitchen",
+        description:
+          "Warm chocolate cake with a molten chocolate center, served with vanilla ice cream.",
+        price: 199.0,
+        category: "Dessert",
+        image_url: "https://via.placeholder.com/150",
+        rating: 4.9,
+        is_veg: true,
+        options: [],
+      },
+    ],
   },
   {
-    SpiceSymphony: {
+    2: {
       id: "1",
       restaurantId: "2",
       name: "Veg Burger",
@@ -225,7 +241,7 @@ export const foodItems2 = [
     },
   },
   {
-    ChickenWings: {
+    3: {
       id: "1",
       restaurantId: "3",
       name: "Chicken Wings",
@@ -241,55 +257,62 @@ export const foodItems2 = [
     },
   },
   {
-    id: "4",
-    restaurantId: "1",
-    name: "Pepperoni Pizza",
-    restaurantName: "The Gourmet Kitchen",
-    description: "A pizza topped with pepperoni slices and mozzarella cheese.",
-    price: 349.0,
-    category: "Pizza",
-    image_url: "https://via.placeholder.com/150",
-    rating: 4.6,
-    is_veg: false,
-    options: [
-      {
-        name: "Size",
-        type: "select",
-        values: ["Small", "Medium", "Large"],
-      },
-      {
-        name: "Crust",
-        type: "select",
-        values: ["Thin", "Regular", "Cheese Stuffed"],
-      },
-    ],
+    4: {
+      id: "1",
+      restaurantId: "4",
+      name: "Pepperoni Pizza",
+      restaurantName: "The Gourmet Kitchen",
+      description:
+        "A pizza topped with pepperoni slices and mozzarella cheese.",
+      price: 349.0,
+      category: "Pizza",
+      image_url: "https://via.placeholder.com/150",
+      rating: 4.6,
+      is_veg: false,
+      options: [
+        {
+          name: "Size",
+          type: "select",
+          values: ["Small", "Medium", "Large"],
+        },
+        {
+          name: "Crust",
+          type: "select",
+          values: ["Thin", "Regular", "Cheese Stuffed"],
+        },
+      ],
+    },
   },
   {
-    id: "5",
-    restaurantId: "1",
-    name: "Pasta Alfredo",
-    restaurantName: "The Gourmet Kitchen",
-    description: "Creamy Alfredo sauce with penne pasta, served hot.",
-    price: 199.0,
-    category: "Pasta",
-    image_url: "https://via.placeholder.com/150",
-    rating: 4.3,
-    is_veg: true,
-    options: [],
+    5: {
+      id: "1",
+      restaurantId: "1",
+      name: "Pasta Alfredo",
+      restaurantName: "Burger Town",
+      description: "Creamy Alfredo sauce with penne pasta, served hot.",
+      price: 199.0,
+      category: "Pasta",
+      image_url: "https://via.placeholder.com/150",
+      rating: 4.3,
+      is_veg: true,
+      options: [],
+    },
   },
   {
-    id: "6",
-    restaurantId: "1",
-    name: "Cheese Burger",
-    restaurantName: "The Gourmet Kitchen",
-    description:
-      "Juicy beef patty with melted cheese, lettuce, tomato, and a soft bun.",
-    price: 189.0,
-    category: "Burger",
-    image_url: "https://via.placeholder.com/150",
-    rating: 4.4,
-    is_veg: false,
-    options: [],
+    6: {
+      id: "6",
+      restaurantId: "1",
+      name: "Cheese Burger",
+      restaurantName: "The Gourmet Kitchen",
+      description:
+        "Juicy beef patty with melted cheese, lettuce, tomato, and a soft bun.",
+      price: 189.0,
+      category: "Burger",
+      image_url: "https://via.placeholder.com/150",
+      rating: 4.4,
+      is_veg: false,
+      options: [],
+    },
   },
   {
     id: "7",
@@ -342,20 +365,6 @@ export const foodItems2 = [
         values: ["Thin", "Regular", "Cheese Stuffed"],
       },
     ],
-  },
-  {
-    id: "10",
-    restaurantId: "1",
-    name: "Chocolate Lava Cake",
-    restaurantName: "The Gourmet Kitchen",
-    description:
-      "Warm chocolate cake with a molten chocolate center, served with vanilla ice cream.",
-    price: 199.0,
-    category: "Dessert",
-    image_url: "https://via.placeholder.com/150",
-    rating: 4.9,
-    is_veg: true,
-    options: [],
   },
 ];
 

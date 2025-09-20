@@ -1,7 +1,7 @@
 import { genSalt, hash } from "bcrypt";
 import { Response } from "express";
 import { checkSchema, validationResult } from "express-validator";
-import User, { userInterface } from "../models/userModel.js";
+import User, { userInterface, userInterfaceOAuth } from "../models/userModel.js";
 
 class userService {
   private static instance: userService;
@@ -67,7 +67,7 @@ class userService {
     return true;
   }
 
-  async registerUser(user: userInterface, res: Response): Promise<Response> {
+  async registerUser(user: userInterface, res?: Response){
     // console.log(user);
 
     const isValidUser = await this.validateUser(user, res);
@@ -86,7 +86,7 @@ class userService {
         .status(500)
         .json({ message: "Failed to register user, invalid user inputs" });
     }
-    // if(res)
+    if(res)
     return res.status(200).json({ message: "User Added Successfull" });
   }
 
@@ -115,5 +115,28 @@ class userService {
     const user = await User.findByIdAndDelete(id);
     return user ? true : false;
   }
+
+  async registerUserOAuth(
+    user: userInterfaceOAuth,
+  ) {
+    // console.log(user);
+      const existingUser: userInterface | null = await User.findOne({
+      email: user.email,
+    });
+    if (existingUser) {
+      return 
+    }
+    const salt = await genSalt(10);
+    let secPassword = await hash("dummy", salt);
+    user.password = secPassword;
+
+    const sucess = await User.create(user);
+    if (!sucess) {
+      console.error("Failed to register user, can't update database");
+    
+    }
+    console.log("User Added Successfull");
+  }
 }
+
 export default userService;

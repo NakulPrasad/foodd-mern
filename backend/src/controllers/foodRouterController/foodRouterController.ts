@@ -7,9 +7,13 @@ export const foodTest = (req: Request, res: Response) => {
   return res.status(200).json({ message: "Working Food Path" });
 };
 
-export const getAllFoodItems = async (req: Request, res: Response) => {
-  const response: Response = await FoodService.getAllFoodItems(res);
-  return response;
+export const getAllFoodItemByRestaurantId = async (req: Request, res: Response) => {
+  const restaturantId = req.params.id;
+  const foodItems= await FoodService.getAllFoodItems(restaturantId);
+  if(!foodItems){
+    return res.status(500).json({ message: "Failed to fetch food items" });
+  }
+  return res.status(200).json({ message: "Fetched food items successfully", data: foodItems });
 };
 
 export const getAllFoodCategory = async (req: Request, res: Response) => {
@@ -27,9 +31,12 @@ export const addFoodCategory = async (req: Request, res: Response) => {
 };
 
 export const addFoodItem = async (req: Request, res: Response) => {
-  const response = req.body;
-  const foodAdded: Response = await FoodService.addFoodItem(response, res);
-  return foodAdded;
+  const foodItem = req.body;
+  const foodAdded: Boolean = await FoodService.addFoodItem(foodItem);
+  if (!foodAdded) {
+    return res.status(500).json({ message: "Failed to add food item" });
+  }
+  return res.status(201).json({ message: "Food Item Added Successfully" });
 };
 
 export const deleteFoodItemByName = async (req: Request, res: Response) => {

@@ -9,7 +9,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import classes from "./OrderCard.module.css";
-import Pizza from "/img/pizza.jpg";
+import Pizza from "/img/foodItem/pizza.jpg";
 
 const OrderCard = () => {
   const theme = useMantineTheme();
@@ -33,7 +33,7 @@ const OrderCard = () => {
           </Stack>
         </Box>
       </Group>
-      <Stack >
+      <Stack>
         <Group justify="space-between">
           <Text fw={"var(--font-weight-semi-bold)"}>Chicken Masala x1</Text>
           <Text fw={"var(--font-weight-semi-bold)"}>Total Paid: 209</Text>
