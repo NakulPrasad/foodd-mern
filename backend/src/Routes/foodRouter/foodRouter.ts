@@ -2,6 +2,7 @@ import express from "express";
 import {
   addFoodCategory,
   addFoodItem,
+  deleteFoodItemById,
   deleteFoodItemByName,
   foodTest,
   getAllFoodCategory,
@@ -17,3 +18,4 @@ foodRouter.get("/getAllFoodCategory", getAllFoodCategory);
 foodRouter.post("/addFoodItem", addFoodItem);
 foodRouter.post("/addFoodCategory", addFoodCategory);
 foodRouter.delete("/deleteFoodItemByName", deleteFoodItemByName);
+foodRouter.delete("/deleteFoodItemById", deleteFoodItemById);

@@ -16,13 +16,18 @@ import { useCart } from "../../hooks/useCart";
 import classes from "./Checkout.module.css";
 import IconVeg from "/icons/veg-icon.png";
 import RestrauntLogo from "/img/restaurant/pizzahut.jpg";
+import { useState } from "react";
 
 const Checkout = () => {
   // const {cartItems} = useSelector((state: RootState) => state.cart)
-  const { cartItems, currentRestaurant } = useCart();
+  const { cartItems, currentRestaurant, price } = useCart();
   // toast.info(cartItems);
-  // console.log(cartItems, currentRestaurant);
-
+  console.log(cartItems, currentRestaurant, price);
+  const [deliveryFee, setDeliveryFee] = useState(price > 200 ?0 : 30);
+  const [tax, setTax] =useState(price * 0.18);
+  const handleProceeedToPay = ()=>{
+    
+  }
   return (
     <section id="checkout" className={classes.section}>
       <Grid justify="space-between" className={classes.rootGrid}>
@@ -41,7 +46,7 @@ const Checkout = () => {
             <AddressCard />
           </SimpleGrid>
           <Flex justify={"center"}>
-            <Button className={classes.payButton}>Proceed To Pay</Button>
+            <Button onClick={handleProceeedToPay} className={classes.payButton}>Proceed To Pay</Button>
           </Flex>
         </Grid.Col>
         <Grid.Col
@@ -95,19 +100,19 @@ const Checkout = () => {
             <Title order={4}>Bill Details</Title>
             <Group justify="space-between">
               <Text>Item Total</Text>
-              <Text>222</Text>
+              <Text>{price}</Text>
             </Group>
             <Group justify="space-between">
               <Text>Delivery Fee</Text>
-              <Text>55</Text>
+              <Text>{deliveryFee}</Text>
             </Group>
             <Group justify="space-between">
               <Text>GST & Other Charges</Text>
-              <Text>14</Text>
+              <Text>{tax}</Text>
             </Group>
             <Group justify="space-between">
               <Title order={5}>Total</Title>
-              <Title order={5}>585</Title>
+              <Title order={5}>{price+deliveryFee+tax}</Title>
             </Group>
           </Stack>
         </Grid.Col>

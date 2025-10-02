@@ -14,7 +14,12 @@ export const foodItemSchema = new Schema({
     {
       name: { type: String, required: true },
       type: { type: String, required: true },
-      values: [{ type: String, required: true }],
+      values: [
+        {
+          label: { type: String, required: true },
+          price: { type: Number, required: true },
+        },
+      ],
     },
   ],
 });
@@ -33,7 +38,7 @@ export interface IFoodItem {
     {
       name: String;
       type: String;
-      values: [String];
+      values: { label: string; price: number }[];
     },
   ];
 }

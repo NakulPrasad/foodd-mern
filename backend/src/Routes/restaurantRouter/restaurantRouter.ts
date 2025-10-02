@@ -4,5 +4,5 @@ import {addRestaurant, getAllRestaurant, getRestaurantById, test, } from "../../
 export const restaurantRouter = express.Router();
 restaurantRouter.get("/test", test)
 restaurantRouter.get("/getAllRestaurant", getAllRestaurant)
-restaurantRouter.get("/getRestaurantById", getRestaurantById)
+restaurantRouter.get("/getRestaurantById/:id", getRestaurantById)
 restaurantRouter.post("/addRestaurant", addRestaurant)

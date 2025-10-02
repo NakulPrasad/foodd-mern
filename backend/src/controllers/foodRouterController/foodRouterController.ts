@@ -47,3 +47,12 @@ export const deleteFoodItemByName = async (req: Request, res: Response) => {
   );
   return foodDelete;
 };
+
+export const deleteFoodItemById = async (req: Request, res: Response) => {
+  const id = req.body.id;
+  const foodDelete: Response = await FoodService.deleteFoodItemById(
+    id,
+    res,
+  );
+  return foodDelete;
+};

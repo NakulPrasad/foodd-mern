@@ -1,6 +1,6 @@
 import { Box, Flex, Image, Text, Title, useMantineTheme } from "@mantine/core";
 import { IconStarFilled } from "@tabler/icons-react";
-import { IFoodItem } from "../../../types/cart.types";
+import { IFoodItem } from "../../../types";
 import ModalCart from "../../Modal/ModalCart";
 import classes from "./MenuCard.module.css";
 import IconVeg from "/icons/veg-icon.png";

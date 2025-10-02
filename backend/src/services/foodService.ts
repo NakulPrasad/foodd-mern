@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import FoodCategory, { foodCategoryInterface } from "../models/foodCategory.js";
 import FoodItem, { IFoodItem } from "../models/foodModel.js";
 import restaurantModel from "../models/restaurantModel.js";
@@ -34,7 +34,7 @@ export default class foodService {
   ): Promise<boolean | IFoodItem[]> {
     try {
       const foodItems = await FoodItem.findById(id);
-      if (!foodItems || foodItems.length === 0) {
+      if (!foodItems) {
         console.error("Empty Food Items");
         return false;
       }
@@ -49,6 +49,23 @@ export default class foodService {
    * @description delete a foodItem
    * @returns IFoodItem []
    */
+
+  async deleteFoodItemById(
+    id:ObjectId,
+    res: Response,
+  ): Promise<Response> {
+    try {
+      const foodItems = await FoodItem.findById(id);
+      if (!foodItems) {
+        throw new Error("Failed to delete food Item");
+      }
+      return res.status(200).json({ message: "FoodItem deleted sucessfully" });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: "Failed To delete foodItem", error: error.message });
+    }
+  }
 
   async deleteFoodItemByName(
     foodName: string,

@@ -1,9 +1,12 @@
 import { Box, Flex, Paper, Text, Title } from "@mantine/core";
 import { IconPointFilled } from "@tabler/icons-react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import IconStar from "../../../assets/icons/starFilled.svg?react";
+import { setSelectedRestaurant } from "../../../redux/slices/restaurantSlie";
+import { IRestaurant } from "../../../types";
 import classes from "./RestaurantCard.module.css";
-import { IRestaurant } from "../../../screens/Restaurant/Restaurant";
+import { useRestaurant } from "../../../hooks/useRestaurant";
 
 interface RestrauntCardProps {
   restaurant: IRestaurant;
@@ -11,7 +14,11 @@ interface RestrauntCardProps {
 
 const RestaurantCard = (props: RestrauntCardProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {setCurrentRestaurant} = useRestaurant();
   const handleClick = (address: string) => {
+    dispatch(setSelectedRestaurant(props.restaurant));
+    setCurrentRestaurant(JSON.stringify(props.restaurant))
     navigate("restaurant/" + address);
   };
 
@@ -21,7 +28,7 @@ const RestaurantCard = (props: RestrauntCardProps) => {
       className={classes.card}
       onClick={() =>
         handleClick(
-          props.restaurant.name + "-" + props.restaurant.location.area,
+          props.restaurant._id,
         )
       }
     >

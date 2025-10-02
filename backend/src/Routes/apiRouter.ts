@@ -3,7 +3,7 @@ import { foodRouter } from "./foodRouter/foodRouter.js";
 import { homeRouter } from "./homeRouter/homeRouter.js";
 import { orderRouter } from "./orderRouter/orderRouter.js";
 import { userRouter } from "./userRouter/userRouter.js";
-import { restaurantRouter } from "./restaurant/restaurantRouter.js";
+import { restaurantRouter } from "./restaurantRouter/restaurantRouter.js";
 
 export const apiRouter = express.Router();
 

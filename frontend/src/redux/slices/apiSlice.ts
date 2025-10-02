@@ -1,7 +1,13 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import URLs, { BASE_URL } from "../../configs/URLs";
+import {
+  ICheckAuthResponse,
+  ILoginRequest,
+  ILoginResponse,
+  IRegisterRequest,
+  IRegisterResponse,
+} from "../../types/authentication.types";
 import fetchBaseQueryWithAuth from "../baseQueryWithAuth";
-import { ICheckAuthResponse, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse } from "../../types/authentication.types";
 
 const apiBaseQuery = fetchBaseQueryWithAuth(BASE_URL);
 
@@ -11,10 +17,7 @@ export const apiSlice = createApi({
     checkAuth: builder.query<ICheckAuthResponse, void>({
       query: () => URLs.checkAuth,
     }),
-    loginRequest: builder.mutation<
-      ILoginResponse,
-      ILoginRequest
-    >({
+    loginRequest: builder.mutation<ILoginResponse, ILoginRequest>({
       query: (user) => ({
         url: URLs.loginUser,
         method: "POST",
@@ -22,13 +25,25 @@ export const apiSlice = createApi({
       }),
     }),
     registerRequest: builder.mutation<IRegisterResponse, IRegisterRequest>({
-      query : (user)=>({
+      query: (user) => ({
         url: URLs.addUser,
         method: "POST",
         body: user,
-      })
-    })
+      }),
+    }),
+    getAllRestaurant: builder.query({
+      query: () => URLs.getAllRestaurant,
+    }),
+    getRestaurantById: builder.query({
+      query: (id) => URLs.getRestaurantById + "/" + id,
+    }),
   }),
 });
 
-export const { useCheckAuthQuery, useLoginRequestMutation, useRegisterRequestMutation } = apiSlice;
+export const {
+  useCheckAuthQuery,
+  useLoginRequestMutation,
+  useRegisterRequestMutation,
+  useGetAllRestaurantQuery,
+  useGetRestaurantByIdQuery,
+} = apiSlice;

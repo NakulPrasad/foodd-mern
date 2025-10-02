@@ -19,7 +19,7 @@ export const useCart = () => {
   );
 
   const cart = useAppSelector((state: RootState) => state.cart);
-  const {cartItems} = useAppSelector((state: RootState) => state.cart);
+  const {cartItems, price, totalItems} = useAppSelector((state: RootState) => state.cart);
 
-  return { addItem, removeItem, currentRestaurant, cart, cartItems };
+  return { addItem, removeItem, currentRestaurant, cart, cartItems, price, totalItems };
 };

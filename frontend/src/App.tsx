@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         element: <Partner />,
       },
       {
-        path: "/restaurant/*",
+        path: "/restaurant/:id",
         element: <Restaurant />,
       },
       {

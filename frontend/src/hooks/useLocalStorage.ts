@@ -1,7 +1,7 @@
 export const useLocalStorage = () => {
   const setItem = (name: string, value: any | string | undefined | null) => {
-    if(!value){
-      throw new Error ("setItem : value is empty")
+    if (!value) {
+      throw new Error("setItem : value is empty");
     }
     try {
       localStorage.set(name, JSON.stringify(value));
