@@ -1,4 +1,4 @@
-import { Document, model, Schema } from "mongoose";
+import { Document, model, Schema, Types } from "mongoose";
 import { foodItemSchema, IFoodItem } from "./foodModel.js";
 
 export interface IRestaurant extends Document {
@@ -22,7 +22,7 @@ export interface IRestaurant extends Document {
     open: number;
     close: number;
   };
-  menu: [IFoodItem];
+  menu: [Types.ObjectId];
 }
 
 export interface ILocation {
@@ -110,9 +110,7 @@ const RestaurantSchema: Schema<IRestaurant> = new Schema<IRestaurant>(
       },
       required: true,
     },
-    menu: {
-      type: [foodItemSchema],
-    },
+    menu: [{type: Types.ObjectId, ref:"foodItems" }],
   },
   {
     timestamps: true,

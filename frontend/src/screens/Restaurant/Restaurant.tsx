@@ -66,7 +66,7 @@ const Restaurant = () => {
       // const groupedCategory = groupMenuByCategory(restaurantData);
       // console.log(groupedCategory);
 
-      const foodItems = groupedCategory.map((item, index) => (
+      const foodItems = groupedCategory?.map((item, index) => (
         <Accordion.Item key={index} value={item.category}>
           <Accordion.Control>
             <Title order={3}>{item.category}</Title>

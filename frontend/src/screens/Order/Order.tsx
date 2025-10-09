@@ -3,17 +3,30 @@ import {
   Button,
   Container,
   Group,
-  Image,
   Stack,
-  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import classes from "./Order.module.css";
-import Pizza from "/img/pizza.jpg";
+import { useEffect, useState } from "react";
 import OrderCard from "../../components/Cards/OrderCard/OrderCard";
+import { useGetMyOrdersQuery } from "../../redux/slices/apiSlice";
+import { IOrder } from "../../types/order.types";
+import classes from "./Order.module.css";
+
 const Order = () => {
   const theme = useMantineTheme();
+  const { data: orderData, isLoading } = useGetMyOrdersQuery();
+  const [orders, setOrders] = useState<IOrder[]>([]);
+  useEffect(() => {
+    if (orderData && !isLoading) {
+      setOrders(orderData);
+      console.log(orders);
+    }
+  }, [orderData]);
+
+  useEffect(() => {
+    console.log("Updated orders:", orders);
+  }, [orders]);
   return (
     <Box className={classes.mainContainer}>
       <Container className={classes.subContainer1}>
@@ -27,10 +40,12 @@ const Order = () => {
       </Container>
       <Container className={classes.subContainer2}>
         <Title order={3}>Past Order</Title>
-        <OrderCard/>
-        <OrderCard/>
-        <OrderCard/>
+        {/* {orders && orders?.map(order =>{
+          return <OrderCard key={order?.id}/>
+        })} */}
 
+        <OrderCard />
+        <OrderCard />
       </Container>
     </Box>
   );

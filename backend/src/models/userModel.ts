@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 const UserSchema = new Schema({
   name: {
@@ -21,18 +21,19 @@ const UserSchema = new Schema({
     default: Date.now,
   },
   avatarUrl: {
-    type :String,
-    require : false,
-  }
+    type: String,
+    require: false,
+  },
 });
 
 export interface userInterface {
+  id: Types.ObjectId;
   name: string;
   location?: string;
   email: string;
   password: string;
   date?: Date;
-  avatarUrl?:String;
+  avatarUrl?: String;
 }
 
 export interface userInterfaceOAuth {
@@ -41,6 +42,6 @@ export interface userInterfaceOAuth {
   email: string;
   password?: string;
   date?: Date;
-  avatarUrl?:String;
+  avatarUrl?: String;
 }
 export default model("user", UserSchema);

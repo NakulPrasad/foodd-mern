@@ -3,6 +3,9 @@ import { ObjectId, Types } from "mongoose";
 import FoodCategory, { foodCategoryInterface } from "../models/foodCategory.js";
 import FoodItem, { IFoodItem } from "../models/foodModel.js";
 import restaurantModel from "../models/restaurantModel.js";
+import restaurantService from "./restaurantService.js";
+
+const RestaurantService = restaurantService.getInstance();
 
 /**
  * @description This class manages all the operations related to food data.
@@ -31,7 +34,7 @@ export default class foodService {
 
   async getAllFoodItems(
     id: Types.ObjectId | string,
-  ): Promise<boolean | IFoodItem[]> {
+  ): Promise<boolean | IFoodItem[] | any> {
     try {
       const foodItems = await FoodItem.findById(id);
       if (!foodItems) {
@@ -46,14 +49,30 @@ export default class foodService {
   }
 
   /**
+   * @description fetches all the food items
+   * @returns IFoodItem []
+   */
+
+  async getAllFoodItems2(
+    id: Types.ObjectId | string,
+  ): Promise<boolean | IFoodItem[] | any> {
+    try {
+      const foodItemsIds = await RestaurantService.getRestaurantMenuById(id);
+      const foodItems = await FoodItem.find({_id : {$in : foodItemsIds}}).select("-__v").lean().exec();
+      console.log(foodItems)
+      return foodItems;
+    } catch (error: any) {
+      console.error("Error while fetching food items", error.message);
+      return false;
+    }
+  }
+
+  /**
    * @description delete a foodItem
    * @returns IFoodItem []
    */
 
-  async deleteFoodItemById(
-    id:ObjectId,
-    res: Response,
-  ): Promise<Response> {
+  async deleteFoodItemById(id: ObjectId, res: Response): Promise<Response> {
     try {
       const foodItems = await FoodItem.findById(id);
       if (!foodItems) {
@@ -89,12 +108,12 @@ export default class foodService {
    * @returns
    */
 
-  async addFoodItem(foodItem: IFoodItem) : Promise<boolean> {
+  async addFoodItem(foodItem: IFoodItem |any): Promise<boolean> {
     try {
-      const restaurantId = foodItem.restaurantId
+      const restaurantId = foodItem.restaurantId;
       const restaurant = await restaurantModel.findById(restaurantId);
-      if(!restaurant){
-        console.error("Restaurant Not Found by this id")
+      if (!restaurant) {
+        console.error("Restaurant Not Found by this id");
         return false;
       }
       restaurant.menu.push(foodItem);
@@ -102,6 +121,31 @@ export default class foodService {
       return true;
     } catch (error: any) {
       console.error("Error while adding food item to menu", error.message);
+      return false;
+    }
+  }
+
+  /**
+   * @description add foodItem
+   * @returns
+   */
+
+  async addFoodItem2(foodItem: IFoodItem): Promise<boolean> {
+    try {
+      const restaurantId = foodItem.restaurantId;
+      const restaurant = await restaurantModel.findById(restaurantId);
+      if (!restaurant) {
+        console.error("Restaurant Not Found by this id");
+        return false;
+      }
+      const createdFoodItem = await FoodItem.create(foodItem);
+      
+      restaurant.menu.push(createdFoodItem._id);
+      await restaurant.save();
+
+      return true;
+    } catch (error: any) {
+      console.error("Error while adding food item", error.message);
       return false;
     }
   }

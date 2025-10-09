@@ -37,6 +37,9 @@ export const apiSlice = createApi({
     getRestaurantById: builder.query({
       query: (id) => URLs.getRestaurantById + "/" + id,
     }),
+    getMyOrders: builder.query({
+      query: () => URLs.getOrders,
+    }),
   }),
 });
 
@@ -46,4 +49,5 @@ export const {
   useRegisterRequestMutation,
   useGetAllRestaurantQuery,
   useGetRestaurantByIdQuery,
+  useGetMyOrdersQuery,
 } = apiSlice;

@@ -49,7 +49,6 @@ const NavBar = () => {
   const { isAuthenticated, user } = useAppSelector(
     (state: RootState) => state.auth,
   );
-  // const { cart.cartItems } = useAppSelector((state: RootState) => state.cart);
   const { cart } = useCart();
 
   const dispatch = useAppDispatch();

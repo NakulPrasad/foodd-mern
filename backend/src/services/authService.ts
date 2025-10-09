@@ -65,7 +65,7 @@
       if (!isValid) {
         return res.status(400).json({ message: "Invalid email or password" });
       }
-      const { email, password } = user;
+      const {email, password } = user;
       const userData: userInterface | null = await User.findOne({ email });
       if (!userData) {
         console.error("No user found with provided email");
@@ -84,6 +84,7 @@
       }
       // Sign JWT token
       const payload = {
+        id:userData.id,
         name: userData.name,
         email: userData.email,
       };
@@ -98,6 +99,12 @@
       return res
         .status(200)
         .json({ message: "User Found", authToken: authToken });
+    }
+
+    async getCurrentUser (req:Request, res:Response){
+      const currentUser :  userInterface | any  = req.user;
+
+      return currentUser;
     }
   }
 

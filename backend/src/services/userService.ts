@@ -2,6 +2,7 @@ import { genSalt, hash } from "bcrypt";
 import { Response } from "express";
 import { checkSchema, validationResult } from "express-validator";
 import User, { userInterface, userInterfaceOAuth } from "../models/userModel.js";
+import { Types } from "mongoose";
 
 class userService {
   private static instance: userService;
@@ -90,7 +91,7 @@ class userService {
     return res.status(200).json({ message: "User Added Successfull" });
   }
 
-  async getUserById(id: string): Promise<userInterface | null> {
+  async getUserById(id: Types.ObjectId | string): Promise<userInterface | null> {
     const user: userInterface | null = await User.findById(id, { password: 0 });
     return user || null;
   }

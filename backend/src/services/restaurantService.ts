@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import Restaurant, { IRestaurant } from "../models/restaurantModel.js";
+import RestaurantModel, { IRestaurant } from "../models/restaurantModel.js";
 import { Response } from "express";
 
 
@@ -17,9 +17,9 @@ export default class restaurantService {
 
   async getAllRestaurant(): Promise<boolean | IRestaurant[]> {
     try {
-      const restaurants = await Restaurant.find({});
+      const restaurants = await RestaurantModel.find({});
       if(!restaurants || restaurants.length === 0){
-            console.error("Empty Restaurant")
+            console.error("Empty RestaurantModel")
           return false;
       }
       return restaurants;
@@ -32,9 +32,9 @@ export default class restaurantService {
 
   async getRestaurantById(id: Types.ObjectId | string): Promise<boolean | IRestaurant> {
     try {
-      const restaurant = await Restaurant.findById(id);
+      const restaurant = await RestaurantModel.findById(id).populate("menu").exec();;
       if(!restaurant){
-          console.error("Restaurant Not Found by this id")
+          console.error("RestaurantModel Not Found by this id")
           return false;
       }
       return restaurant;
@@ -47,9 +47,9 @@ export default class restaurantService {
 
   async registerRestaurant(restaturant : IRestaurant): Promise<boolean> {
     try {
-      const restaurantAdded = await Restaurant.create(restaturant);
+      const restaurantAdded = await RestaurantModel.create(restaturant);
       if(!restaurantAdded){
-          console.error("Can't Add Restaurant")
+          console.error("Can't Add RestaurantModel")
           return false
       }
       return true;
@@ -62,15 +62,31 @@ export default class restaurantService {
 
   async removeRestaurant(id: Types.ObjectId): Promise<boolean> {
     try {
-      const restaurantRemoved = await Restaurant.findByIdAndRemove(id);
+      const restaurantRemoved = await RestaurantModel.findByIdAndRemove(id);
       if(!restaurantRemoved){
-          console.error("Can't remove Restaurant")
+          console.error("Can't remove RestaurantModel")
           return false
       }
       return true;
 
     } catch (error: any) {
       console.error("Error while removing restaurant", error.message);
+      return false;
+    }
+  }
+
+    async getRestaurantMenuById(id: Types.ObjectId | string): Promise<boolean | Types.ObjectId[]> {
+    try {
+      const restaurant = await RestaurantModel.findById(id).populate("menu").exec();
+      if(!restaurant){
+          console.error("RestaurantModel Not Found by this id")
+          return false;
+      }
+      console.log(JSON.stringify(restaurant, null, 2));
+      return restaurant.menu;
+
+    } catch (error: any) {
+      console.error("Error while fetching restaurant by id", error.message);
       return false;
     }
   }

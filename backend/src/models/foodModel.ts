@@ -2,7 +2,7 @@ import { model, Schema, Types } from "mongoose";
 
 export const foodItemSchema = new Schema({
   name: String,
-  restaurantId: Types.ObjectId,
+  restaurantId: {type : Types.ObjectId, ref: "restaurants", required : true},
   restaurntName: String,
   description: String,
   price: Number,

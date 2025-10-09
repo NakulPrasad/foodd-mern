@@ -9,7 +9,7 @@ const URLs = {
   getAllFoodCategory: `${BASE_URL}/food/getAllFoodCategory`,
   loginUser: `${BASE_URL}/user/login/apiv1/user/getMyDetails`,
   postOrder: `${BASE_URL}/order/orderCheckout`,
-  getOrders: `${BASE_URL}/order/getMyOrders`,
+  getMyOrders: `${BASE_URL}/order/getMyOrders`,
   addUser: `${BASE_URL}/user/addUser`,
 };
 

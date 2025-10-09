@@ -2,13 +2,14 @@ import User, { userInterface } from "../../models/userModel.js";
 import { Request, Response } from "express";
 import authService from "../../services/authService.js";
 import userService from "../../services/userService.js";
+import { Types } from "mongoose";
 
 const UserService = userService.getInstance();
 const AuthService = authService.getInstance();
 
 export const getUserById = async (req: Request, res: Response) => {
   try {
-    const id: string | null =
+    const id: Types.ObjectId | string | null =
       typeof req.query.id === "string" ? req.query.id : null;
 
     // log(id);
@@ -29,6 +30,7 @@ export const getUserById = async (req: Request, res: Response) => {
 export const addUser = async (req: Request, res: Response) => {
   try {
     const newUser = {
+      id : req.body.id,
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
