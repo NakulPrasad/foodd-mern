@@ -19,8 +19,7 @@ const Order = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
   useEffect(() => {
     if (orderData && !isLoading) {
-      setOrders(orderData);
-      console.log(orders);
+      setOrders(orderData.data);
     }
   }, [orderData]);
 
@@ -40,12 +39,11 @@ const Order = () => {
       </Container>
       <Container className={classes.subContainer2}>
         <Title order={3}>Past Order</Title>
-        {/* {orders && orders?.map(order =>{
-          return <OrderCard key={order?.id}/>
-        })} */}
-
-        <OrderCard />
-        <OrderCard />
+        {!isLoading &&
+          Array.isArray(orders) &&
+          orders?.map((order) => {
+            return <OrderCard key={order?._id} order={order} />;
+          })}
       </Container>
     </Box>
   );

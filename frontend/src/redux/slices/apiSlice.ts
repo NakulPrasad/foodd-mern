@@ -7,6 +7,7 @@ import {
   IRegisterRequest,
   IRegisterResponse,
 } from "../../types/authentication.types";
+import { IOrder } from "../../types/order.types";
 import fetchBaseQueryWithAuth from "../baseQueryWithAuth";
 
 const apiBaseQuery = fetchBaseQueryWithAuth(BASE_URL);
@@ -37,7 +38,7 @@ export const apiSlice = createApi({
     getRestaurantById: builder.query({
       query: (id) => URLs.getRestaurantById + "/" + id,
     }),
-    getMyOrders: builder.query({
+    getMyOrders: builder.query<{ data: IOrder[] }, void>({
       query: () => URLs.getOrders,
     }),
   }),

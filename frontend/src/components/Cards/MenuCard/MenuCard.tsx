@@ -13,7 +13,7 @@ interface IMenuCardProps {
 
 const MenuCard = (props: IMenuCardProps) => {
   const theme = useMantineTheme();
-  // console.log(props.foodItem)
+  console.log(props.foodItem)
 
   return (
     <Flex justify={"space-between"} className={classes.bd}>

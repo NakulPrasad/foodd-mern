@@ -157,14 +157,14 @@ const NavBar = () => {
                     <Flex justify={"space-between"} pb={theme.spacing.sm}>
                       <Image src={KFC} className={classes.img} />
                       {/* <Text>{currentRestaurant}</Text> */}
-                      <Title order={5}>{cart.selectedRestaurant}</Title>
+                      <Title order={5}>{cart.selectedRestaurantName}</Title>
                     </Flex>
                     <Divider p={theme.spacing.sm} />
                     <Stack>
-                      {cart.cartItems.map((item) => {
+                      {cart.cartItems.map((item, index) => {
                         return (
                           <Flex
-                            key={item.id}
+                            key={index}
                             justify={"space-between"}
                             pb={theme.spacing.sm}
                           >
@@ -186,7 +186,7 @@ const NavBar = () => {
                     <Divider p={theme.spacing.sm} />
                     <Flex justify={"space-between"}>
                       <Text fw={"var(--font-weight-bold)"}>SubTotal : </Text>
-                      <Text fw={"var(--font-weight-bold)"}>{cart.price}</Text>
+                      <Text fw={"var(--font-weight-bold)"}>{cart.totalPrice}</Text>
                     </Flex>
                     <Button onClick={handleCheckout}>CHECKOUT</Button>
                   </Flex>

@@ -11,11 +11,11 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../hooks/reduxHooks";
-import { addToCart } from "../../redux/slices/cartSlice";
-import { IFoodItem, IValue } from "../../types/cart.types";
+import {  IValue } from "../../types/cart.types";
 import classes from "./ModalCart.module.css";
 import { useCart } from "../../hooks/useCart";
 import { toast } from "react-toastify";
+import { IFoodItem } from "../../types";
 
 interface IModalCartProps {
   item: IFoodItem;
@@ -69,7 +69,8 @@ const ModalCart = (props: IModalCartProps) => {
     addItem(cartItem)
     toast.success("Item Added successfully")
     // console.log(value);
-    console.log(cartItem);
+    console.log("ModalCartProps",props)
+    console.log("cartItem",cartItem);
 
     close();
   };

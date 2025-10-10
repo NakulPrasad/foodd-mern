@@ -11,23 +11,27 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { useState } from "react";
 import AddressCard from "../../components/Cards/AddressCard/AddressCard";
+import CheckoutCard from "../../components/Cards/CheckoutCard/CheckoutCard";
 import { useCart } from "../../hooks/useCart";
 import classes from "./Checkout.module.css";
 import IconVeg from "/icons/veg-icon.png";
 import RestrauntLogo from "/img/restaurant/pizzahut.jpg";
-import { useState } from "react";
 
 const Checkout = () => {
   // const {cartItems} = useSelector((state: RootState) => state.cart)
-  const { cartItems, currentRestaurant, price } = useCart();
+  const { cart } = useCart();
   // toast.info(cartItems);
-  console.log(cartItems, currentRestaurant, price);
-  const [deliveryFee, setDeliveryFee] = useState(price > 200 ?0 : 30);
-  const [tax, setTax] =useState(price * 0.18);
-  const handleProceeedToPay = ()=>{
-    
-  }
+  // console.log("Checkout Items", cartItems, cart.selectedRestaurantName, cart.price);
+  const [deliveryFee, setDeliveryFee] = useState(cart.totalPrice > 200 ? 0 : 30);
+  const [tax, setTax] = useState(cart.totalPrice * 0.18);
+
+  
+
+  const handleProceeedToPay = () => {
+    console.log("Cart Items", cart.cartItems);
+  };
   return (
     <section id="checkout" className={classes.section}>
       <Grid justify="space-between" className={classes.rootGrid}>
@@ -46,9 +50,12 @@ const Checkout = () => {
             <AddressCard />
           </SimpleGrid>
           <Flex justify={"center"}>
-            <Button onClick={handleProceeedToPay} className={classes.payButton}>Proceed To Pay</Button>
+            <Button onClick={handleProceeedToPay} className={classes.payButton}>
+              Proceed To Pay
+            </Button>
           </Flex>
         </Grid.Col>
+        {/* Second Column - Items */}
         <Grid.Col
           span={{ base: 12, md: 5.5, lg: 3.5 }}
           className={classes.gridColumn}
@@ -58,29 +65,13 @@ const Checkout = () => {
               <Image src={RestrauntLogo} className={classes.restaurantLogo} />
 
               <Flex direction={"column"}>
-                <Title order={3}>{currentRestaurant}</Title>
+                <Title order={3}>{cart.selectedRestaurantName}</Title>
                 <Title order={5}>Hyderabad</Title>
               </Flex>
             </Flex>
-            <Group>
-              <Flex align={"center"}>
-                <Image src={IconVeg} className={classes.icon} />
-                <Text>Paneer Butter Masala</Text>
-              </Flex>
-              <Group>
-                <Flex>
-                  <Button variant="transparent" color="gray">
-                    -
-                  </Button>
-                  0{" "}
-                  <Button variant="transparent" color="green">
-                    +
-                  </Button>
-                </Flex>
-                <Text>100</Text>
-              </Group>
-            </Group>
-
+              {cart.cartItems.map((item) => (
+                <CheckoutCard item={item} />
+              ))}
             <Flex className={classes.infomsg}>
               <Checkbox />
               <Stack>
@@ -100,7 +91,7 @@ const Checkout = () => {
             <Title order={4}>Bill Details</Title>
             <Group justify="space-between">
               <Text>Item Total</Text>
-              <Text>{price}</Text>
+              <Text>{cart.totalPrice}</Text>
             </Group>
             <Group justify="space-between">
               <Text>Delivery Fee</Text>
@@ -112,7 +103,7 @@ const Checkout = () => {
             </Group>
             <Group justify="space-between">
               <Title order={5}>Total</Title>
-              <Title order={5}>{price+deliveryFee+tax}</Title>
+              <Title order={5}>{cart.totalPrice + deliveryFee + tax}</Title>
             </Group>
           </Stack>
         </Grid.Col>

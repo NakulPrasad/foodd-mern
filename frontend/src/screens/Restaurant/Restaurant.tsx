@@ -18,10 +18,12 @@ import MenuCard from "../../components/Cards/MenuCard/MenuCard";
 import CustomCrousel from "../../components/Carousel/Carousel";
 import CouponCard from "../../components/CouponCard/CouponCard";
 import { useGetRestaurantByIdQuery } from "../../redux/slices/apiSlice";
+import { IFoodItem, IRestaurant } from "../../types";
 import { coupons } from "../../utils/dummyData";
 import classes from "./Restaurant.module.css";
 
-function groupMenuByCategory(apiData) {
+
+function groupMenuByCategory(apiData: IRestaurant) {
   if (!apiData) {
     return;
   }
@@ -33,8 +35,8 @@ function groupMenuByCategory(apiData) {
     }
 
     categoryGroup.items.push({
-      id: item.id,
-      restaurantId: apiData.id, // assuming restaurant id is in apiData
+      id: item._id,
+      restaurantId: apiData._id, // assuming restaurant id is in apiData
       name: item.name,
       restaurantName: apiData.name,
       description: item.description || "",
@@ -62,7 +64,9 @@ const Restaurant = () => {
   // );
   useEffect(() => {
     if (restaurantData && !isLoading) {
-      const groupedCategory = groupMenuByCategory(restaurantData?.data);
+      const groupedCategory: IFoodItem[] = groupMenuByCategory(
+        restaurantData?.data,
+      );
       // const groupedCategory = groupMenuByCategory(restaurantData);
       // console.log(groupedCategory);
 

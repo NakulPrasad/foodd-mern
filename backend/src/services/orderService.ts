@@ -48,7 +48,7 @@ export default class orderService {
     try {
       // console.log(id)
       const orders = await OrderModel.find({ customerId: id })
-        .populate({ path: "restaurantId", select: "name location" }).populate({path:"items.foodItemId" , select : "name"})
+        .populate({ path: "restaurantId", select: "name location" }).populate({path:"items.foodItemId" , select : "name img_url"})
         .lean<IOrderModel[]>();
       if (!orders) {
         console.error("Order ID not found");

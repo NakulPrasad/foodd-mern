@@ -5,15 +5,17 @@ import { ICartItem } from "../../types/cart.types";
 interface ICartState {
   cartItems: ICartItem[];
   totalItems: number;
-  price: number;
-  selectedRestaurant: string | null;
+  totalPrice: number;
+  selectedRestaurantId: string | null;
+  selectedRestaurantName: string;
 }
 
 const initialState: ICartState = {
   cartItems: [],
   totalItems: 0,
-  price: 0,
-  selectedRestaurant: null,
+  totalPrice: 0,
+  selectedRestaurantId: null,
+  selectedRestaurantName: "RestaurantName",
 };
 
 const cartSlice = createSlice({
@@ -26,19 +28,17 @@ const cartSlice = createSlice({
 
       // Validate restaurant context
       if (
-        state.selectedRestaurant &&
-        state.selectedRestaurant !== restaurantId
+        state.selectedRestaurantId &&
+        state.selectedRestaurantId !== restaurantId
       ) {
         toast.warning(
           "Your cart contains items from other restaurant. Please Remove to continue",
         );
         // return;
-        throw new Error("Your cart contains items from other restaurant.");
-      }
-
-      if (existingItem) {
+        console.error("Your cart contains items from other restaurant.");
+      } else if (existingItem) {
         existingItem.quantity += 1;
-        existingItem.price += price;
+        state.totalPrice += existingItem.price;
       } else {
         state.cartItems.push({
           ...action.payload,
@@ -48,21 +48,34 @@ const cartSlice = createSlice({
       }
 
       state.totalItems += 1;
-      state.price += price;
-      state.selectedRestaurant = restaurantName;
+      state.totalPrice += price;
+      state.selectedRestaurantId = restaurantId;
+      state.selectedRestaurantName = restaurantName;
       // console.log(state);
     },
     removeFromCart: (state, action) => {
-      const { id, price, quantity } = action.payload;
-      state.cartItems = state.cartItems.filter((item) => item.id !== id);
-      state.totalItems -= quantity;
-      state.price -= price * quantity;
+      const { id } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id);
+
+      if (existingItem) {
+        if (existingItem.quantity > 1) {
+          existingItem.quantity -= 1;
+          state.totalItems -= 1;
+          state.totalPrice -= existingItem.price;
+        } else {
+          // Remove item if quantity becomes 0
+          state.cartItems = state.cartItems.filter((item) => item.id !== id);
+          state.totalItems -= 1;
+          state.totalPrice -= existingItem.price;
+        }
+      }
     },
+
     clearCart: (state) => {
       state.cartItems = [];
       state.totalItems = 0;
-      state.price = 0;
-      state.selectedRestaurant = null;
+      state.totalPrice = 0;
+      state.selectedRestaurantId = null;
     },
   },
 });

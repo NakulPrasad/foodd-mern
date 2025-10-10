@@ -13,13 +13,17 @@ export const useCart = () => {
   const removeItem = (cartItem: ICartItem) => {
     dispatch(removeFromCart(cartItem));
   };
+  const cart = useAppSelector((state: RootState) => state.cart);
 
   const currentRestaurant = useAppSelector(
-    (state: RootState) => state.cart.selectedRestaurant,
+    (state: RootState) => state.cart.selectedRestaurantId,
   );
 
-  const cart = useAppSelector((state: RootState) => state.cart);
-  const {cartItems, price, totalItems} = useAppSelector((state: RootState) => state.cart);
+  // const currentRestaurantName = useAppSelector(
+  //   (state: RootState) => state.cart.selectedRestaurantName,
+  // );
 
-  return { addItem, removeItem, currentRestaurant, cart, cartItems, price, totalItems };
+  const {cartItems, totalPrice, totalItems} = useAppSelector((state: RootState) => state.cart);
+
+  return { addItem, removeItem, currentRestaurant, cart, cartItems, totalPrice, totalItems };
 };

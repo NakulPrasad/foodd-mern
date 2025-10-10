@@ -1,9 +1,10 @@
 // import { IValue } from "./cart.types";
 
 export interface IFoodItem {
+  id: string;
   name: string;
   restaurantId: string;
-  restaurntName: string;
+  restaurantName: string;
   description: string;
   price: number;
   category: string;

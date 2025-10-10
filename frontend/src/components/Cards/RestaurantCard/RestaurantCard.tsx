@@ -25,6 +25,7 @@ const RestaurantCard = (props: RestrauntCardProps) => {
   return (
     <Flex
       direction={"column"}
+      
       className={classes.card}
       onClick={() =>
         handleClick(
