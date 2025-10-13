@@ -1,4 +1,4 @@
-// import { IValue } from "./cart.types";
+import { IValue } from "./cart.types";
 
 export interface IFoodItem {
   id: string;
@@ -15,7 +15,7 @@ export interface IFoodItem {
     {
       name: string;
       type: string;
-      values: [string];
+      values: [IValue];
     },
   ];
 }

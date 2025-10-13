@@ -10,12 +10,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../hooks/reduxHooks";
-import {  IValue } from "../../types/cart.types";
-import classes from "./ModalCart.module.css";
-import { useCart } from "../../hooks/useCart";
 import { toast } from "react-toastify";
+import { useCart } from "../../hooks/useCart";
 import { IFoodItem } from "../../types";
+import { IValue } from "../../types/cart.types";
+import classes from "./ModalCart.module.css";
 
 interface IModalCartProps {
   item: IFoodItem;
@@ -23,10 +22,7 @@ interface IModalCartProps {
 
 const ModalCart = (props: IModalCartProps) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const {addItem} = useCart();
-
-  const dispatch = useAppDispatch();
-  // console.log(props.item)
+  const { addItem,updateTaxAndFee } = useCart();
 
   const title = (
     <Flex direction={"column"}>
@@ -46,7 +42,7 @@ const ModalCart = (props: IModalCartProps) => {
   const cartItem = {
     id: props.item.id,
     restaurantId: props.item.restaurantId,
-    restaurantName : props.item.restaurantName,
+    restaurantName: props.item.restaurantName,
     name: props.item.name,
     price: totalPrice,
     options: value,
@@ -66,11 +62,11 @@ const ModalCart = (props: IModalCartProps) => {
 
   const handleAddToCart = () => {
     // dispatch(addToCart(cartItem));
-    addItem(cartItem)
-    toast.success("Item Added successfully")
+    addItem(cartItem);
+    toast.success("Item Added successfully");
     // console.log(value);
-    console.log("ModalCartProps",props)
-    console.log("cartItem",cartItem);
+    console.log("ModalCartProps", props);
+    console.log("cartItem", cartItem);
 
     close();
   };
@@ -102,15 +98,14 @@ const ModalCart = (props: IModalCartProps) => {
     setTotalPrice(props.item.price);
   };
 
-  const handleAddClick = ()=>{
-    if(props.item.options.length === 0){
+  const handleAddClick = () => {
+    if (props.item.options.length < 1) {
       handleAddToCart();
-      return
+      return;
       // close();
     }
     open();
-
-  }
+  };
 
   return (
     <>
@@ -181,4 +176,3 @@ const ModalCart = (props: IModalCartProps) => {
 };
 
 export default ModalCart;
-

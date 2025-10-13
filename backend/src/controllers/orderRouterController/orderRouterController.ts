@@ -85,7 +85,18 @@ export const getOrdersByUserId = async (req: Request, res: Response) => {
 };
 
 export const addOrder = async (req: Request, res: Response) => {
-  const order = req.body;
+  // const order = req.body;
+  const order ={
+    restaurantId: req.body.selectedRestaurantId,
+  items: req.body.cartItems,
+  totalAmount: req.body.totalPrice,
+  deliveryFee : req.body.deliveryFee,
+  gstAndCharges : req.body.tax,
+  status: "confirmed",
+  paymentStatus: "paid",
+  deliveryAddress: req.body.deliveryAddress,
+  customerId : req.user.id,
+  }
   const orderAdded: Boolean = await OrderService.addOrder(order);
   if (!orderAdded) {
     return res.status(500).json({ message: "Failed to create OrderModel" });

@@ -11,7 +11,8 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AddressCard from "../../components/Cards/AddressCard/AddressCard";
 import CheckoutCard from "../../components/Cards/CheckoutCard/CheckoutCard";
 import { useCart } from "../../hooks/useCart";
@@ -20,18 +21,33 @@ import IconVeg from "/icons/veg-icon.png";
 import RestrauntLogo from "/img/restaurant/pizzahut.jpg";
 
 const Checkout = () => {
-  // const {cartItems} = useSelector((state: RootState) => state.cart)
   const { cart } = useCart();
-  // toast.info(cartItems);
+  const navigate = useNavigate();
   // console.log("Checkout Items", cartItems, cart.selectedRestaurantName, cart.price);
-  const [deliveryFee, setDeliveryFee] = useState(cart.totalPrice > 200 ? 0 : 30);
-  const [tax, setTax] = useState(cart.totalPrice * 0.18);
 
-  
+  const placeOrderJson = {
+  restaurantId: cart.selectedRestaurantId,
+  items: cart.cartItems,
+  totalAmount: cart.totalPrice,
+  deliveryFee : cart.deliveryFee,
+  gstAndCharges : cart.tax,
+  status: "confirmed",
+  paymentStatus: "paid",
+  deliveryAddress: "Flat 302, Green Valley Apartments, MG Road, Bangalore"
+}
+
 
   const handleProceeedToPay = () => {
-    console.log("Cart Items", cart.cartItems);
+    // console.log("Cart Items", cart);
+    console.log(placeOrderJson)
   };
+
+  useEffect(() => {
+    if (cart.cartItems.length === 0) {
+      navigate("/");
+    }
+  }, [cart.cartItems, navigate]);
+
   return (
     <section id="checkout" className={classes.section}>
       <Grid justify="space-between" className={classes.rootGrid}>
@@ -49,11 +65,6 @@ const Checkout = () => {
             <AddressCard />
             <AddressCard />
           </SimpleGrid>
-          <Flex justify={"center"}>
-            <Button onClick={handleProceeedToPay} className={classes.payButton}>
-              Proceed To Pay
-            </Button>
-          </Flex>
         </Grid.Col>
         {/* Second Column - Items */}
         <Grid.Col
@@ -69,9 +80,9 @@ const Checkout = () => {
                 <Title order={5}>Hyderabad</Title>
               </Flex>
             </Flex>
-              {cart.cartItems.map((item) => (
-                <CheckoutCard item={item} />
-              ))}
+            {cart.cartItems.map((item) => (
+              <CheckoutCard key={item.id} item={item} />
+            ))}
             <Flex className={classes.infomsg}>
               <Checkbox />
               <Stack>
@@ -95,16 +106,26 @@ const Checkout = () => {
             </Group>
             <Group justify="space-between">
               <Text>Delivery Fee</Text>
-              <Text>{deliveryFee}</Text>
+              <Text>{cart.deliveryFee}</Text>
             </Group>
             <Group justify="space-between">
               <Text>GST & Other Charges</Text>
-              <Text>{tax}</Text>
+              <Text>{cart.tax}</Text>
             </Group>
             <Group justify="space-between">
               <Title order={5}>Total</Title>
-              <Title order={5}>{cart.totalPrice + deliveryFee + tax}</Title>
+              <Title order={5}>
+                {cart.totalPrice + cart.deliveryFee + cart.tax}
+              </Title>
             </Group>
+            <Flex justify={"center"}>
+              <Button
+                onClick={handleProceeedToPay}
+                className={classes.payButton}
+              >
+                Proceed To Pay
+              </Button>
+            </Flex>
           </Stack>
         </Grid.Col>
       </Grid>

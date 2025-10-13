@@ -8,6 +8,8 @@ interface ICartState {
   totalPrice: number;
   selectedRestaurantId: string | null;
   selectedRestaurantName: string;
+  tax: number;
+  deliveryFee: number;
 }
 
 const initialState: ICartState = {
@@ -15,7 +17,9 @@ const initialState: ICartState = {
   totalItems: 0,
   totalPrice: 0,
   selectedRestaurantId: null,
-  selectedRestaurantName: "RestaurantName",
+  selectedRestaurantName: "{RestaurantName}",
+  tax: 0,
+  deliveryFee: 0,
 };
 
 const cartSlice = createSlice({
@@ -34,11 +38,13 @@ const cartSlice = createSlice({
         toast.warning(
           "Your cart contains items from other restaurant. Please Remove to continue",
         );
-        // return;
         console.error("Your cart contains items from other restaurant.");
-      } else if (existingItem) {
+        return;
+      }
+
+      if (existingItem) {
         existingItem.quantity += 1;
-        state.totalPrice += existingItem.price;
+        // state.totalPrice += existingItem.price;
       } else {
         state.cartItems.push({
           ...action.payload,
@@ -47,38 +53,45 @@ const cartSlice = createSlice({
         });
       }
 
-      state.totalItems += 1;
       state.totalPrice += price;
+      state.totalItems += 1;
       state.selectedRestaurantId = restaurantId;
       state.selectedRestaurantName = restaurantName;
+      state.deliveryFee = state.totalPrice > 200 ? 0 : 30;
+      state.tax = state.totalPrice * 0.18;
       // console.log(state);
     },
     removeFromCart: (state, action) => {
       const { id } = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === id);
 
-      if (existingItem) {
-        if (existingItem.quantity > 1) {
-          existingItem.quantity -= 1;
-          state.totalItems -= 1;
-          state.totalPrice -= existingItem.price;
-        } else {
-          // Remove item if quantity becomes 0
-          state.cartItems = state.cartItems.filter((item) => item.id !== id);
-          state.totalItems -= 1;
-          state.totalPrice -= existingItem.price;
-        }
+      if (!existingItem) return;
+
+      if (existingItem.quantity > 1) {
+        existingItem.quantity -= 1;
+        // state.totalItems -= 1;
+        // state.totalPrice -= existingItem.price;
+      } else {
+        // Remove item if quantity becomes 0
+        state.cartItems = state.cartItems.filter((item) => item.id !== id);
+      }
+      state.totalItems -= 1;
+      state.totalPrice -= existingItem.price;
+
+      state.deliveryFee = state.totalPrice > 200 ? 0 : 30;
+      state.tax = state.totalPrice * 0.18;
+
+      if (state.cartItems.length === 0) {
+        clearCart();
       }
     },
 
     clearCart: (state) => {
-      state.cartItems = [];
-      state.totalItems = 0;
-      state.totalPrice = 0;
-      state.selectedRestaurantId = null;
+      Object.assign(state, initialState);
     },
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart } =
+  cartSlice.actions;
 export default cartSlice.reducer;

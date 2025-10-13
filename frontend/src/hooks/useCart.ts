@@ -1,4 +1,8 @@
-import { addToCart, removeFromCart } from "../redux/slices/cartSlice";
+import {
+  addToCart,
+  clearCart,
+  removeFromCart,
+} from "../redux/slices/cartSlice";
 import { RootState } from "../redux/store";
 import { ICartItem } from "../types/cart.types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
@@ -13,6 +17,11 @@ export const useCart = () => {
   const removeItem = (cartItem: ICartItem) => {
     dispatch(removeFromCart(cartItem));
   };
+
+  const removeAllFromCart = () => {
+    dispatch(clearCart());
+  };
+
   const cart = useAppSelector((state: RootState) => state.cart);
 
   const currentRestaurant = useAppSelector(
@@ -23,7 +32,18 @@ export const useCart = () => {
   //   (state: RootState) => state.cart.selectedRestaurantName,
   // );
 
-  const {cartItems, totalPrice, totalItems} = useAppSelector((state: RootState) => state.cart);
+  const { cartItems, totalPrice, totalItems } = useAppSelector(
+    (state: RootState) => state.cart,
+  );
 
-  return { addItem, removeItem, currentRestaurant, cart, cartItems, totalPrice, totalItems };
+  return {
+    addItem,
+    removeItem,
+    removeAllFromCart,
+    currentRestaurant,
+    cart,
+    cartItems,
+    totalPrice,
+    totalItems,
+  };
 };
