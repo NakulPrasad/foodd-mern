@@ -1,5 +1,5 @@
 import * as express from "express";
-import { User } from "./user.js";
+import { User } from "./user.ts";
 
 declare global {
   namespace Express {
@@ -9,4 +9,3 @@ declare global {
   }
 }
 
-export {};

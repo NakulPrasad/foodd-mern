@@ -25,5 +25,19 @@ export interface IRestaurant {
     open: string;
     close: string;
   };
-  menu : IFoodItem[];
+  menu: IFoodItem[];
+}
+
+export interface IGetRequestRestaurantById {
+  id: string;
+}
+
+export interface IGetResponseRestaurantById {
+  message: string;
+  data: IRestaurant;
+}
+
+export interface IAllRestaurantResponse {
+  message: string;
+  data: IRestaurant[];
 }

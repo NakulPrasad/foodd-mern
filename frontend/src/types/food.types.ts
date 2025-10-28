@@ -1,7 +1,7 @@
 import { IValue } from "./cart.types";
 
 export interface IFoodItem {
-  id: string;
+  _id: string;
   name: string;
   restaurantId: string;
   restaurantName: string;
@@ -15,7 +15,7 @@ export interface IFoodItem {
     {
       name: string;
       type: string;
-      values: [IValue];
+      values: IValue[];
     },
   ];
 }

@@ -32,6 +32,7 @@ export default class orderService {
 
   async addOrder(order: IOrderModel): Promise<boolean> {
     try {
+      
       const orderAdded = await OrderModel.create(order);
       if (!orderAdded) {
         console.error("Can't Create Order");

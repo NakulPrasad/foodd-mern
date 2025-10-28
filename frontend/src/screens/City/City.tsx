@@ -5,14 +5,17 @@ import {
   Flex,
   Image,
   SimpleGrid,
+  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { toast } from "react-toastify";
 import CollectionCard from "../../components/Cards/CollectionCard/CollectionCard";
 import RestaurantCard from "../../components/Cards/RestaurantCard/RestaurantCard";
 import CustomCarousel from "../../components/Carousel/Carousel";
 import { useLocation } from "../../hooks/useLocation";
-import { useGetAllRestaurantQuery } from "../../redux/slices/apiSlice";
+import { useRestaurant } from "../../hooks/useRestaurant";
+import { IRestaurant } from "../../types";
 import classes from "./City.module.css";
 import Biryani from "/img/foodCategory/biryani.png";
 import Burger from "/img/foodCategory/burger.png";
@@ -24,10 +27,11 @@ const City = () => {
 
   const { city } = useLocation();
 
-  const { data, error, isLoading } = useGetAllRestaurantQuery();
+  const { allRestaurantJson, isLoading, error } = useRestaurant();
 
   return (
     <section id="city">
+      {error && toast.warn("Something went wrong")}
       <header id="banner">
         <Flex
           align={"center"}
@@ -91,9 +95,9 @@ const City = () => {
           slidesToScroll={2}
           className="px-5"
         >
-          {data?.data?.map((restaurant, index) => {
+          {allRestaurantJson?.data?.map((restaurant: IRestaurant) => {
             return (
-              <Carousel.Slide key={index}>
+              <Carousel.Slide key={restaurant._id}>
                 <RestaurantCard restaurant={restaurant} />
               </Carousel.Slide>
             );
@@ -110,12 +114,14 @@ const City = () => {
           spacing={theme.spacing.xl}
           // onClick={(e) => console.log(e.target)}
         >
-          {isLoading && <p>Loading ...</p>}
+          {!isLoading && error && <Text>Loading ...</Text>}
           {/* {restaurants.map((restaurant, index) => {
             return <RestaurantCard restaurant={restaurant} key={index} />;
           })} */}
-          {data?.data?.map((restaurant, index) => {
-            return <RestaurantCard restaurant={restaurant} key={index} />;
+          {allRestaurantJson?.data?.map((restaurant: IRestaurant) => {
+            return (
+              <RestaurantCard restaurant={restaurant} key={restaurant._id} />
+            );
           })}
         </SimpleGrid>
       </section>

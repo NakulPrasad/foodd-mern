@@ -24,7 +24,7 @@ const URLs = {
   getAllFoodCategory: `${BASE_URL}/food/getAllFoodCategory`,
   
   // Orders
-  postOrder: `${BASE_URL}/order/orderCheckout`,
+  postOrder: `${BASE_URL}/order/addOrder`,
   getOrders: `${BASE_URL}/order/getMyOrders`,
   
   

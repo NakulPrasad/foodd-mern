@@ -1,6 +1,6 @@
-import { Document, model, Schema, Types } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
-export interface IOrderModel extends Document {
+export interface IOrderModel {
   customerId: Types.ObjectId;
   restaurantId: Types.ObjectId;
   items: {
@@ -19,8 +19,8 @@ export interface IOrderModel extends Document {
     | "cancelled";
   paymentStatus: "pending" | "paid" | "failed" | "refunded";
   deliveryAddress: string;
-  createdAt: Date;
-  updatedAt: Date;
+  deliveryFee: Number;
+  gstAndCharges: Number;
 }
 
 const OrderSchema = new Schema(
@@ -35,8 +35,8 @@ const OrderSchema = new Schema(
         price: { type: Number, required: true }, // snapshot price at the time of order
       },
     ],
-    deliveryFee : {type : Number, required: true},
-    gstAndCharges : {type: Number, required: true},
+    deliveryFee: { type: Number, required: true },
+    gstAndCharges: { type: Number, required: true },
     totalAmount: { type: Number, required: true },
 
     status: {

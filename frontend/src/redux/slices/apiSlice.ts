@@ -1,6 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import URLs, { BASE_URL } from "../../configs/URLs";
 import {
+  IAllRestaurantResponse,
+  IGetResponseRestaurantById,
+} from "../../types";
+import {
   ICheckAuthResponse,
   ILoginRequest,
   ILoginResponse,
@@ -32,14 +36,21 @@ export const apiSlice = createApi({
         body: user,
       }),
     }),
-    getAllRestaurant: builder.query({
+    getAllRestaurant: builder.query<IAllRestaurantResponse, void>({
       query: () => URLs.getAllRestaurant,
     }),
-    getRestaurantById: builder.query({
+    getRestaurantById: builder.query<IGetResponseRestaurantById, string>({
       query: (id) => URLs.getRestaurantById + "/" + id,
     }),
     getMyOrders: builder.query<{ data: IOrder[] }, void>({
       query: () => URLs.getOrders,
+    }),
+    postOrder: builder.mutation({
+      query: (order) => ({
+        url: URLs.postOrder,
+        method: "POST",
+        body: order,
+      }),
     }),
   }),
 });
@@ -51,4 +62,5 @@ export const {
   useGetAllRestaurantQuery,
   useGetRestaurantByIdQuery,
   useGetMyOrdersQuery,
+  usePostOrderMutation,
 } = apiSlice;

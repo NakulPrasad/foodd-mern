@@ -4,7 +4,7 @@ export interface IValue {
 }
 
 export interface ICartItem {
-  id: string;
+  _id: string;
   restaurantId: string;
   restaurantName: string;
   name: string;

@@ -5,7 +5,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import authenticateToken from "../middleware/authMiddleware.js";
 import authService from "../services/authService.js";
 import userService from "../services/userService.js";
-import { GoogleOAuthLoginRequest } from "../types/auth.js";
+import { IGoogleOAuthLoginRequest } from "../types/auth.js";
 
 const CLIENT_ID = process.env.GOOGLE_CLIENTID || "error";
 const CLIENT_SEC = process.env.GOOGLE_CLIENTSECRET || "error";
@@ -71,7 +71,7 @@ export const passportRoutes = (app: any) => {
     passport.authenticate("google", {
       failureRedirect: FRONTEND_URL,
     }),
-    async (req: GoogleOAuthLoginRequest, res: Response) => {
+    async (req: IGoogleOAuthLoginRequest, res: Response) => {
       const payload = {
         id: req.user.id, // Use a unique identifier from the user object
         name: req.user.displayName,

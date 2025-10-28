@@ -8,15 +8,15 @@ import {
   Text,
   TextInput,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import { isEmail, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconUser } from "@tabler/icons-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import URLs from "../../configs/URLs";
 import { useAppDispatch } from "../../hooks/reduxHooks";
+import { useLocation } from "../../hooks/useLocation";
 import { useUser } from "../../hooks/useUser";
 import {
   useLoginRequestMutation,
@@ -28,8 +28,6 @@ import InputPassword from "../Inputs/InputPassword";
 import InputPasswordReq from "../Inputs/InputPasswordReq";
 import Spinner from "../Loader/Spinner";
 import classes from "./LoginDrawer.module.css";
-import { useLocation } from "../../hooks/useLocation";
-import URLs from "../../configs/URLs";
 
 interface DrawerProps {
   variant: string;
@@ -37,8 +35,6 @@ interface DrawerProps {
 }
 
 const LoginDrawer = ({ variant, title }: DrawerProps) => {
-  const theme = useMantineTheme();
-  const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [isNewUser, setIsNewUser] = useState(true);
   const [loginRequest, { isLoading: isLoginLoading }] =
@@ -48,7 +44,7 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
 
   const { addUser } = useUser();
 
-  const {city} = useLocation();
+  const { city } = useLocation();
 
   const dispatch = useAppDispatch();
 
@@ -122,11 +118,10 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
   const handleSignUp = async () => {
     const response = await registerRequest(form.values);
     if (response.data && response.data.message) {
-      console.log("User Registered Successfully");
+      // console.log("User Registered Successfully");
       toast.success("User Registered Successfully");
-    }
-    else{
-      toast.error(response?.error.data.message)
+    } else {
+      toast.error("Failed to register user");
     }
   };
 
@@ -167,7 +162,7 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
             </>
           )}
           <Group mt="md">
-            <Button fullWidth type="submit" >
+            <Button fullWidth type="submit">
               {isNewUser ? "CONTINUE" : "LOGIN"}
             </Button>
             <Button fullWidth onClick={handleLoginGoogle}>

@@ -22,7 +22,7 @@ interface IModalCartProps {
 
 const ModalCart = (props: IModalCartProps) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { addItem,updateTaxAndFee } = useCart();
+  const { addItem} = useCart();
 
   const title = (
     <Flex direction={"column"}>
@@ -40,7 +40,7 @@ const ModalCart = (props: IModalCartProps) => {
   // const dispatch = useAppDispatch();
 
   const cartItem = {
-    id: props.item.id,
+    _id: props.item._id,
     restaurantId: props.item.restaurantId,
     restaurantName: props.item.restaurantName,
     name: props.item.name,
@@ -65,8 +65,8 @@ const ModalCart = (props: IModalCartProps) => {
     addItem(cartItem);
     toast.success("Item Added successfully");
     // console.log(value);
-    console.log("ModalCartProps", props);
-    console.log("cartItem", cartItem);
+    // console.log("ModalCartProps", props);
+    // console.log("cartItem", cartItem);
 
     close();
   };

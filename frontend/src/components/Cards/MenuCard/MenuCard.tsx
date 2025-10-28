@@ -13,7 +13,7 @@ interface IMenuCardProps {
 
 const MenuCard = (props: IMenuCardProps) => {
   const theme = useMantineTheme();
-  console.log(props.foodItem)
+  // console.log(props.foodItem)
 
   return (
     <Flex justify={"space-between"} className={classes.bd}>
@@ -45,8 +45,9 @@ const MenuCard = (props: IMenuCardProps) => {
         <Image radius={theme.radius.sm} src={Pizza} className={classes.img} />
         <Flex direction={"column"} className={classes.translate}>
           <ModalCart item={props.foodItem} />
-
-          <Text className="description_sm">Customisable</Text>
+          {props.foodItem.options.length >=1 && (
+            <Text className="description_sm">Customisable</Text>
+          )}
         </Flex>
       </Flex>
     </Flex>

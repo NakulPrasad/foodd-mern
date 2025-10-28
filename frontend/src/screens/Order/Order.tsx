@@ -4,8 +4,8 @@ import {
   Container,
   Group,
   Stack,
+  Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import OrderCard from "../../components/Cards/OrderCard/OrderCard";
@@ -14,7 +14,6 @@ import { IOrder } from "../../types/order.types";
 import classes from "./Order.module.css";
 
 const Order = () => {
-  const theme = useMantineTheme();
   const { data: orderData, isLoading } = useGetMyOrdersQuery();
   const [orders, setOrders] = useState<IOrder[]>([]);
   useEffect(() => {
@@ -39,6 +38,7 @@ const Order = () => {
       </Container>
       <Container className={classes.subContainer2}>
         <Title order={3}>Past Order</Title>
+        {isLoading && <Text>Loading</Text>}
         {!isLoading &&
           Array.isArray(orders) &&
           orders?.map((order) => {

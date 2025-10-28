@@ -22,33 +22,41 @@ import { IFoodItem, IRestaurant } from "../../types";
 import { coupons } from "../../utils/dummyData";
 import classes from "./Restaurant.module.css";
 
+interface ICategoryGroup {
+  category: string;
+  items: IFoodItem[];
+}
 
 function groupMenuByCategory(apiData: IRestaurant) {
   if (!apiData) {
     return;
   }
-  const groupedMenu = apiData?.menu.reduce((acc, item) => {
-    let categoryGroup = acc.find((cat) => cat.category === item.category);
-    if (!categoryGroup) {
-      categoryGroup = { category: item.category, items: [] };
-      acc.push(categoryGroup);
-    }
+  const groupedMenu: ICategoryGroup[] = apiData.menu.reduce<ICategoryGroup[]>(
+    (acc, item) => {
+      let categoryGroup = acc.find((cat) => cat.category === item.category);
+      if (!categoryGroup) {
+        categoryGroup = { category: item.category, items: [] };
+        acc.push(categoryGroup);
+      }
 
-    categoryGroup.items.push({
-      id: item._id,
-      restaurantId: apiData._id, // assuming restaurant id is in apiData
-      name: item.name,
-      restaurantName: apiData.name,
-      description: item.description || "",
-      price: item.price,
-      image_url: item.image_url || "https://via.placeholder.com/150",
-      rating: item.rating || 0,
-      is_veg: item.isVeg,
-      options: item.options || [], // keep empty array if no options
-    });
+      categoryGroup.items.push({
+        _id: item._id,
+        restaurantId: apiData._id,
+        name: item.name,
+        restaurantName: apiData.name,
+        description: item.description || "",
+        price: item.price,
+        img_url: item.img_url || "https://via.placeholder.com/150",
+        rating: item.rating || 0,
+        is_veg: item.is_veg,
+        options: item.options || [],
+        category: item.category,
+      });
 
-    return acc;
-  }, []);
+      return acc;
+    },
+    [],
+  );
 
   return groupedMenu;
 }
@@ -56,17 +64,14 @@ function groupMenuByCategory(apiData: IRestaurant) {
 const Restaurant = () => {
   const theme = useMantineTheme();
   const { id } = useParams();
-  const [items, setItems] = useState([]);
+  if (!id) return <Text>Restaurant not found</Text>;
+  const [items, setItems] = useState<JSX.Element[]>([]);
   const { data: restaurantData, isLoading } = useGetRestaurantByIdQuery(id);
 
-  // const restaurantData: IRestaurant = useSelector(
-  //   (state) => state.restaurant.selected,
-  // );
   useEffect(() => {
     if (restaurantData && !isLoading) {
-      const groupedCategory: IFoodItem[] = groupMenuByCategory(
-        restaurantData?.data,
-      );
+      const groupedCategory: ICategoryGroup[] =
+        groupMenuByCategory(restaurantData.data) ?? [];
       // const groupedCategory = groupMenuByCategory(restaurantData);
       // console.log(groupedCategory);
 
@@ -77,7 +82,7 @@ const Restaurant = () => {
           </Accordion.Control>
           {item.items.map((food) => {
             return (
-              <Accordion.Panel key={food.id}>
+              <Accordion.Panel key={food._id}>
                 <MenuCard foodItem={food} />
                 <Divider my="md" />
               </Accordion.Panel>

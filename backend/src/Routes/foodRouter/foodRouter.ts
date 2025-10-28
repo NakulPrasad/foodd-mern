@@ -1,14 +1,13 @@
 import express from "express";
 import {
   addFoodCategory,
-  addFoodItem,
   addFoodItem2,
+  addFoodItemBulk,
   deleteFoodItemById,
   deleteFoodItemByName,
   foodTest,
   getAllFoodCategory,
   getAllFoodItemByRestaurantId,
-  getAllFoodItemByRestaurantId2,
 } from "../../controllers/foodRouterController/foodRouterController.js";
 import authenticateToken from "../../middleware/authMiddleware.js";
 
@@ -20,6 +19,7 @@ foodRouter.get("/getAllFoodItemByRestaurantId", getAllFoodItemByRestaurantId);
 foodRouter.get("/getAllFoodCategory", getAllFoodCategory);
 // foodRouter.post("/addFoodItem", addFoodItem);
 foodRouter.post("/addFoodItem", addFoodItem2);
+foodRouter.post("/addFoodItemBulk", addFoodItemBulk);
 foodRouter.post("/addFoodCategory", addFoodCategory);
 foodRouter.delete("/deleteFoodItemByName", deleteFoodItemByName);
 foodRouter.delete("/deleteFoodItemById", deleteFoodItemById);
