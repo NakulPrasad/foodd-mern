@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { IOrderModel } from "../../models/orderModel.js";
 import authService from "../../services/authService.js";
 import orderService from "../../services/orderService.js";
@@ -37,7 +37,11 @@ export const getOrdersByUserId = async (req: Request, res: Response) => {
     .json({ message: "Fetched order details successfully", data: orders });
 };
 
-export const addOrder = async (req: IAuthenticatedRequest, res: Response) => {
+export const addOrder = async (
+  req: IAuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const order: IOrderModel = {
     restaurantId: req.body.restaurantId,
     items: req.body.items,
@@ -49,7 +53,7 @@ export const addOrder = async (req: IAuthenticatedRequest, res: Response) => {
     deliveryAddress: req.body.deliveryAddress,
     customerId: req.user.id,
   };
-  const orderAdded: Boolean = await OrderService.addOrder(order);
+  const orderAdded: boolean = await OrderService.addOrder(order);
   if (!orderAdded) {
     return res.status(500).json({ message: "Failed to create OrderModel" });
   }

@@ -27,8 +27,8 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<ICartItem>) => {
-      const { id, price, restaurantId, restaurantName } = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === id);
+      const { _id, price, restaurantId, restaurantName } = action.payload;
+      const existingItem = state.cartItems.find((item) => item._id === _id);
 
       // Validate restaurant context
       if (
@@ -62,8 +62,8 @@ const cartSlice = createSlice({
       // console.log(state);
     },
     removeFromCart: (state, action) => {
-      const { id } = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === id);
+      const { _id } = action.payload;
+      const existingItem = state.cartItems.find((item) => item._id === _id);
 
       if (!existingItem) return;
 
@@ -73,7 +73,7 @@ const cartSlice = createSlice({
         // state.totalPrice -= existingItem.price;
       } else {
         // Remove item if quantity becomes 0
-        state.cartItems = state.cartItems.filter((item) => item.id !== id);
+        state.cartItems = state.cartItems.filter((item) => item._id !== _id);
       }
       state.totalItems -= 1;
       state.totalPrice -= existingItem.price;

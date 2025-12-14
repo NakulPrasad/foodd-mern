@@ -12,6 +12,6 @@ export interface ICartItem {
   image_url?: string;
   rating?: number;
   is_veg?: boolean;
-  options: any;
+  options: IValue;
   quantity: number;
 }

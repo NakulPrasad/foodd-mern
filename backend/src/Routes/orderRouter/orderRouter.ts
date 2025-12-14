@@ -10,4 +10,4 @@ export const orderRouter = express.Router();
 orderRouter.use(authenticateToken);
 orderRouter.get("/test", orderTest);
 orderRouter.get("/getMyOrders", getMyOrders);
-orderRouter.post("/addOrder", addOrder);
+orderRouter.post("/addOrder", addOrder as any);

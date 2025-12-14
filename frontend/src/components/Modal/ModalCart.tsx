@@ -75,7 +75,7 @@ const ModalCart = (props: IModalCartProps) => {
     // console.log(value);
     let calculatedTotal = props.item.price;
 
-    Object.entries(value).forEach(([key, val]) => {
+    Object.entries(value).forEach(([_, val]) => {
       if (Array.isArray(val)) {
         // For arrays, parse each item and add the prices
         val.forEach((item) => {

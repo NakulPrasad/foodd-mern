@@ -8,7 +8,7 @@ const authToken = getItem("authToken");
 const fetchBaseQueryWithAuth = (baseUrl: string) =>
   fetchBaseQuery({
     baseUrl: baseUrl,
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers, {}) => {
       // const authToken = (getState() as RootState).auth.authToken;
       headers.set("Content-Type", "application/json");
 
