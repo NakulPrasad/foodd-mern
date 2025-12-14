@@ -3,9 +3,10 @@
  */
 
 import { useEffect, useState } from "react";
+import { IUserProfile } from "../../types/profile.types";
 
 function Auth() {
-  const [user, setUser] = useState(null);
+  const [user, setUser]  = useState<IUserProfile|null>();
 
   useEffect(() => {
     fetch("http://localhost:3000/auth/profile", {

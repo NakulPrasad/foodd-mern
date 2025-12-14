@@ -62,7 +62,7 @@ const ModalCart = (props: IModalCartProps) => {
 
   const handleAddToCart = () => {
     // dispatch(addToCart(cartItem));
-    addItem(cartItem);
+    addItem(cartItem as any);
     toast.success("Item Added successfully");
     // console.log(value);
     // console.log("ModalCartProps", props);

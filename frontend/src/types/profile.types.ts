@@ -1,5 +1,6 @@
 // Basic user profile data
 export interface IUserProfile {
+    displayName: string;
     id?: number;
     name: string;
     email: string;

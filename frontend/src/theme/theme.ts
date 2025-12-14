@@ -242,7 +242,7 @@ const shadcnTheme = createTheme({
         radius: "md",
         withBorder: true,
       },
-      classNames: (theme) => ({
+      classNames: () => ({
         root: "globalMantineCardRoot",
       }),
     }),
@@ -271,7 +271,7 @@ const shadcnTheme = createTheme({
 
         return {};
       },
-      vars: (theme) => {
+      vars: (_theme) => {
         return {
           input: {
             "--input-bd": "var(--mantine-color-default-border)",
