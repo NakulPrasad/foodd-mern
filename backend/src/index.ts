@@ -17,7 +17,7 @@ const app = express();
 app.use(corsMiddleware);
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(rateLimiter);
+// app.use(rateLimiter);
 
 // Setup session
 app.use(
@@ -62,10 +62,16 @@ app.use("/apiv1", apiRouter);
 
 passportRoutes(app);
 
-app.get("/graph", (_req, res) => {
-  res.type("html")
-  res.end(ruruHTML({ endpoint: "/graphql" }))
-})
+// app.get("/graph", (_req, res) => {
+//   res.type("html").end(ruruHTML({ endpoint: "/graphql" }))
+// })
+
+if (process.env.NODE_ENV !== "production") {
+  const { ruruHTML } = require("ruru/server");
+  app.get("/graphql", (_req, res) => {
+    res.type("html").end(ruruHTML({ endpoint: "/graphql" }));
+  });
+}
 
 export default app;
 
