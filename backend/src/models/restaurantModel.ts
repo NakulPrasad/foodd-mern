@@ -1,5 +1,5 @@
 import { Document, model, Schema, Types } from "mongoose";
-import { foodItemSchema, IFoodItem } from "./foodModel.js";
+
 
 export interface IRestaurant extends Document {
   name: string;
@@ -123,4 +123,6 @@ const RestaurantSchema: Schema<IRestaurant> = new Schema<IRestaurant>(
 // );
 
 // export { IRestaurant, RestaurantModel };
+
+
 export default model<IRestaurant>("restaurant", RestaurantSchema);

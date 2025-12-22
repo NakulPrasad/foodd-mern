@@ -9,8 +9,8 @@ import { IGoogleOAuthLoginRequest } from "../types/auth.js";
 
 const CLIENT_ID = process.env.GOOGLE_CLIENTID || "error";
 const CLIENT_SEC = process.env.GOOGLE_CLIENTSECRET || "error";
-const BACKEND_URL = process.env.BACKEND_URL || "error";
-const FRONTEND_URL = process.env.FRONTEND_URL || "error";
+const BACKEND_URL = process.env.BACKEND_URL ||process.env.BACKEND_URL_PROD|| "error";
+const FRONTEND_URL = process.env.FRONTEND_URL || process.env.FRONTEND_URL_PROD|| "error";
 const UserService = userService.getInstance();
 const AuthService = authService.getInstance();
 

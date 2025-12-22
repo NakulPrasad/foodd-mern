@@ -4,6 +4,7 @@ import { Response } from "express";
 
 
 export default class restaurantService {
+  
   private static instance: restaurantService;
 
   private constructor() {}
@@ -12,11 +13,13 @@ export default class restaurantService {
     if (!restaurantService.instance) {
       restaurantService.instance = new restaurantService();
     }
+    // console.log("Collection:", RestaurantModel.collection.name);
     return restaurantService.instance;
   }
 
   async getAllRestaurant(): Promise<boolean | IRestaurant[]> {
     try {
+      console.log("Collection:", RestaurantModel.collection.name);
       const restaurants = await RestaurantModel.find({});
       if(!restaurants || restaurants.length === 0){
             console.error("Empty RestaurantModel")

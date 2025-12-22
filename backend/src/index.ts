@@ -1,16 +1,14 @@
 import MongoStore from "connect-mongo";
 import express from "express";
 import session from "express-session";
+import { createHandler } from "graphql-http/lib/use/express";
 import morgan from "morgan";
 import { apiRouter } from "./Routes/apiRouter.js";
 import dbConfig from "./configs/dbConfig2.js";
 import passport, { passportRoutes } from "./configs/passportConfig.js";
-import corsMiddleware from "./middleware/corsMiddleware.js";
-import rateLimiter from "./middleware/rateLimitter.js";
 import root from "./graphql/resolvers.js";
 import schema from "./graphql/schema.js";
-import  {createHandler} from "graphql-http/lib/use/express"
-import {ruruHTML} from "ruru/server"
+import corsMiddleware from "./middleware/corsMiddleware.js";
 
 const app = express();
 
@@ -40,7 +38,12 @@ app.use(passport.session());
  * Connect to database
  */
 const dbconfig = new dbConfig();
-dbconfig.connect();
+app.use((req, res, next) => {
+  if (!dbConfig.getConnectionStatus()) {
+    dbconfig.connect();
+  }
+  next();
+});
 
 // Create and use the GraphQL handler.
 app.all(
@@ -48,8 +51,8 @@ app.all(
   createHandler({
     schema: schema,
     rootValue: root,
-  })
-)
+  }),
+);
 
 /**
  * Routes
@@ -74,4 +77,3 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export default app;
-
