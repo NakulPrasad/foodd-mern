@@ -1,36 +1,43 @@
-import { useEffect } from "react";
-import { User, useUser } from "./useUser";
+import { useState } from "react";
+import { apiSlice } from "../redux/slices/apiSlice";
+import { setAuth, setAuthenticationToken } from "../redux/slices/authSlice";
+import store, { RootState } from "../redux/store";
+import { ILoginRequest } from "../types/authentication.types";
+import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import { useCookie } from "./useCookie";
-import { useRef } from "react";
+import { useUser } from "./useUser";
 
 export const useAuth = () => {
-  const { user, setUser, addUser, removeUser } = useUser();
-  const { getItem } = useCookie();
-  const getItemRef = useRef(getItem);
-  getItemRef.current = getItem;
+  const { getItem, setItem } = useCookie();
+  const { addUser, removeUser } = useUser();
+  const [authToken] = useState(() => getItem("authToken"));
+  const dispatch = useAppDispatch();
 
-  const addUserRef = useRef(addUser);
-  addUserRef.current = addUser;
-  useEffect(() => {
-    const updateLogin = () => {
-      const userFormCookie = getItemRef.current("user");
-      if (userFormCookie) {
-        try {
-          const user = JSON.parse(userFormCookie);
-          addUserRef.current(user);
-        } catch (error) {
-          console.error("Failed to parse user data from cookie:", error);
-        }
-      }
-    };
-    updateLogin();
-  }, []);
+  const checkAuth = async () => {
+    if (!authToken) return;
+    const checkAuthResponse = await store
+      .dispatch(apiSlice.endpoints.checkAuth.initiate())
+      .unwrap();
+    dispatch(setAuthenticationToken({ authToken: authToken }));
+    if (checkAuthResponse) {
+      dispatch(setAuth(checkAuthResponse));
+    }
+  };
 
-  const login = (user: User) => {
-    addUser(user);
+  const login = (props: ILoginRequest) => {
+    addUser(props.token);
   };
   const logout = () => {
     removeUser();
   };
-  return { login, logout, user, setUser };
+
+  const isAuthenticated = ()=>{
+    const user = useAppSelector((state : RootState) => state.auth.isAuthenticated)
+    return user;
+  }
+
+  const setAuthToken=(token : string)=>{
+    setItem("authToken", token )
+  }
+  return { login, logout, authToken, checkAuth, isAuthenticated, setAuthToken };
 };

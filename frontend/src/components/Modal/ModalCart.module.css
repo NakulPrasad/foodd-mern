@@ -1,0 +1,14 @@
+.icon{
+    height: var(--icon-veg-h);
+    width: var(--icon-veg-w);
+}
+
+.modalBody{
+    overflow: hidden auto;
+}
+
+.checkbox {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

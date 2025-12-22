@@ -1,57 +1,66 @@
-import Order from "../../models/orderModel.js";
-import User from "../../models/userModel.js";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { IOrderModel } from "../../models/orderModel.js";
+import authService from "../../services/authService.js";
+import orderService from "../../services/orderService.js";
+import { IAuthenticatedRequest } from "../../types/auth.js";
+
+const OrderService = orderService.getInstance();
+const AuthService = authService.getInstance();
 
 export const orderTest = (req: Request, res: Response) => {
-  return res.status(200).json({ message: "Working Order Router" });
-};
-
-export const orderCheckout = async (req: Request, res: Response) => {
-  const data = req.body.order_data;
-  // const { email } = req.user!;
-  const email = (req.user as any).email;
-
-  await data.splice(0, 0, { Order_date: req.body.order_date });
-
-  const user = await Order.findOne({ email: email });
-
-  if (!user) {
-    try {
-      const order = await Order.create({
-        email: email,
-        order_data: [data],
-      });
-      if (!order) {
-        return res.status(204).json({ message: "Order Can't be added" });
-      }
-      return res.status(201).json({ message: "Order Successfully added" });
-    } catch (error: any) {
-      console.error(error.message);
-
-      return res
-        .status(500)
-        .json({ message: "Can't Place order", error: error.message });
-    }
-  }
-  const order = await Order.findOneAndUpdate(
-    { email: email },
-    { $push: { order_data: data } }
-  );
-  if (!order) {
-    return res.status(204).json({ message: "Order Can't be added" });
-  }
-  return res.status(201).json({ message: "Order Successfully added" });
+  return res.status(200).json({ message: "Working OrderModel Router" });
 };
 
 export const getMyOrders = async (req: Request, res: Response) => {
-  try {
-    const email = (req.user as any).email;
-    if (!email) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    const orders = await Order.findOne({ email: email });
-    return res.status(200).json({ orderData: orders });
-  } catch (error: any) {
-    return res.send("Server error");
+  const currentUser = await AuthService.getCurrentUser(req, res);
+  // console.log(currentUser);
+  const orders = await OrderService.getMyOrders(currentUser.id);
+  if (!orders) {
+    console.error("Order ID not found");
+    return false;
   }
+  return res
+    .status(200)
+    .json({ message: "Fetched order details successfully", data: orders });
 };
+
+export const getOrdersByUserId = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const orders = await OrderService.getOrderByUserId(id);
+  if (!orders) {
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch OrderModel Details" });
+  }
+  return res
+    .status(200)
+    .json({ message: "Fetched order details successfully", data: orders });
+};
+
+export const addOrder = async (
+  req: IAuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  const order: IOrderModel = {
+    restaurantId: req.body.restaurantId,
+    items: req.body.items,
+    totalAmount: req.body.totalAmount,
+    deliveryFee: req.body.deliveryFee,
+    gstAndCharges: req.body.gstAndCharges,
+    status: req.body.status,
+    paymentStatus: req.body.paymentStatus,
+    deliveryAddress: req.body.deliveryAddress,
+    customerId: req.user.id,
+  };
+  const orderAdded: boolean = await OrderService.addOrder(order);
+  if (!orderAdded) {
+    return res.status(500).json({ message: "Failed to create OrderModel" });
+  }
+  return res.status(200).json({ message: "OrderModel Created Successfully" });
+};
+
+// export const removeOrderById=async(req:Request, res:Response)=>{
+//   const id = req.body.id;
+//   const removeOrder = await
+// }

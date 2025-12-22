@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, model } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 
 const foodCategorySchema = new Schema({
   CategoryName: String,

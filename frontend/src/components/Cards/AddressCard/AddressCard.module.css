@@ -1,0 +1,14 @@
+.main {
+  padding: var(--padding-sm);
+}
+
+@media (min-width: var(--mantine-breakpoint-md)) {
+  .main {
+    padding: var(--padding-md);
+  }
+}
+@media (min-width: var(--mantine-breakpoint-lg)) {
+  .main {
+    padding: var(--padding-lg);
+  }
+}

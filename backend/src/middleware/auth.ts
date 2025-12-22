@@ -5,7 +5,7 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.status(401).json({ msg: "Unautorised" });
+  res.status(401).json({ msg: "Unauthorised" });
 };
 
 module.exports = isAuthenticated;

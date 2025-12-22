@@ -1,0 +1,17 @@
+.icon{
+    height: var(--icon-veg-h);
+    width: var(--icon-veg-w);
+}
+
+.img{
+    height: 12rem
+}
+
+.ml{
+    margin-left:3rem;
+}
+
+.translate{
+    transform: translateY(-50%);
+}
+

@@ -1,0 +1,32 @@
+.bg_tranparent {
+  background-color: transparent;
+}
+
+.bg_gradient {
+  background: linear-gradient(
+    0deg,
+    rgb(201, 188, 244) 0%,
+    rgb(255, 255, 255) 95.83%
+  );
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+
+.mw {
+  max-width: 25rem;
+}
+
+.section_m {
+  margin: var(--section-m);
+  padding: var(--mantine-spacing-md) !important;
+}
+
+.collection_img {
+  height: 10rem;
+}
+
+
+.divider{
+  margin: var(--section-mx);
+  border: 1px solid rgba(2, 6, 12, 0.05) !important;
+}

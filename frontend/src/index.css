@@ -1,90 +1,100 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  /* Section */
+  --section-mx: 0 calc(10% + 36px);
+  --section-my: calc(2%) 0;
+  --section-m: calc(2%) calc(10% + 36px);
+  --section-sm: calc(2%) calc(12% + 36px);
+  --section-md: calc(2%) calc(10% + 36px);
+  --section-lg: calc(2%) calc(10% + 36px);
 
-@font-face {
-  font-family: "Metropolis";
-  src: url("./assets/fonts/metropolis.regular.otf");
-}
-@layer base {
-  html {
-    font-family: "Metropolis", system-ui, sans-serif;
-  }
-}
+  /* Spacing */
+  --space-xs: 0.25rem; /* 4px */
+  --space-sm: 0.5rem; /* 8px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-2xl: 3rem; /* 48px */
 
-@layer utilities {
-  /* Basic Button */
-  .btn {
-    @apply px-4 py-2 text-white font-semibold rounded-md shadow-md transition-all duration-300 ease-in-out;
-  }
+  /* Padding */
+  --padding-xs: 0.25rem; /* 4px */
+  --padding-sm: 0.5rem; /* 8px */
+  --padding-md: 1rem; /* 16px */
+  --padding-lg: 1.5rem; /* 24px */
+  --padding-xl: 2rem; /* 32px */
+  --padding-2xl: 3rem; /* 48px */
 
-  /* Primary Button */
-  .btn-primary {
-    @apply bg-blue-700 hover:bg-blue-700 text-white py-2 px-12 rounded-md shadow-md transition-all duration-300 ease-in-out;
-  }
+  /* Margin */
+  --margin-xs: 0.25rem; /* 4px */
+  --margin-sm: 0.5rem; /* 8px */
+  --margin-md: 1rem; /* 16px */
+  --margin-lg: 1.5rem; /* 24px */
+  --margin-xl: 2rem; /* 32px */
+  --margin-2xl: 3rem; /* 48px */
 
-  /* Secondary Button */
-  .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition-all duration-300 ease-in-out;
-  }
+  --heading-grey: rgba(2, 6, 12, 0.75);
 
-  /* Outline Button */
-  .btn-outline {
-    @apply bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 hover:border-transparent rounded-md transition-all duration-300 ease-in-out;
-  }
+  /* Font Weight */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi-bold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
+  --font-weight-black: 900;
 
-  /* Disabled Button */
-  .btn-disabled {
-    @apply opacity-50 cursor-not-allowed text-gray-400;
-  }
+  /* Image  */
+  --img-h-sm: 2rem;
+  --img-w-sm: 2rem;
+  --img-h-md: 3rem;
+  --img-w-md: 3rem;
 
-  /* Gradient Button */
-  .btn-gradient {
-    @apply bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition-all duration-300 ease-in-out;
-  }
-
-  /* Pill Button */
-  .btn-pill {
-    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-all duration-300 ease-in-out;
-  }
-
-  /* Elevated Button */
-  .btn-elevated {
-    @apply bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition-all duration-300 ease-in-out;
-  }
-
-  /* 3D Button */
-  .btn-3d {
-    @apply bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded transition-all duration-300 ease-in-out;
-  }
-
-  /* Large Button */
-  .btn-large {
-    @apply px-6 py-3 font-bold rounded-md shadow-md transition-all duration-300 ease-in-out;
-  }
-
-  /* Small Button */
-  .btn-small {
-    @apply px-3 py-1 font-semibold rounded-md shadow-sm transition-all duration-300 ease-in-out;
-  }
+  /* Icons */
+  --icon-veg-h: 1rem;
+  --icon-veg-w: 1rem;
+  --icon-h-sm: 2rem;
+  --icon-w-sm: 2rem;
+  --icon-h-md: 3rem;
+  --icon-w-md: 3rem;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Montserrat',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-
+h1 {
+  letter-spacing: -0.43px;
+  overflow: hidden;
+  color: var(--heading-grey);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h2 {
+  letter-spacing: -0.4px;
+  overflow: hidden;
 }
 
+h3 {
+  letter-spacing: -0.3px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  color: rgba(2, 6, 12, 0.75);
+}
+h4 {
+  letter-spacing: -0.3px;
+  color: rgba(2, 6, 12, 0.75);
+  overflow: hidden;
+}
 
-a{
-  text-decoration: none;
+h5 {
+  letter-spacing: -0.3px;
+  color: rgba(2, 6, 12, 0.92);
+  overflow: hidden;
+}
+
+.secondaryText {
+  font-size: 13px;
+  color: rgb(4, 90, 218);
+  font-weight: 200;
+  line-height: 16px;
+  overflow: hidden;
+}
+
+.foodIcon {
+  height: var(--icon-veg-h);
+  width: var(--icon-veg-w);
 }

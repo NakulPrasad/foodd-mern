@@ -1,0 +1,130 @@
+.section-mx {
+  margin: var(--section-mx);
+}
+
+.section-my {
+  margin: var(--section-my);
+}
+
+.section_m {
+  margin: var(--section-m);
+}
+
+.description {
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: -0.3px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  color: rgba(2, 6, 12, 0.6);
+}
+
+.description_sm {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: -0.3px;
+  color: rgba(2, 6, 12, 0.6);
+}
+
+.description_sm_bold {
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: -0.3px;
+  color: rgba(2, 6, 12, 0.45);
+}
+
+.rating {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.3px;
+  color: rgba(2, 6, 12, 0.6);
+  margin-left: 2px;
+}
+
+.globalMantineInput {
+  &:focus-within {
+    outline: rem(1px) solid var(--mantine-primary-color-filled);
+  }
+}
+
+.globalMantineTableRow {
+  &:hover {
+    background-color: rgb(from var(--mantine-color-default-hover) r g b / 0.5);
+  }
+}
+
+.globalMantineButton {
+  &:disabled {
+    cursor: default;
+    background-color: var(--mantine-color-default);
+    opacity: 0.5;
+  }
+}
+
+.globalMantineCheckbox {
+  /* background-color: var(--mantine-color-default); */
+  background-color: transparent;
+  border-color: var(--mantine-primary-color-filled);
+
+  &:checked {
+    border-color: var(--mantine-primary-color-filled);
+  }
+}
+
+.globalMantineCardRoot {
+  background-color: var(--mantine-color-default);
+  border-color: var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-default);
+}
+
+.globalMantineCardRoot__roseGreen {
+  background-color: var(--mantine-color-secondary-filled);
+  border-color: var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-default);
+}
+
+.mantine-Modal-content {
+  overflow-y: hidden;
+}
+
+.globalMantineHoverCard {
+  background-color: var(--mantine-color-default);
+  border-color: var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-default);
+}
+
+/* Menu Dropdown */
+.mantine-Menu-dropdown {
+  background-color: var(--mantine-color-default);
+  border-color: var(--mantine-color-default-border);
+
+  .mantine-Menu-item {
+    background-color: transparent;
+    &:hover {
+      background-color: var(--mantine-color-default-hover);
+    }
+  }
+}
+
+/* Segmented Control */
+.mantine-SegmentedControl-root {
+  background-color: var(--mantine-color-secondary-outline-hover);
+
+  .mantine-SegmentedControl-indicator {
+    background-color: var(--mantine-color-default);
+  }
+}
+
+/* Title */
+.mantine-Title-root,
+.mantine-Modal-title,
+.mantine-Drawer-title {
+  letter-spacing: -0.025em;
+}
+
+m_d3ea56bb.mantine-Checkbox-labelWrapper {
+  width: 100%;
+}

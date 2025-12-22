@@ -1,7 +1,7 @@
 import express from "express";
 import {
+  addOrder,
   getMyOrders,
-  orderCheckout,
   orderTest,
 } from "../../controllers/orderRouterController/orderRouterController.js";
 
@@ -10,4 +10,4 @@ export const orderRouter = express.Router();
 orderRouter.use(authenticateToken);
 orderRouter.get("/test", orderTest);
 orderRouter.get("/getMyOrders", getMyOrders);
-orderRouter.post("/orderCheckout", orderCheckout);
+orderRouter.post("/addOrder", addOrder as any);

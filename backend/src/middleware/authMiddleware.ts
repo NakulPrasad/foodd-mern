@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import authService from "../services/authService.js";
 import express, { Response, Request, NextFunction } from "express";
-import { log } from "console";
 const authenticateToken = express.Router();
 
 authenticateToken.use((req: Request, res: Response, next: NextFunction) => {

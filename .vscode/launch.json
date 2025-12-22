@@ -12,16 +12,13 @@
       "webRoot": "${workspaceFolder/frontend}"
     },
     {
-      "name": "Attach to Chrome",
-      "port": 5173,
-      "request": "attach",
-      "type": "chrome",
-      "webRoot": "${workspaceFolder/frontend}"
-    },
-    {
-      "name": "Attach by Process ID",
-      "processId": "${command:PickProcess}",
-      "request": "attach",
+      "name": "Launch with Nodemon",
+      "program": "${workspaceFolder}backend/dist/app.js",
+      "envFile": "${workspaceFolder}backend/.env.dev",
+      "runtimeExecutable": "nodemon", // Load environment variables if needed
+      "request": "launch",
+      "restart": true,
+      "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"],
       "type": "node"
     },

@@ -1,0 +1,11 @@
+.couponcard{
+    border-radius: var(--space-md);
+    gap: var(--space-md);
+}
+
+.icon{
+    height: var(--img-h-md);
+    width: var(--img-w-md);
+}
+
+
