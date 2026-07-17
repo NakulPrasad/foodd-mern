@@ -5,7 +5,7 @@
   <p align="center">
     <a href="https://github.com/NakulPrasad/foodd-mern"><strong>Explore the docs »</strong></a>
     <br/>
-    <a href="https://crazy-snaps-ray.cyclic.app">View Demo</a>
+    <a href="https://foodd-mern.vercel.app/">View Demo</a>
     .
     <a href="https://github.com/NakulPrasad/foodd-mern/issues">Report Bug</a>
     .
@@ -20,35 +20,47 @@
 **FOODD** is a dynamic and interactive restaurant React web application that empowers users to seamlessly explore an assortment of delectable food items, personalize their orders, and effortlessly finalize the checkout process.<br/>
 The application incorporates a robust user authentication system, ensuring data security and enhancing the overall user experience.<br/>
 <br/>
-![image](https://github.com/NakulPrasad/foodd-mern/assets/96919039/89e197f0-199f-4c5e-9e2f-498a14181d73)
+<img width="1918" height="1079" alt="image" src="https://github.com/user-attachments/assets/7c93c911-9faa-4d5d-b4c9-a5d4709596f1" />
+
 
 <br/>
 <p  align="center">
-<a href="https://librarry.azurewebsites.net" >View Live</a></p>
+<a href="https://foodd-mern.vercel.app" >View Live</a></p>
 
 ### _Key features:_
 
-
-* **_User Registration and Authentication:_** &nbsp; secure user registration, login, and logout functionality utilizing bcrypt for password hashing and JSON Web Tokens (JWT) for session managemen.<br/>
-
-* **_Food Exploration:_**  &nbsp; Users can navigate through a rich catalog of food items, each accompanied by enticing images and detailed descriptions. <br/>
-
-* **_Customization Options:_** &nbsp; Empowers users to customize their food orders according to individual preferences.<br/>
-
-* **_Effortless Checkout_**   &nbsp; Streamlines the checkout process, enabling users to review their customized orders.<br/>
+* **Unified Authentication** — Credential-based login (bcrypt-hashed passwords) and Google OAuth (via Passport.js) both resolve to the same JWT-based session, so downstream routes don't need to know which login method a user took.
+* **Food Exploration** — Full catalog browsing with images and descriptions.
+* **Customization Options** — Users tailor orders before checkout.
+* **Effortless Checkout** — Order review and confirmation flow.
 
 
 ## Built With
 
-_**Frontend:**_ &nbsp;React, Bootstrap, HTML, CSS <br/>
-**_Backend:_** &nbsp;Node.js, Express.js, MongoDB, Mongoose, bcrypt, JSON Web Tokens (JWT) <br/>
+* **Frontend:** React, TypeScript, Vite, Redux Toolkit, Mantine UI, React Router
+* **Backend:** Node.js, Express.js, MongoDB, Passport.js
+* **Testing:** Vitest, React Testing Library
+
+## Technical Decisions
+
+* **TypeScript + strict build (`tsc -b`)** — caught type mismatches between API responses and frontend state at compile time rather than runtime, especially useful across the Redux store's shared shape.
+* **Redux Toolkit for order/cart state** — checkout involves multi-step state (item selection → customization → cart → order) that benefited from centralized, predictable state over prop drilling or scattered local state.
+* **JWT over server-side sessions** — chosen for statelessness, since frontend (Vercel) and backend are deployed separately, and sticky sessions would've added deployment complexity.
+* **Passport.js as the OAuth abstraction layer** — kept the Google OAuth callback logic isolated from the core auth service, so both login paths (credentials + OAuth) resolve to the same JWT session without duplicating logic.
+* **Vitest + Testing Library** — component-level tests for cart/order flows rather than testing the whole app end-to-end, given time constraints as a solo project.
 
 ## Screen Shots
-![image](https://github.com/NakulPrasad/foodd-mern/assets/96919039/e6fda635-6a78-4fb7-a9a1-c8605c8ec4b7)
+<img width="1916" height="1077" alt="image" src="https://github.com/user-attachments/assets/2418c6e8-2218-4ea5-b336-b26e26424cfd" />
+
 <br/>
-![image](https://github.com/NakulPrasad/foodd-mern/assets/96919039/10d34b5d-4755-4a4b-adfe-32ee8f399f21)
+<img width="1919" height="1078" alt="image" src="https://github.com/user-attachments/assets/5bf9a997-030c-43c4-a3f3-384eb44bc0a9" />
+
 <br/>
-![image](https://github.com/NakulPrasad/foodd-mern/assets/96919039/03b8e63d-139e-4640-8968-122697c065e4)
+<img width="1919" height="937" alt="image" src="https://github.com/user-attachments/assets/576b8abb-9df7-4cef-b867-d2b7e657a3b7" />
+
+<br/>
+<img width="1918" height="1067" alt="image" src="https://github.com/user-attachments/assets/602c67e8-f54d-4a80-976d-00b7a8b2a748" />
+
 
 ## Getting Started
 
@@ -59,7 +71,7 @@ To get a local copy up and running follow these simple example steps.
 1. Clone the repo
 
 ```sh
-https://github.com/NakulPrasad/Library-Management.git
+https://github.com/NakulPrasad/foodd-mern.git
 ```
 2. Install NPM packages
 
@@ -80,7 +92,7 @@ Database File : /server/data/index.js
 #ADD FOLLOWING
 
 MONGO_URL = "mongodb+srv://{user}:{password}@{database}.5qdwl8g.mongodb.net/library?retryWrites=true&w=majority"
-PORT = 80
+PORT = 8080
 NODE_ENV = "production"
 
 ```
