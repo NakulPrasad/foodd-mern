@@ -1,8 +1,12 @@
 .header {
-  height: 60px;
-
-  border-bottom: 1px solid
-    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  height: 70px;
+  width: 100%;
+  max-width: var(--max-width-container);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .link {

@@ -1,29 +1,53 @@
+.card {
+  border-radius: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.12);
+  border-color: #cbd5e1;
+}
+
 .image {
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    background-size: cover;
-    background-position: center;
+  height: 190px;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  transition: transform 0.4s ease;
+}
 
-   
-  }
+.card:hover .image {
+  transform: scale(1.03);
+}
 
+.wrapper {
+  padding: 1rem 1.15rem 1.25rem 1.15rem;
+}
 
-  .card:hover {
-    cursor: pointer;
-    transition: 0.05s;
-    transform: scale(1.05);
-    filter: drop-shadow(rgba(0, 0, 0, 0.1) 0px 2px 8px);
-  }
-  
-  .mt{
-    margin-top: -2px;
-    padding-left: var(--mantine-spacing-3xs);
-  }
+.h4 {
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.25rem;
+}
 
-  .wrapper{
-    padding: var(--mantine-spacing-xs);
-  }
+.mt {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
+.description {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

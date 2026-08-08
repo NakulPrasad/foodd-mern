@@ -1,5 +1,12 @@
 .section_m {
-  margin: var(--section-m);
+  width: 100%;
+  max-width: var(--max-width-container);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .img {
@@ -9,24 +16,26 @@
 
 .menu_text {
   letter-spacing: 4px;
-  margin: 0px 4px;
-  color: rgba(2, 6, 12, 0.6);
+  margin: 0px 8px;
+  color: #64748b;
+  font-weight: 700;
 }
 
 .menu_text_div {
-  padding: 32px 0px 16px;
+  padding: 24px 0px 16px;
+  align-items: center;
 }
 
 .overview {
   border-radius: 20px;
-  border: 1px solid rgba(2, 6, 12, 0.15);
-  background: white;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 8px 16px 0px;
-  /* Allow wrapping on mobile */
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
   flex-wrap: wrap;
+  padding: 1.5rem;
 }
 
 .mt {
   margin-top: -2px;
-  padding-left: 4px;
+  padding-left: 6px;
 }

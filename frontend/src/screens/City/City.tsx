@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Carousel } from "@mantine/carousel";
 import {
   Box,
@@ -29,9 +30,14 @@ const City = () => {
 
   const { allRestaurantJson, isLoading, error } = useRestaurant();
 
+  useEffect(() => {
+    if (error) {
+      toast.warn("Something went wrong");
+    }
+  }, [error]);
+
   return (
     <section id="city">
-      {error && toast.warn("Something went wrong")}
       <header id="banner">
         <Flex
           align={"center"}

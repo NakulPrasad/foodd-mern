@@ -6,141 +6,123 @@ html, body {
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
+  background-color: #fafafa;
+  color: #0f172a;
 }
 
 #root {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.section-mx {
-  margin: var(--section-mx);
-}
-
+/* Centered Container Wrapper for All Pages & Sections */
+.section-mx,
+.section_m,
 .section-my {
-  margin: var(--section-my);
-}
-
-.section_m {
-  margin: var(--section-m);
+  width: 100% !important;
+  max-width: var(--max-width-container) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--container-padding) !important;
+  padding-right: var(--container-padding) !important;
 }
 
 .description {
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: -0.3px;
-  overflow: hidden;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: #64748b;
   overflow-wrap: break-word;
-  color: rgba(2, 6, 12, 0.6);
 }
 
 .description_sm {
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
-  letter-spacing: -0.3px;
-  color: rgba(2, 6, 12, 0.6);
-}
-
-.description_sm_bold {
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 16px;
-  letter-spacing: -0.3px;
-  color: rgba(2, 6, 12, 0.45);
+  color: #64748b;
 }
 
 .rating {
   font-weight: 600;
   font-size: 14px;
   line-height: 16px;
-  letter-spacing: -0.3px;
-  color: rgba(2, 6, 12, 0.6);
-  margin-left: 2px;
+  color: #334155;
+  margin-left: 4px;
 }
 
 .globalMantineInput {
   &:focus-within {
-    outline: rem(1px) solid var(--mantine-primary-color-filled);
-  }
-}
-
-.globalMantineTableRow {
-  &:hover {
-    background-color: rgb(from var(--mantine-color-default-hover) r g b / 0.5);
+    outline: 1.5px solid var(--mantine-primary-color-filled);
   }
 }
 
 .globalMantineButton {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 82, 0, 0.25);
+  }
   &:disabled {
-    cursor: default;
-    background-color: var(--mantine-color-default);
+    cursor: not-allowed;
     opacity: 0.5;
   }
 }
 
 .globalMantineCheckbox {
-  /* background-color: var(--mantine-color-default); */
   background-color: transparent;
   border-color: var(--mantine-primary-color-filled);
-
   &:checked {
     border-color: var(--mantine-primary-color-filled);
   }
 }
 
 .globalMantineCardRoot {
-  background-color: var(--mantine-color-default);
-  border-color: var(--mantine-color-default-border);
-  border-radius: var(--mantine-radius-default);
-}
-
-.globalMantineCardRoot__roseGreen {
-  background-color: var(--mantine-color-secondary-filled);
-  border-color: var(--mantine-color-default-border);
-  border-radius: var(--mantine-radius-default);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--mantine-radius-md);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  &:hover {
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .mantine-Modal-content {
   overflow-y: hidden;
+  border-radius: 16px !important;
 }
 
 .globalMantineHoverCard {
-  background-color: var(--mantine-color-default);
-  border-color: var(--mantine-color-default-border);
-  border-radius: var(--mantine-radius-default);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Menu Dropdown */
 .mantine-Menu-dropdown {
-  background-color: var(--mantine-color-default);
-  border-color: var(--mantine-color-default-border);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 
   .mantine-Menu-item {
-    background-color: transparent;
+    border-radius: 8px;
+    margin: 2px 4px;
     &:hover {
-      background-color: var(--mantine-color-default-hover);
+      background-color: #f1f5f9;
     }
   }
 }
 
-/* Segmented Control */
-.mantine-SegmentedControl-root {
-  background-color: var(--mantine-color-secondary-outline-hover);
-
-  .mantine-SegmentedControl-indicator {
-    background-color: var(--mantine-color-default);
-  }
-}
-
-/* Title */
+/* Title Styling */
 .mantine-Title-root,
 .mantine-Modal-title,
 .mantine-Drawer-title {
-  letter-spacing: -0.025em;
-}
-
-m_d3ea56bb.mantine-Checkbox-labelWrapper {
-  width: 100%;
+  letter-spacing: -0.02em;
+  font-weight: 700;
 }

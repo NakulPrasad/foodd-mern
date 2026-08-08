@@ -19,7 +19,7 @@ class dbConfig {
 
   public async connect(): Promise<void> {
     mongoose.set("strictQuery", true);
-    const MONGODB_URI = dbConfig.mongodb_connection_uri;
+    const MONGODB_URI = process.env.MONGODB_CONNECTION_URI || dbConfig.mongodb_connection_uri;
 
     try {
       if (!MONGODB_URI) {

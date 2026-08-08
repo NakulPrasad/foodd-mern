@@ -42,7 +42,7 @@ const MenuCard = (props: IMenuCardProps) => {
         align={"center"}
         className={classes.ml}
       >
-        <Image radius={theme.radius.sm} src={Pizza} className={classes.img} />
+        <Image radius="md" src={props.foodItem.img_url || Pizza} className={classes.img} />
         <Flex direction={"column"} className={classes.translate}>
           <ModalCart item={props.foodItem} />
           {props.foodItem.options.length >=1 && (

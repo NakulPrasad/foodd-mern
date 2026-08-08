@@ -49,17 +49,17 @@ const redColors: MantineColorsTuple = [
   "#EF4444",
 ];
 const orangeColors: MantineColorsTuple = [
-  "#fff7ed",
-  "#ffedd5",
-  "#fed7aa",
-  "#fdba74",
-  "#fb923c",
-  "#f97316",
-  "#ea580c",
-  "#9a3412",
-  "#7c2d12",
-  "#431407",
-  "#F97316",
+  "#fff5f0",
+  "#ffe8dc",
+  "#ffd4be",
+  "#ffb593",
+  "#ff8a5d",
+  "#ff5200",
+  "#e04200",
+  "#b83200",
+  "#932900",
+  "#782302",
+  "#FF5200",
 ];
 
 const amberColors: MantineColorsTuple = [

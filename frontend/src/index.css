@@ -1,37 +1,29 @@
 :root {
-  /* Section — mobile first, overridden at larger breakpoints via media queries */
-  --section-mx: 0 1rem;
-  --section-my: calc(2%) 0;
-  --section-m: calc(2%) 1rem;
-  --section-sm: calc(2%) 1rem;
-  --section-md: calc(2%) 1rem;
-  --section-lg: calc(2%) 1rem;
+  /* Layout Container - Centered Desktop Width (like Swiggy/Zomato) */
+  --max-width-container: 1000px;
+  --container-padding: 1.25rem;
 
-  /* Spacing */
+  /* Section Spacing */
+  --section-mx: 0 auto;
+  --section-my: 2rem auto;
+  --section-m: 2rem auto;
+  --section-sm: 1.5rem auto;
+  --section-md: 2rem auto;
+  --section-lg: 3rem auto;
+
+  /* Spacing Scale */
   --space-xs: 0.25rem; /* 4px */
-  --space-sm: 0.5rem; /* 8px */
-  --space-md: 1rem; /* 16px */
-  --space-lg: 1.5rem; /* 24px */
-  --space-xl: 2rem; /* 32px */
-  --space-2xl: 3rem; /* 48px */
+  --space-sm: 0.5rem;  /* 8px */
+  --space-md: 1rem;    /* 16px */
+  --space-lg: 1.5rem;  /* 24px */
+  --space-xl: 2rem;    /* 32px */
+  --space-2xl: 3rem;   /* 48px */
 
-  /* Padding */
-  --padding-xs: 0.25rem; /* 4px */
-  --padding-sm: 0.5rem; /* 8px */
-  --padding-md: 1rem; /* 16px */
-  --padding-lg: 1.5rem; /* 24px */
-  --padding-xl: 2rem; /* 32px */
-  --padding-2xl: 3rem; /* 48px */
-
-  /* Margin */
-  --margin-xs: 0.25rem; /* 4px */
-  --margin-sm: 0.5rem; /* 8px */
-  --margin-md: 1rem; /* 16px */
-  --margin-lg: 1.5rem; /* 24px */
-  --margin-xl: 2rem; /* 32px */
-  --margin-2xl: 3rem; /* 48px */
-
-  --heading-grey: rgba(2, 6, 12, 0.75);
+  /* Heading & Typography */
+  --heading-grey: #1e293b;
+  --text-secondary: #64748b;
+  --brand-orange: #ff5200;
+  --brand-orange-hover: #e04800;
 
   /* Font Weight */
   --font-weight-light: 300;
@@ -42,81 +34,30 @@
   --font-weight-extra-bold: 800;
   --font-weight-black: 900;
 
-  /* Image  */
-  --img-h-sm: 2rem;
-  --img-w-sm: 2rem;
-  --img-h-md: 3rem;
-  --img-w-md: 3rem;
-
   /* Icons */
   --icon-veg-h: 1rem;
   --icon-veg-w: 1rem;
-  --icon-h-sm: 2rem;
-  --icon-w-sm: 2rem;
-  --icon-h-md: 3rem;
-  --icon-w-md: 3rem;
 }
 
-/* Tablet and up */
 @media (min-width: 768px) {
   :root {
-    --section-mx: 0 calc(5% + 16px);
-    --section-m: calc(2%) calc(5% + 16px);
-    --section-sm: calc(2%) calc(5% + 16px);
-    --section-md: calc(2%) calc(5% + 16px);
-    --section-lg: calc(2%) calc(5% + 16px);
+    --container-padding: 2rem;
   }
 }
 
-/* Desktop */
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   :root {
-    --section-mx: 0 calc(10% + 36px);
-    --section-m: calc(2%) calc(10% + 36px);
-    --section-sm: calc(2%) calc(12% + 36px);
-    --section-md: calc(2%) calc(10% + 36px);
-    --section-lg: calc(2%) calc(10% + 36px);
+    --container-padding: 2rem;
   }
 }
 
-h1 {
-  letter-spacing: -0.43px;
-  overflow: hidden;
-  color: var(--heading-grey);
+h1, .h1 {
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  font-weight: 800;
 }
 
-h2 {
-  letter-spacing: -0.4px;
-  overflow: hidden;
-}
-
-h3 {
-  letter-spacing: -0.3px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  color: rgba(2, 6, 12, 0.75);
-}
-h4 {
-  letter-spacing: -0.3px;
-  color: rgba(2, 6, 12, 0.75);
-  overflow: hidden;
-}
-
-h5 {
-  letter-spacing: -0.3px;
-  color: rgba(2, 6, 12, 0.92);
-  overflow: hidden;
-}
-
-.secondaryText {
-  font-size: 13px;
-  color: rgb(4, 90, 218);
-  font-weight: 200;
-  line-height: 16px;
-  overflow: hidden;
-}
-
-.foodIcon {
-  height: var(--icon-veg-h);
-  width: var(--icon-veg-w);
+h2, h3, h4, h5 {
+  letter-spacing: -0.02em;
+  color: #1e293b;
 }

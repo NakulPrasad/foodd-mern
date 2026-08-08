@@ -17,19 +17,14 @@ export default class restaurantService {
     return restaurantService.instance;
   }
 
-  async getAllRestaurant(): Promise<boolean | IRestaurant[]> {
+  async getAllRestaurant(): Promise<IRestaurant[]> {
     try {
       console.log("Collection:", RestaurantModel.collection.name);
       const restaurants = await RestaurantModel.find({});
-      if(!restaurants || restaurants.length === 0){
-            console.error("Empty RestaurantModel")
-          return false;
-      }
-      return restaurants;
-
+      return restaurants || [];
     } catch (error: any) {
       console.error("Error while fetching restaurant", error.message);
-      return false;
+      throw error;
     }
   }
 

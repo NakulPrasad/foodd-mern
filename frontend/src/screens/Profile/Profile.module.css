@@ -1,25 +1,10 @@
 .section_m {
-  margin: var(--section-m);
-}
-
-.img {
-  width: var(--img-w-sm);
-  height: var(--img-h-sm);
-}
-
-.menu_text {
-  letter-spacing: 4px;
-  margin: 0px 4px;
-  color: rgba(2, 6, 12, 0.6);
-}
-
-.menu_text_div {
-  padding: 32px 0px 16px;
-}
-
-.overview {
-  border-radius: 20px;
-  border: 1px solid rgba(2, 6, 12, 0.15);
-  background: white;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 8px 16px 0px;
+  width: 100%;
+  max-width: var(--max-width-container);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }

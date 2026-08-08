@@ -28,16 +28,15 @@ export const deleteRestaurant = async (req: Request, res: Response) => {
 };
 
 export const getAllRestaurant = async (req: Request, res: Response) => {
-  const restaurants = await RestaurantService.getAllRestaurant();
-  if (!restaurants) {
-    return res.status(500).json({ message: "Failed to fetch restaurant" });
-  }
-  return res
-    .status(200)
-    .json({
+  try {
+    const restaurants = await RestaurantService.getAllRestaurant();
+    return res.status(200).json({
       message: "Fetched all restaurants successfully",
       data: restaurants,
     });
+  } catch (error: any) {
+    return res.status(500).json({ message: "Failed to fetch restaurant", error: error.message });
+  }
 };
 
 export const getRestaurantById = async (req: Request, res: Response) => {

@@ -7,7 +7,7 @@ import { useCookie } from "./useCookie";
 import { useUser } from "./useUser";
 
 export const useAuth = () => {
-  const { getItem, setItem, removeItem } = useCookie();
+  const { getItem, setItem } = useCookie();
   const { addUser, removeUser } = useUser();
   const dispatch = useAppDispatch();
 
