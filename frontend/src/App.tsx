@@ -1,34 +1,100 @@
-import React from 'react';
-import './App.css';
-import Home from './screens/Home';
-import Login from './screens/Login';
+import "@mantine/carousel/styles.css";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import React from "react";
+import { Provider } from "react-redux";
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
 } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Signup from './screens/Signup';
-import { CartProvider } from './components/ContextReducer'
-import MyOrder from './screens/MyOrder';
-import Login2 from './screens/Login/Login2';
+import "./App.css";
+import Root from "./components/Root/Root";
+import { useAuth } from "./hooks/useAuth";
+import store from "./redux/store";
+import Auth from "./screens/Auth/Auth";
+import Checkout from "./screens/Checkout/Checkout";
+import Error from "./screens/Error/Error";
+import Home from "./screens/Home/Home";
+import Order from "./screens/Order/Order";
+import Partner from "./screens/Partner/Partner";
+import Profile from "./screens/Profile/Profile";
+import Restaurant from "./screens/Restaurant/Restaurant";
+import Theme from "./theme/theme";
+
+interface PrivateRouteProps {
+  element: React.ReactElement;
+}
+
+/**
+ * Checks for authentication before accessing to user.
+ * @param element React Component
+ * @returns React Component if authenticated else redirected to /login
+ */
+
+const PrivateRoute = ({ element }: PrivateRouteProps) => {
+  const { isAuthenticated } = useAuth();
+
+  return isAuthenticated() ? element : <Navigate to="/" />;
+};
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/partner-with-us/new/",
+        element: <Partner />,
+      },
+      {
+        path: "/restaurant/:id",
+        element: <Restaurant />,
+      },
+      {
+        path: "/my-account/*",
+        element: <Profile />,
+      },
+      {
+        path: "/order/*",
+        element: <Order />,
+      },
+    ],
+  },
+  {
+    element: <PrivateRoute element={<Root />} />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/checkout",
+        element: <Checkout />,
+      },
+    ],
+  },
+  {
+    element: <Root />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/auth",
+        element: <Auth />,
+      },
+    ],
+  },
+]);
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <div>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/createuser' element={<Signup />} />
-            <Route path='/myOrder' element={<MyOrder />} />
-            <Route path='/login2' element={<Login2 />} />
-          </Routes>
-        </div>
-      </Router>
-
-    </CartProvider>
+    <Provider store={store}>
+      <MantineProvider theme={Theme}>
+        <RouterProvider router={router} />
+      </MantineProvider>
+    </Provider>
   );
 }
 

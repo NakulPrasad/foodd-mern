@@ -1,0 +1,62 @@
+.itemImage {
+  height: 6rem;
+  width: 8rem;
+}
+
+.mainContainer {
+  background-color: #37718e;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.subContainer1 {
+  color: white !important;
+  padding: var(--padding-sm);
+  max-width: 100%;
+  width: 100%;
+}
+
+.subContainer2 {
+  background-color: white;
+  max-width: 100%;
+  width: 100%;
+}
+
+.subContainer2 > .itemCard {
+  padding: var(--padding-sm);
+}
+
+@media (min-width: 768px) {
+  .mainContainer {
+    padding: var(--padding-md);
+  }
+
+  .subContainer1 {
+    max-width: 720px;
+    padding: var(--padding-md);
+  }
+
+  .subContainer2 {
+    max-width: 720px;
+  }
+
+  .subContainer2 > .itemCard {
+    padding: var(--padding-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .subContainer1 {
+    max-width: 960px;
+    padding: var(--padding-lg);
+  }
+
+  .subContainer2 {
+    max-width: 960px;
+    padding: var(--padding-lg);
+  }
+
+  .subContainer2 > .itemCard {
+    padding: var(--padding-lg);
+  }
+}

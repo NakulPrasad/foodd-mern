@@ -1,0 +1,29 @@
+.image {
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-size: cover;
+    background-position: center;
+
+   
+  }
+
+
+  .card:hover {
+    cursor: pointer;
+    transition: 0.05s;
+    transform: scale(1.05);
+    filter: drop-shadow(rgba(0, 0, 0, 0.1) 0px 2px 8px);
+  }
+  
+  .mt{
+    margin-top: -2px;
+    padding-left: var(--mantine-spacing-3xs);
+  }
+
+  .wrapper{
+    padding: var(--mantine-spacing-xs);
+  }
+

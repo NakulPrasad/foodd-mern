@@ -1,0 +1,47 @@
+.itemImage {
+  height: 6rem;
+  width: 8rem;
+}
+
+.mainContainer {
+  margin: var(--margin-sm) 0;
+}
+
+.subContainer1 {
+  color: white !important;
+  padding: var(--padding-sm);
+}
+
+.subContainer2 {
+  background-color: white;
+}
+
+.subContainer2 >.itemCard {
+  padding: var(--padding-sm);
+}
+
+@media (min-width: $mantine-breakpoint-md) {
+  .mainContainer {
+    padding: var(--padding-md);
+  }
+
+  .subContainer2 >.itemCard  {
+    padding: var(--padding-md);
+  }
+
+}
+
+@media (min-width: $mantine-breakpoint-lg) {
+  .subContainer1 {
+    padding: var(--padding-lg);
+  }
+
+  .subContainer2 {
+    padding: var(--padding-lg);
+  }
+
+  .subContainer2 >.itemCard  {
+    padding: var(--padding-lg);
+  }
+
+}

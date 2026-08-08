@@ -1,0 +1,159 @@
+[
+  {
+    "id": "1",
+    "name": "The Gourmet Kitchen",
+    "description": "A fine dining experience with the best Italian and Continental dishes.",
+    "cuisine": ["Italian", "Continental"],
+    "location": {
+      "address": "123 Jubilee Hills Road",
+      "area": "Jubilee Hills",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "zipCode": "500033"
+    },
+    "rating": 4.5,
+    "image": "/img/restaurant/TheGourmetKitchen.jpg",
+    "isVeg": false,
+    "priceRange": "₹₹",
+    "deliveryTime": "30-40 min",
+    "contact": {
+      "phone": "9876543210",
+      "email": "contact@gourmetkitchen.in"
+    },
+    "timing": {
+      "open": "10:00 AM",
+      "close": "11:00 PM"
+    }
+  },
+  {
+    "id": "2",
+    "name": "Spice Symphony",
+    "description": "Authentic Indian and Mughlai cuisine to tantalize your taste buds.",
+    "cuisine": ["Indian", "Mughlai"],
+    "location": {
+      "address": "45 Gachibowli Main Road",
+      "area": "Gachibowli",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "zipCode": "500032"
+    },
+    "rating": 4.8,
+    "image": "/img/restaurant/SpiceSymphony.jpg",
+    "isVeg": false,
+    "priceRange": "₹₹₹",
+    "deliveryTime": "20-30 min",
+    "contact": {
+      "phone": "8765432109",
+      "email": "info@spicesymphony.in"
+    },
+    "timing": {
+      "open": "11:00 AM",
+      "close": "10:00 PM"
+    }
+  },
+  {
+    "id": "3",
+    "name": "GreenLeaf Vegan Cafe",
+    "description": "A paradise for vegans with healthy and delicious options.",
+    "cuisine": ["Vegan", "Healthy"],
+    "location": {
+      "address": "88 Banjara Hills Road",
+      "area": "Banjara Hills",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "zipCode": "500034"
+    },
+    "rating": 4.2,
+    "image": "/img/restaurant/GreenLeafVeganCafe.jpg",
+    "isVeg": true,
+    "priceRange": "₹₹",
+    "deliveryTime": "25-35 min",
+    "contact": {
+      "phone": "7654321098",
+      "email": "contact@greenleafvegan.in"
+    },
+    "timing": {
+      "open": "9:00 AM",
+      "close": "9:00 PM"
+    }
+  },
+  {
+    "id": "4",
+    "name": "Sushi Haven",
+    "description": "Fresh sushi and Japanese delicacies prepared by expert chefs.",
+    "cuisine": ["Japanese", "Sushi"],
+    "location": {
+      "address": "112 HITEC City Road",
+      "area": "HITEC City",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "zipCode": "500081"
+    },
+    "rating": 4.7,
+    "image": "/img/restaurant/SushiHaven.jpg",
+    "isVeg": false,
+    "priceRange": "₹₹₹",
+    "deliveryTime": "40-50 min",
+    "contact": {
+      "phone": "6543210987",
+      "email": "hello@sushihaven.in"
+    },
+    "timing": {
+      "open": "12:00 PM",
+      "close": "11:00 PM"
+    }
+  },
+  {
+    "id": "5",
+    "name": "Burger Town",
+    "description": "Juicy burgers and crispy fries for the ultimate fast-food experience.",
+    "cuisine": ["Fast Food", "American"],
+    "location": {
+      "address": "75 Madhapur Road",
+      "area": "Madhapur",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "zipCode": "500081"
+    },
+    "rating": 3.9,
+    "image": "/img/restaurant/BurgerTown.jpg",
+    "isVeg": false,
+    "priceRange": "₹",
+    "deliveryTime": "15-20 min",
+    "contact": {
+      "phone": "5432109876",
+      "email": "support@burgertown.in"
+    },
+    "timing": {
+      "open": "10:00 AM",
+      "close": "12:00 AM"
+    }
+  },
+  {
+  "id": "6",
+  "name": "KFC",
+  "description": "World-famous fried chicken, crunchy fries, and refreshing beverages.",
+  "cuisine": ["Fast Food", "American", "Chicken"],
+  "location": {
+    "address": "Plot No. 21, Hitech City Main Road",
+    "area": "Hitech City",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "zipCode": "500081"
+  },
+  "rating": 4.2,
+  "image": "/img/restaurant/kfc.jpg",
+  "isVeg": false,
+  "priceRange": "₹₹",
+  "deliveryTime": "20-25 min",
+  "contact": {
+    "phone": "9876543210",
+    "email": "support@kfc.in"
+  },
+  "timing": {
+    "open": "11:00 AM",
+    "close": "11:00 PM"
+  }
+}
+
+]

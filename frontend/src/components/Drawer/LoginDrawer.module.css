@@ -1,0 +1,26 @@
+.button{
+    border: none;
+}
+
+.h1{
+    font-family: 'ProximaNova';
+}
+
+.mx{
+    margin: 0 8px;
+}
+
+.my_2{
+    margin: 2px 0;
+}
+.my_4{
+    margin: 4px 0;
+}
+
+.bg_red{
+    background-color: red;
+}
+
+.bg_orange{
+    background-color: orangered;
+}

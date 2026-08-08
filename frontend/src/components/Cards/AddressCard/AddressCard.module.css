@@ -1,0 +1,22 @@
+.main {
+  padding: var(--padding-sm);
+  border: 2px solid transparent;
+  border-radius: var(--mantine-radius-md);
+  transition: border-color 0.2s ease;
+}
+
+.selected {
+  border-color: var(--mantine-color-green-6);
+  background-color: var(--mantine-color-green-0);
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding: var(--padding-md);
+  }
+}
+@media (min-width: 1024px) {
+  .main {
+    padding: var(--padding-lg);
+  }
+}

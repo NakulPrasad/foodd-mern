@@ -1,0 +1,28 @@
+{
+    "env": {
+      "node": true,
+      "es2021": true
+    },
+    "extends": ["eslint:recommended"],
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": "error", // Prevent unused variables
+      "class-methods-use-this": "error", // Enforce using 'this' in class methods
+      "no-restricted-syntax": [
+        "error",
+        {
+          "selector": "FunctionExpression",
+          "message": "Use classes instead of function expressions for OOP."
+        }
+      ],
+      "no-console": "warn", // Warn about console.log usage
+      "max-classes-per-file": ["error", 1], // Limit one class per file
+      "prefer-const": "error", // Prefer const over let for immutability
+      "no-var": "error", // Disallow var (use let/const instead)
+      "prefer-object-spread": "error" // Use object spread for merging objects
+    }
+  }
+  
