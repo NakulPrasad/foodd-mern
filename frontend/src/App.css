@@ -126,3 +126,10 @@ html, body {
   letter-spacing: -0.02em;
   font-weight: 700;
 }
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+

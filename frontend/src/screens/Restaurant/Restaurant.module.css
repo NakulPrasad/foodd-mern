@@ -1,3 +1,33 @@
+/* ── Page wrapper ── */
+.page {
+  width: 100%;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+/* ── Hero image cover ── */
+.heroWrap {
+  width: 100%;
+  height: 240px;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.55) 100%);
+}
+
+/* ── Centred content region ── */
 .section_m {
   width: 100%;
   max-width: var(--max-width-container);
@@ -5,37 +35,448 @@
   margin-right: auto;
   padding-left: var(--container-padding);
   padding-right: var(--container-padding);
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
 }
 
-.img {
-  width: var(--img-w-sm);
-  height: var(--img-h-sm);
+/* ── Info card that floats over the hero ── */
+.infoCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 1.5rem;
+  margin-top: -60px;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 16px 40px -8px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.menu_text {
-  letter-spacing: 4px;
-  margin: 0px 8px;
+.infoTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.infoTitle {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.035em;
+  margin: 0 0 0.25rem 0;
+}
+
+.ratingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.ratingDetails {
+  font-size: 13px;
   color: #64748b;
+  margin-left: 6px;
+}
+
+.priceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #475569;
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+.cuisineTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.cuisineTag {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 64px;
+}
+
+.metaValue {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.metaLabel {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.metaDivider {
+  width: 1px;
+  background: #e2e8f0;
+  align-self: stretch;
+  margin: 0 0.25rem;
+}
+
+.openBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.closedBadge {
+  color: #dc2626;
+}
+
+/* ── Coupon cards ── */
+.couponCard {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1.5px dashed #fb923c;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.couponCard::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: #fafafa;
+  border-radius: 50%;
+  border: 1.5px solid #fb923c;
+}
+
+.couponCard::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -8px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: #fafafa;
+  border-radius: 50%;
+  border: 1.5px solid #fb923c;
+}
+
+.couponCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(251, 146, 60, 0.2);
+}
+
+.couponIcon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.couponCode {
+  font-size: 13px;
+  font-weight: 900;
+  color: #ea580c;
+  letter-spacing: 0.08em;
+  background: rgba(234, 88, 12, 0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.couponTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2px 0;
+}
+
+.couponDesc {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── Menu section ── */
+.menuSection {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.menuHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem 0 1rem;
+}
+
+.menuDividerLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e2e8f0);
+}
+
+.menuDividerLineRight {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to left, transparent, #e2e8f0);
+}
+
+.menuLabel {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+/* ── Menu search ── */
+.menuSearchBar {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 10px 16px;
+  gap: 10px;
+  max-width: 380px;
+  margin-bottom: 1.25rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menuSearchBar:focus-within {
+  border-color: #ff5200;
+  box-shadow: 0 4px 12px rgba(255, 82, 0, 0.1);
+}
+
+.menuSearchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #0f172a;
+  background: transparent;
+  font-family: inherit;
+}
+
+.menuSearchInput::placeholder { color: #94a3b8; }
+
+/* ── Category filter pills ── */
+.categoryPills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.categoryPill {
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.categoryPill:hover {
+  border-color: #ff5200;
+  color: #ff5200;
+}
+
+.categoryPill.active {
+  background: #ff5200;
+  color: #ffffff;
+  border-color: #ff5200;
+}
+
+/* ── Accordion tweaks ── */
+.accordionControl {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  padding: 1rem !important;
+}
+
+.accordionItem {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  margin-bottom: 0.75rem !important;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.accordionPanel {
+  background: #ffffff;
+}
+
+.categoryCount {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-left: 6px;
+}
+
+/* ── Menu card row ── */
+.menuRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 0;
+  gap: 1rem;
+  border-bottom: 1px dashed #f1f5f9;
+  transition: background 0.15s ease;
+}
+
+.menuRow:last-child {
+  border-bottom: none;
+}
+
+.vegDot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 2px solid #16a34a;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.vegDot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.nonVegDot {
+  border-color: #dc2626;
+}
+
+.nonVegDot::after {
+  background: #dc2626;
+}
+
+/* ── Sticky cart bar ── */
+.stickyCart {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  padding-bottom: 1rem;
+}
+
+.stickyCartInner {
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 500px;
+  width: calc(100% - 2rem);
+  pointer-events: all;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.stickyCartInner:hover {
+  transform: translateY(-2px);
+}
+
+.stickyCartCount {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.stickyCartName {
+  font-size: 14px;
   font-weight: 700;
 }
 
-.menu_text_div {
-  padding: 24px 0px 16px;
-  align-items: center;
+.stickyCartBtn {
+  background: #ff5200;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s ease;
 }
 
-.overview {
-  border-radius: 20px;
-  border: 1px solid #e2e8f0;
-  background: #ffffff;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-  flex-wrap: wrap;
-  padding: 1.5rem;
+.stickyCartBtn:hover { background: #e04200; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .heroWrap { height: 180px; }
+  .infoCard { margin-top: -40px; border-radius: 18px; padding: 1.25rem; }
+  .metaRow { gap: 0.75rem; }
 }
 
-.mt {
-  margin-top: -2px;
-  padding-left: 6px;
+@media (max-width: 480px) {
+  .heroWrap { height: 150px; }
+  .infoTop { flex-direction: column; }
+  .stickyCartInner { padding: 0.85rem 1rem; gap: 1rem; }
 }

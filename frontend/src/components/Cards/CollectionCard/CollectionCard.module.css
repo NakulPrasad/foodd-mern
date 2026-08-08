@@ -1,10 +1,45 @@
-.card {
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    background-size: cover;
-    background-position: center;
-  }
-  
+.pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.22s ease;
+}
+
+.pill:hover {
+  transform: scale(1.08);
+}
+
+.imgWrap {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #fff5f0;
+  border: 2.5px solid #ffd4be;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(255, 82, 0, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pill:hover .imgWrap {
+  border-color: #ff5200;
+  box-shadow: 0 6px 18px rgba(255, 82, 0, 0.18);
+}
+
+.img {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+  line-height: 1.2;
+}

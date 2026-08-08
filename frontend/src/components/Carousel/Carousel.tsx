@@ -28,17 +28,33 @@ const CustomCarousel = (props: ICustomCarouselProps) => {
   const theme = useMantineTheme();
   return (
     <>
-      <Flex justify={"space-between"} py={theme.spacing.md}>
-        <Title order={2}>{props.title}</Title>
-        <Group>
-          <ActionIcon onClick={handlePrevious}>
-            <IconArrowNarrowLeft />
-          </ActionIcon>
-          <ActionIcon onClick={handleNext}>
-            <IconArrowNarrowRight />
-          </ActionIcon>
-        </Group>
-      </Flex>
+      {props.title && (
+        <Flex justify={"space-between"} align="center" py={theme.spacing.md}>
+          <Title order={2} style={{ letterSpacing: "-0.025em", fontWeight: 800 }}>
+            {props.title}
+          </Title>
+          <Group gap="xs">
+            <ActionIcon
+              variant="default"
+              size="lg"
+              radius="xl"
+              onClick={handlePrevious}
+              style={{ border: "1.5px solid #e2e8f0" }}
+            >
+              <IconArrowNarrowLeft size={18} />
+            </ActionIcon>
+            <ActionIcon
+              variant="default"
+              size="lg"
+              radius="xl"
+              onClick={handleNext}
+              style={{ border: "1.5px solid #e2e8f0" }}
+            >
+              <IconArrowNarrowRight size={18} />
+            </ActionIcon>
+          </Group>
+        </Flex>
+      )}
       <Carousel
         withControls={false}
         slideSize={props.slideSize}

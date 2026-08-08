@@ -7,17 +7,24 @@ import {
   Drawer,
   Flex,
   Group,
-  HoverCard,
   Image,
   Menu,
   Stack,
   Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconChevronDown } from "@tabler/icons-react";
-import { memo } from "react";
+import {
+  IconMapPin,
+  IconSearch,
+  IconShoppingCart,
+  IconChevronDown,
+  IconUser,
+  IconLogout,
+  IconReceipt,
+  IconLayoutDashboard,
+} from "@tabler/icons-react";
+import { memo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
@@ -33,18 +40,6 @@ import classes from "./NavBar.module.css";
 import IconNonVeg from "/icons/non-veg-icon.png";
 import IconVeg from "/icons/veg-icon.png";
 import Logo from "/img/logo/LOGO-bgremove.png";
-import KFC from "/img/restaurant/kfc.jpg";
-
-/**
- * Main Navigation bar of the app
- *
- * @remarks
- * - Sticks to the top
- * - Contains logo, current location, nav links and user menu
- * - Collapses to a burger menu on mobile
- *
- * @returns Navbar Component
- */
 
 const NavBar = () => {
   const { removeUser } = useUser();
@@ -55,7 +50,8 @@ const NavBar = () => {
   const { cart } = useCart();
   const [mobileMenuOpened, { open: openMobileMenu, close: closeMobileMenu }] =
     useDisclosure(false);
-
+  const [cartOpen, setCartOpen] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleLogoutBtn = () => {
@@ -66,242 +62,274 @@ const NavBar = () => {
 
   const handleCheckout = () => {
     if (!isAuthenticated) {
-      toast.info("Please Login before continue");
+      toast.info("Please login to continue");
       return;
     }
     navigate("/checkout");
     closeMobileMenu();
+    setCartOpen(false);
   };
 
-  const theme = useMantineTheme();
   const avatarUrl = user?.avatarUrl;
-
-  /**
-   * @description Fetches current location of user
-   */
-
   const { city, getLocation, loading, error } = useLocation();
-
-  const handleLocationBtnClick = () => {
-    getLocation();
-  };
-
-  /**
-   * @description Handles Order Button Functionality
-   */
 
   const handleOrderBtn = () => {
     navigate("/order");
     closeMobileMenu();
   };
 
+  const cartCount = cart.cartItems.length;
+  const cartTotal = cart.totalPrice;
+
   return (
-    <header className={`${classes.header} section-mx`}>
-      <Group justify="space-between" h="100%">
-        <Group>
-          <Link to="/">
-            <Image src={Logo} className={classes.logo} />
-          </Link>
-          <Flex direction={"column"}>
-            <Text>{city}</Text>
-            <SubText
-              className={classes.subText}
-              style={{ cursor: "pointer" }}
-              onClick={handleLocationBtnClick}
+    <>
+      {/* ─── Sticky header ─── */}
+      <header className={classes.header}>
+        <div className={classes.inner}>
+
+          {/* LEFT — Logo + Location */}
+          <div className={classes.leftSection}>
+            <Link to="/" className={classes.logoWrap}>
+              <Image src={Logo} className={classes.logo} alt="Foodd" />
+            </Link>
+
+            <button
+              className={classes.locationPill}
+              onClick={getLocation}
+              title="Update location"
             >
-              Wrong Location ?
-            </SubText>
-          </Flex>
-          {loading && <Spinner />}
-          {error && toast.error(error)}
-        </Group>
+              <IconMapPin size={14} stroke={2.5} className={classes.locationIcon} />
+              <span className={classes.locationCity}>{city || "Set location"}</span>
+              <IconChevronDown size={12} stroke={2} className={classes.locationChev} />
+              {loading && <Spinner />}
+            </button>
+            {error && toast.error(error)}
+          </div>
 
-        {/* Desktop nav links */}
-        <Group h="100%" gap={0} visibleFrom="sm">
-          <Link to="/" className={classes.link}>
-            Home
-          </Link>
+          {/* CENTER — Search */}
+          <div className={`${classes.searchWrap} ${searchFocused ? classes.searchFocused : ""}`}>
+            <IconSearch size={16} className={classes.searchIcon} />
+            <input
+              className={classes.searchInput}
+              placeholder="Search for restaurants, food…"
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+            />
+          </div>
 
-          <HoverCard
-            width={600}
-            position="bottom"
-            radius="md"
-            shadow="md"
-            withinPortal
-          >
-            <HoverCard.Target>
-              <Box className={classes.link}>
-                <Box component="span" mr={5}>
-                  {cart.cartItems.length > 0 && (
-                    <Text span c={theme.primaryColor}>
-                      {" "}
-                      {cart.cartItems.length}{" "}
-                    </Text>
-                  )}
-                  Cart
-                </Box>
-                <IconChevronDown size={16} color={theme.colors.blue[6]} />
-              </Box>
-            </HoverCard.Target>
+          {/* RIGHT — Cart + Auth (desktop) */}
+          <div className={classes.rightSection}>
 
-            <HoverCard.Dropdown style={{ overflow: "hidden" }}>
-              {cart.cartItems.length === 0 && (
-                <Box className={classes.dropdownFooter}>
-                  <Text fw={500} fz="sm">
-                    Cart Empty
-                  </Text>
-                  <SubText>
-                    Good food is always cooking! Go ahead, order some yummy
-                    items from the menu.
-                  </SubText>
-                </Box>
-              )}
-              {cart.cartItems.length > 0 && (
-                <Box className={classes.dropdownFooter_sm}>
-                  <Flex direction={"column"}>
-                    <Flex justify={"space-between"} align="center" pb={theme.spacing.sm}>
-                      <Image src={cart.selectedRestaurantImage || selectedRestaurant?.image || Logo} className={classes.img} radius="md" />
-                      <Title order={5}>{cart.selectedRestaurantName}</Title>
-                    </Flex>
-                    <Divider p={theme.spacing.sm} />
-                    <Stack>
-                      {cart.cartItems.map((item, index) => {
-                        return (
-                          <Flex
-                            key={index}
-                            justify={"space-between"}
-                            pb={theme.spacing.sm}
-                          >
-                            <Flex>
+            {/* Cart button with hover dropdown */}
+            <div
+              className={classes.cartWrap}
+              onMouseEnter={() => setCartOpen(true)}
+              onMouseLeave={() => setCartOpen(false)}
+            >
+              <button className={classes.cartBtn}>
+                <IconShoppingCart size={20} stroke={1.8} />
+                <span className={classes.cartLabel}>Cart</span>
+                {cartCount > 0 && (
+                  <span className={classes.cartBadge}>{cartCount}</span>
+                )}
+              </button>
+
+              {/* Cart dropdown */}
+              {cartOpen && (
+                <div className={classes.cartDropdown}>
+                  {cartCount === 0 ? (
+                    <div className={classes.cartEmpty}>
+                      <IconShoppingCart size={36} color="#cbd5e1" />
+                      <Text size="sm" fw={600} mt="xs" c="#64748b">Your cart is empty</Text>
+                      <Text size="xs" c="#94a3b8" ta="center" mt={4}>
+                        Add items from a restaurant to get started
+                      </Text>
+                    </div>
+                  ) : (
+                    <>
+                      <div className={classes.cartRestHeader}>
+                        <Image
+                          src={cart.selectedRestaurantImage || Logo}
+                          className={classes.cartRestImg}
+                          radius="md"
+                          alt="restaurant"
+                        />
+                        <div>
+                          <Text size="xs" c="#94a3b8" fw={600}>Ordering from</Text>
+                          <Text size="sm" fw={700} c="#1e293b">
+                            {cart.selectedRestaurantName || "Restaurant"}
+                          </Text>
+                        </div>
+                      </div>
+                      <Divider my={8} color="#f1f5f9" />
+                      <div className={classes.cartItems}>
+                        {cart.cartItems.map((item, i) => (
+                          <div key={i} className={classes.cartItemRow}>
+                            <div className={classes.cartItemLeft}>
                               <Image
-                                mx={6}
-                                className={classes.icon}
-                                src={item.is_veg ? IconNonVeg : IconVeg}
+                                src={item.is_veg ? IconVeg : IconNonVeg}
+                                style={{ width: 14, height: 14 }}
                               />
-                              <Text>
-                                {item.name} x {item.quantity}
+                              <Text size="sm" c="#334155">
+                                {item.name}
+                                <Text span size="xs" c="#94a3b8"> x{item.quantity}</Text>
                               </Text>
-                            </Flex>
-                            <Text>{item.price}</Text>
-                          </Flex>
-                        );
-                      })}
-                    </Stack>
-                    <Divider p={theme.spacing.sm} />
-                    <Flex justify={"space-between"}>
-                      <Text fw={"var(--font-weight-bold)"}>SubTotal : </Text>
-                      <Text fw={"var(--font-weight-bold)"}>{cart.totalPrice}</Text>
-                    </Flex>
-                    <Button onClick={handleCheckout}>CHECKOUT</Button>
-                  </Flex>
-                </Box>
+                            </div>
+                            <Text size="sm" fw={600} c="#334155">₹{item.price}</Text>
+                          </div>
+                        ))}
+                      </div>
+                      <Divider my={8} color="#f1f5f9" />
+                      <div className={classes.cartFooter}>
+                        <div className={classes.cartTotal}>
+                          <Text size="sm" c="#64748b">Subtotal</Text>
+                          <Text size="sm" fw={700} c="#1e293b">₹{cartTotal}</Text>
+                        </div>
+                        <button className={classes.checkoutBtn} onClick={handleCheckout}>
+                          Checkout →
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               )}
-            </HoverCard.Dropdown>
-          </HoverCard>
-        </Group>
+            </div>
 
-        {/* Desktop auth */}
-        <Group visibleFrom="sm">
-          {isAuthenticated ? (
-            <>
-              <Menu
-                trigger="hover"
-                openDelay={100}
-                closeDelay={400}
-                shadow="md"
-                width={300}
-              >
-                <Menu.Target>
-                  <Group onClick={handleOrderBtn}>
-                    <Avatar size="sm" src={avatarUrl} alt="it's me" />
-                    <Text fw={"var(--font-weight-semi-bold)"}>
-                      {user?.name}
-                    </Text>
-                  </Group>
-                </Menu.Target>
-                <Menu.Dropdown
-                  className={classes.dropdownMenu}
-                  fw={"var(--font-weight-semi-bold)"}
+            {/* Auth */}
+            <div className={classes.authSection}>
+              {isAuthenticated ? (
+                <Menu
+                  trigger="hover"
+                  openDelay={80}
+                  closeDelay={300}
+                  shadow="lg"
+                  width={210}
+                  position="bottom-end"
+                  radius="md"
                 >
-                  <Menu.Item onClick={handleOrderBtn}>Profile</Menu.Item>
-                  <Menu.Item onClick={handleOrderBtn}>Orders</Menu.Item>
-                  <Menu.Item onClick={handleLogoutBtn}>Logout</Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-              <Button
-                variant="subtle"
-                onClick={() =>
-                  (window.location.href =
-                    "https://mern-dashboard-blond.vercel.app")
-                }
-              >
-                Dashboard
-              </Button>
-            </>
-          ) : (
-            <LoginDrawer variant="default" title="Sign In" />
-          )}
-        </Group>
+                  <Menu.Target>
+                    <button className={classes.userBtn}>
+                      <Avatar
+                        size={32}
+                        src={avatarUrl}
+                        radius="xl"
+                        className={classes.userAvatar}
+                      >
+                        <IconUser size={16} />
+                      </Avatar>
+                      <span className={classes.userName}>{user?.name?.split(" ")[0]}</span>
+                      <IconChevronDown size={12} stroke={2} color="#64748b" />
+                    </button>
+                  </Menu.Target>
+                  <Menu.Dropdown className={classes.userDropdown}>
+                    <div className={classes.userDropdownHeader}>
+                      <Avatar size={40} src={avatarUrl} radius="xl">
+                        <IconUser size={20} />
+                      </Avatar>
+                      <div>
+                        <Text size="sm" fw={700} c="#1e293b">{user?.name}</Text>
+                        <Text size="xs" c="#94a3b8">{user?.email || "Manage account"}</Text>
+                      </div>
+                    </div>
+                    <Divider my={8} color="#f1f5f9" />
+                    <Menu.Item
+                      leftSection={<IconReceipt size={16} />}
+                      onClick={handleOrderBtn}
+                      className={classes.menuItem}
+                    >
+                      My Orders
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={<IconLayoutDashboard size={16} />}
+                      onClick={() => (window.location.href = "https://mern-dashboard-blond.vercel.app")}
+                      className={classes.menuItem}
+                    >
+                      Dashboard
+                    </Menu.Item>
+                    <Divider my={8} color="#f1f5f9" />
+                    <Menu.Item
+                      leftSection={<IconLogout size={16} />}
+                      onClick={handleLogoutBtn}
+                      className={classes.menuItemDanger}
+                    >
+                      Logout
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              ) : (
+                <LoginDrawer variant="default" title="Sign In" />
+              )}
+            </div>
 
-        {/* Mobile burger */}
-        <Burger
-          opened={mobileMenuOpened}
-          onClick={openMobileMenu}
-          hiddenFrom="sm"
-          size="sm"
-        />
-      </Group>
+            {/* Mobile burger */}
+            <Burger
+              opened={mobileMenuOpened}
+              onClick={openMobileMenu}
+              hiddenFrom="sm"
+              size="sm"
+              className={classes.burger}
+            />
+          </div>
+        </div>
+      </header>
 
-      {/* Mobile slide-in drawer */}
+      {/* ─── Mobile drawer ─── */}
       <Drawer
         opened={mobileMenuOpened}
         onClose={closeMobileMenu}
         position="right"
         size="xs"
-        title={
-          <Image src={Logo} className={classes.logo} />
-        }
+        title={<Image src={Logo} className={classes.logo} alt="Foodd" />}
         padding="md"
       >
         <Stack gap="sm">
-          <Link
-            to="/"
-            className={classes.mobileLink}
-            onClick={closeMobileMenu}
-          >
+          {/* Location in drawer */}
+          <button className={classes.locationPillMobile} onClick={getLocation}>
+            <IconMapPin size={14} />
+            <span>{city || "Set location"}</span>
+          </button>
+
+          {/* Mobile search */}
+          <div className={classes.mobileSearchWrap}>
+            <IconSearch size={15} className={classes.searchIcon} />
+            <input
+              className={classes.mobileSearchInput}
+              placeholder="Search restaurants, food…"
+            />
+          </div>
+
+          <Divider />
+
+          <Link to="/" className={classes.mobileLink} onClick={closeMobileMenu}>
             Home
           </Link>
 
           <Divider />
 
-          {/* Mobile Cart summary */}
+          {/* Mobile Cart */}
           <Box>
-            <Text fw={700} mb="xs">
+            <Text fw={700} mb="xs" size="sm">
               Cart{" "}
-              {cart.cartItems.length > 0 && (
-                <Text span c={theme.primaryColor}>
-                  ({cart.cartItems.length})
-                </Text>
+              {cartCount > 0 && (
+                <Text span c="orange">({cartCount})</Text>
               )}
             </Text>
-            {cart.cartItems.length === 0 ? (
+            {cartCount === 0 ? (
               <SubText>Your cart is empty</SubText>
             ) : (
               <Stack gap="xs">
-                {cart.cartItems.map((item, index) => (
-                  <Flex key={index} justify="space-between">
-                    <Text size="sm">
-                      {item.name} x {item.quantity}
-                    </Text>
-                    <Text size="sm">₹{item.price}</Text>
+                {cart.cartItems.map((item, i) => (
+                  <Flex key={i} justify="space-between">
+                    <Text size="sm">{item.name} x{item.quantity}</Text>
+                    <Text size="sm" fw={600}>₹{item.price}</Text>
                   </Flex>
                 ))}
                 <Flex justify="space-between" mt="xs">
-                  <Text fw={700} size="sm">SubTotal:</Text>
-                  <Text fw={700} size="sm">₹{cart.totalPrice}</Text>
+                  <Text fw={700} size="sm">Subtotal</Text>
+                  <Text fw={700} size="sm">₹{cartTotal}</Text>
                 </Flex>
-                <Button fullWidth onClick={handleCheckout} mt="xs">
-                  CHECKOUT
+                <Button fullWidth onClick={handleCheckout} mt="xs" radius="md">
+                  Checkout
                 </Button>
               </Stack>
             )}
@@ -309,27 +337,27 @@ const NavBar = () => {
 
           <Divider />
 
-          {/* Mobile auth */}
+          {/* Mobile Auth */}
           {isAuthenticated ? (
             <Stack gap="xs">
               <Group>
-                <Avatar size="sm" src={avatarUrl} alt="user" />
-                <Text fw={600}>{user?.name}</Text>
+                <Avatar size="sm" src={avatarUrl} radius="xl">
+                  <IconUser size={14} />
+                </Avatar>
+                <Text fw={600} size="sm">{user?.name}</Text>
               </Group>
-              <Button variant="subtle" fullWidth onClick={handleOrderBtn}>
-                Profile / Orders
+              <Button variant="subtle" fullWidth onClick={handleOrderBtn} radius="md">
+                My Orders
               </Button>
               <Button
                 variant="subtle"
                 fullWidth
-                onClick={() =>
-                  (window.location.href =
-                    "https://mern-dashboard-blond.vercel.app")
-                }
+                onClick={() => (window.location.href = "https://mern-dashboard-blond.vercel.app")}
+                radius="md"
               >
                 Dashboard
               </Button>
-              <Button variant="outline" fullWidth onClick={handleLogoutBtn}>
+              <Button variant="outline" color="red" fullWidth onClick={handleLogoutBtn} radius="md">
                 Logout
               </Button>
             </Stack>
@@ -338,7 +366,7 @@ const NavBar = () => {
           )}
         </Stack>
       </Drawer>
-    </header>
+    </>
   );
 };
 
