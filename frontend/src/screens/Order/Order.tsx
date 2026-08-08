@@ -20,7 +20,7 @@ import AddressCard from "../../components/Cards/AddressCard/AddressCard";
 import OrderCard from "../../components/Cards/OrderCard/OrderCard";
 import { useAuth } from "../../hooks/useAuth";
 import { useGetMyOrdersQuery } from "../../redux/slices/apiSlice";
-import { IOrder } from "../../types/order.types";
+
 import classes from "./Order.module.css";
 
 // Production Mock Orders when backend list is empty
@@ -311,7 +311,7 @@ const Order = () => {
         <Box className={classes.emptyState}>
           <IconCreditCard size={48} color="#ff5200" style={{ marginBottom: 12 }} />
           <Title order={3} mb="xs">Saved Cards &amp; UPI</Title>
-          <Text c="dimmed" maxW={400} mx="auto">
+          <Text c="dimmed" maw={400} mx="auto">
             Your saved payment methods for 1-click checkout are encrypted and secured via Stripe.
           </Text>
         </Box>
@@ -322,7 +322,7 @@ const Order = () => {
         <Box className={classes.emptyState}>
           <IconFileText size={48} color="#ff5200" style={{ marginBottom: 12 }} />
           <Title order={3} mb="xs">Available Vouchers &amp; Rewards</Title>
-          <Text c="dimmed" maxW={400} mx="auto">
+          <Text c="dimmed" maw={400} mx="auto">
             You have 3 active promo codes available! Use code <b>FOODD50</b> at checkout for 50% OFF up to ₹100.
           </Text>
         </Box>

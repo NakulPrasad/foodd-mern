@@ -5,7 +5,6 @@ import {
   Divider,
   Flex,
   Grid,
-  Group,
   Image,
   SimpleGrid,
   Stack,
@@ -22,7 +21,6 @@ import { useCart } from "../../hooks/useCart";
 import { usePostOrderMutation } from "../../redux/slices/apiSlice";
 import { RootState } from "../../redux/store";
 import classes from "./Checkout.module.css";
-import IconVeg from "/icons/veg-icon.png";
 import Logo from "/img/logo/LOGO-bgremove.png";
 
 // Saved addresses — in a real app these come from the user's profile API
@@ -95,7 +93,7 @@ const Checkout = () => {
     }
   }, [cart.cartItems, navigate]);
 
-  const restaurantImage = cart.selectedRestaurantImage || selectedRestaurant?.image || Logo;
+  const restaurantImage = cart.selectedRestaurantImage || (selectedRestaurant as any)?.image || Logo;
 
   return (
     <section id="checkout" className={classes.section}>

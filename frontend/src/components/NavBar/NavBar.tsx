@@ -11,7 +11,6 @@ import {
   Menu,
   Stack,
   Text,
-  Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -24,7 +23,7 @@ import {
   IconReceipt,
   IconLayoutDashboard,
 } from "@tabler/icons-react";
-import { memo, useRef, useState } from "react";
+import { memo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";

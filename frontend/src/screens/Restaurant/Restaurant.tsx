@@ -6,13 +6,10 @@ import {
   Button,
   Divider,
   Flex,
-  Group,
-  Image,
   Text,
-  Title,
 } from "@mantine/core";
 import { IconBike, IconClock, IconMapPin, IconSearch, IconStar, IconStarFilled } from "@tabler/icons-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
 import { useGetRestaurantByIdQuery } from "../../redux/slices/apiSlice";

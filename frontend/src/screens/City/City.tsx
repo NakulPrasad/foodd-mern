@@ -1,7 +1,7 @@
 import { Carousel } from "@mantine/carousel";
-import { Divider, SimpleGrid, Text } from "@mantine/core";
-import { IconArrowNarrowLeft, IconArrowNarrowRight, IconSearch } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { Divider, SimpleGrid } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import CollectionCard from "../../components/Cards/CollectionCard/CollectionCard";
 import RestaurantCard from "../../components/Cards/RestaurantCard/RestaurantCard";
@@ -45,7 +45,7 @@ const City = () => {
   const { allRestaurantJson, isLoading, error } = useRestaurant();
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const carouselRef = useRef<any>(null);
+
 
   useEffect(() => {
     if (error) {

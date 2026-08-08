@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@mantine/core";
+import { Image } from "@mantine/core";
 import { IconStarFilled } from "@tabler/icons-react";
 import { IFoodItem } from "../../../types";
 import ModalCart from "../../Modal/ModalCart";

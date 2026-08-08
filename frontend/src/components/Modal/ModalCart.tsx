@@ -22,7 +22,7 @@ const ModalCart = (props: IModalCartProps) => {
   const { addItem } = useCart();
   const selectedRestaurant = useAppSelector(
     (state: RootState) => state.restaurant.selected,
-  );
+  ) as any;
 
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, IValue | IValue[]>
