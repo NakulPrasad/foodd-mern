@@ -5,12 +5,17 @@ import { createHandler } from "graphql-http/lib/use/express";
 import morgan from "morgan";
 import { apiRouter } from "./Routes/apiRouter.js";
 import passport, { passportRoutes } from "./configs/passportConfig.js";
+import dbConfig from "./configs/dbConfig2.js";
 import root from "./graphql/resolvers.js";
 import schema from "./graphql/schema.js";
 import corsMiddleware from "./middleware/corsMiddleware.js";
 import rateLimiter from "./middleware/rateLimitter.js";
 
 const app = express();
+
+// Connect to MongoDB once (cached across Vercel warm invocations)
+const db = new dbConfig();
+db.connect().catch((err) => console.error("MongoDB connection failed:", err));
 
 if (process.env.NODE_ENV === "production") {
   app.set("trust proxy", 1); // for rate limiter in production
