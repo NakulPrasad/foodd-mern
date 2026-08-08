@@ -1,5 +1,6 @@
 import { Image } from "@mantine/core";
 import { IconStarFilled } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 import { IFoodItem } from "../../../types";
 import ModalCart from "../../Modal/ModalCart";
 import classes from "./MenuCard.module.css";
@@ -12,6 +13,8 @@ interface IMenuCardProps {
 }
 
 const MenuCard = ({ foodItem }: IMenuCardProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className={classes.row}>
       {/* Left: info */}
@@ -21,6 +24,14 @@ const MenuCard = ({ foodItem }: IMenuCardProps) => {
           style={{ width: 16, height: 16, marginBottom: 6 }}
         />
         <p className={classes.name}>{foodItem.name}</p>
+        {foodItem.restaurantName && (
+          <p
+            className={classes.restaurantName}
+            onClick={() => foodItem.restaurantId && navigate(`/restaurant/${foodItem.restaurantId}`)}
+          >
+            from <span>{foodItem.restaurantName}</span>
+          </p>
+        )}
         <p className={classes.price}>₹{foodItem.price}</p>
 
         {foodItem.rating > 0 && (

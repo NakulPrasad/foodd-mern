@@ -20,7 +20,7 @@ export default class restaurantService {
   async getAllRestaurant(): Promise<IRestaurant[]> {
     try {
       console.log("Collection:", RestaurantModel.collection.name);
-      const restaurants = await RestaurantModel.find({});
+      const restaurants = await RestaurantModel.find({}).populate("menu").exec();
       return restaurants || [];
     } catch (error: any) {
       console.error("Error while fetching restaurant", error.message);

@@ -141,3 +141,22 @@
     height: 90px;
   }
 }
+
+.restaurantName {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 6px 0;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.restaurantName span {
+  text-decoration: underline;
+  font-weight: 600;
+  color: #ff5200;
+}
+
+.restaurantName:hover span {
+  color: #e04400;
+}

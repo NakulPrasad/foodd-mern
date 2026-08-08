@@ -2,7 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import store from "../../redux/store";
 import Order from "./Order";
 
@@ -88,7 +88,7 @@ describe("Orders Page", () => {
 
   it("switches tabs and displays target tab layouts", () => {
     renderComponent();
-    
+
     // Switch to Addresses tab
     const addressTabBtn = screen.getByRole("button", { name: /Saved Addresses/i });
     fireEvent.click(addressTabBtn);

@@ -1,9 +1,10 @@
 import { Carousel } from "@mantine/carousel";
 import { Divider, SimpleGrid } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import CollectionCard from "../../components/Cards/CollectionCard/CollectionCard";
+import MenuCard from "../../components/Cards/MenuCard/MenuCard";
 import RestaurantCard from "../../components/Cards/RestaurantCard/RestaurantCard";
 import CustomCarousel from "../../components/Carousel/Carousel";
 import { useLocation } from "../../hooks/useLocation";
@@ -45,7 +46,7 @@ const City = () => {
   const { allRestaurantJson, isLoading, error } = useRestaurant();
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [selectedMindCategory, setSelectedMindCategory] = useState<string | null>(null);
 
   useEffect(() => {
     if (error) {
@@ -54,6 +55,37 @@ const City = () => {
   }, [error]);
 
   const restaurants: IRestaurant[] = allRestaurantJson?.data || [];
+
+  const categoryDishes = useMemo(() => {
+    if (!selectedMindCategory) return [];
+
+    const list: any[] = [];
+    restaurants.forEach((r) => {
+      if (r.menu) {
+        r.menu.forEach((item) => {
+          const itemCat = (item.category || "").toLowerCase().trim();
+          const selCat = selectedMindCategory.toLowerCase().trim();
+          const cleanItemCat = itemCat.replace(/s$/, "");
+          const cleanSelCat = selCat.replace(/s$/, "");
+
+          if (
+            itemCat === selCat ||
+            cleanItemCat === cleanSelCat ||
+            itemCat.startsWith(cleanSelCat) ||
+            selCat.startsWith(cleanItemCat)
+          ) {
+            list.push({
+              ...item,
+              restaurantId: r._id,
+              restaurantName: r.name,
+              restaurantImage: r.image,
+            });
+          }
+        });
+      }
+    });
+    return list;
+  }, [restaurants, selectedMindCategory]);
 
   const filteredRestaurants = restaurants.filter((r) => {
     if (searchQuery) {
@@ -156,11 +188,51 @@ const City = () => {
         >
           {CATEGORIES.map((cat, i) => (
             <Carousel.Slide key={i}>
-              <CollectionCard image={cat.image} label={cat.label} />
+              <CollectionCard
+                image={cat.image}
+                label={cat.label}
+                onClick={() => {
+                  setSelectedMindCategory(cat.label);
+                  setTimeout(() => {
+                    document.getElementById("mind-category-dishes")?.scrollIntoView({ behavior: "smooth" });
+                  }, 100);
+                }}
+              />
             </Carousel.Slide>
           ))}
         </CustomCarousel>
       </section>
+
+      {/* ─── Mind Category Dishes ─── */}
+      {selectedMindCategory && (
+        <section id="mind-category-dishes" className={classes.section_m} data-testid="mind-category-dishes">
+          <div className={classes.sectionHeader}>
+            <h2 className={classes.sectionTitle}>
+              {selectedMindCategory} Dishes for you
+            </h2>
+            <button
+              className={classes.seeAllBtn}
+              onClick={() => setSelectedMindCategory(null)}
+              style={{ background: "#fee2e2", color: "#ef4444", padding: "6px 12px", borderRadius: "10px" }}
+            >
+              Clear Filter ✕
+            </button>
+          </div>
+          {categoryDishes.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2.5rem 1rem", color: "#64748b" }}>
+              <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🍽️</div>
+              <div style={{ fontWeight: 700, color: "#0f172a" }}>No dishes found</div>
+              <div style={{ fontSize: 13, marginTop: 4 }}>We couldn't find any {selectedMindCategory} dishes at the moment.</div>
+            </div>
+          ) : (
+            <div className={classes.dishesContainer}>
+              {categoryDishes.map((dish) => (
+                <MenuCard key={dish._id} foodItem={dish} />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* ─── Top Restaurant Chains ─── */}
       <section id="topbrands" className={classes.section_m}>

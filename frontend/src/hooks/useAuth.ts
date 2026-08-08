@@ -22,7 +22,26 @@ export const useAuth = () => {
 
   const checkAuth = async () => {
     const token = getItem("authToken");
-    if (!token) return;
+    if (!token) {
+      if (import.meta.env.DEV) {
+        dispatch(
+          setAuth({
+            user: {
+              name: "Nakul Prasad Mahato",
+              email: "nakulprasad10@gmail.com",
+              displayName: "Nakul",
+              avatarUrl: "https://api.dicebear.com/7.x/adventurer/svg?seed=Nakul",
+              phoneNumber: "8210333793",
+              location: "Hyderabad, India",
+              bio: "Food enthusiast and software engineer. Love Dum Biryani and Burgers.",
+            },
+            isAuthenticated: true,
+          })
+        );
+        dispatch(setAuthenticationToken({ authToken: "mock-dev-token" }));
+      }
+      return;
+    }
 
     // 1. Dispatch token to Redux FIRST so fetchBaseQuery includes Bearer header
     dispatch(setAuthenticationToken({ authToken: token }));
@@ -38,8 +57,10 @@ export const useAuth = () => {
       }
     } catch (error) {
       console.error("Authentication check failed:", error);
-      dispatch(clearAuth());
-      removeUser();
+      if (!import.meta.env.DEV) {
+        dispatch(clearAuth());
+        removeUser();
+      }
     }
   };
 

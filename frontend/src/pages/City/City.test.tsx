@@ -2,7 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import store from "../../redux/store";
 import City from "./City";
 
@@ -68,6 +68,37 @@ const renderComponent = () => {
 };
 
 describe("Homepage (City Screen)", () => {
+  beforeEach(() => {
+    mockUseRestaurant.mockReturnValue({
+      allRestaurantJson: {
+        data: [
+          {
+            _id: "1",
+            name: "Artisan Burger Co",
+            rating: 4.5,
+            deliveryTime: "25 Mins",
+            cuisine: ["Burgers", "American"],
+            location: { area: "Koramangala" },
+            image: "burger.jpg",
+          },
+          {
+            _id: "2",
+            name: "Pizza Palazzo",
+            rating: 3.8,
+            deliveryTime: "35 Mins",
+            cuisine: ["Pizza", "Italian"],
+            location: { area: "Indiranagar" },
+            image: "pizza.jpg",
+          },
+        ],
+      },
+      isLoading: false,
+      error: null,
+      setCurrentRestaurant: vi.fn(),
+      removeCurrentRestaurant: vi.fn(),
+    });
+  });
+
   it("renders the hero banner with the correct location", () => {
     renderComponent();
     expect(screen.getByText(/Order Food/i)).toBeInTheDocument();
@@ -147,5 +178,99 @@ describe("Homepage (City Screen)", () => {
     );
 
     expect(screen.getByText("Couldn't load restaurants")).toBeInTheDocument();
+  });
+
+  it("lists all category dishes across restaurants when a category is clicked", () => {
+    mockUseRestaurant.mockReturnValue({
+      allRestaurantJson: {
+        data: [
+          {
+            _id: "1",
+            name: "Artisan Burger Co",
+            rating: 4.5,
+            deliveryTime: "25 Mins",
+            cuisine: ["Burgers", "American"],
+            location: { area: "Koramangala" },
+            image: "burger.jpg",
+            menu: [
+              {
+                _id: "food1",
+                name: "Classic Chicken Burger",
+                price: 199,
+                category: "Burgers",
+                is_veg: false,
+                rating: 4.5,
+                options: [],
+                img_url: "burger1.jpg",
+              },
+            ],
+          },
+          {
+            _id: "2",
+            name: "Pizza Palazzo",
+            rating: 3.8,
+            deliveryTime: "35 Mins",
+            cuisine: ["Pizza", "Italian"],
+            location: { area: "Indiranagar" },
+            image: "pizza.jpg",
+            menu: [
+              {
+                _id: "food2",
+                name: "Veg Cheese Burger",
+                price: 149,
+                category: "Burgers",
+                is_veg: true,
+                rating: 4.2,
+                options: [],
+                img_url: "burger2.jpg",
+              },
+              {
+                _id: "food3",
+                name: "Margherita Pizza",
+                price: 299,
+                category: "Pizza",
+                is_veg: true,
+                rating: 4.6,
+                options: [],
+                img_url: "pizza1.jpg",
+              },
+            ],
+          },
+        ],
+      },
+      isLoading: false,
+      error: null,
+      setCurrentRestaurant: vi.fn(),
+      removeCurrentRestaurant: vi.fn(),
+    });
+
+    renderComponent();
+
+    // Click on Burgers category card
+    const suggestionsSection = screen.getByText("What's on your mind?").closest("section");
+    const burgerCategoryBtn = within(suggestionsSection!).getByText("Burgers");
+    fireEvent.click(burgerCategoryBtn);
+
+    // Verify the dishes section header is displayed
+    expect(screen.getByText("Burgers Dishes for you")).toBeInTheDocument();
+
+    // Verify both burger dishes are displayed
+    expect(screen.getByText("Classic Chicken Burger")).toBeInTheDocument();
+    expect(screen.getByText("Veg Cheese Burger")).toBeInTheDocument();
+
+    // Verify pizza is NOT displayed (since we clicked Burgers)
+    expect(screen.queryByText("Margherita Pizza")).not.toBeInTheDocument();
+
+    // Verify restaurant names are displayed on the dishes
+    expect(screen.getAllByText(/from/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Artisan Burger Co").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Pizza Palazzo").length).toBeGreaterThan(0);
+
+    // Click the clear button
+    const clearBtn = screen.getByRole("button", { name: /Clear Filter/i });
+    fireEvent.click(clearBtn);
+
+    // Dishes section should disappear
+    expect(screen.queryByText("Burgers Dishes for you")).not.toBeInTheDocument();
   });
 });

@@ -232,6 +232,13 @@ const NavBar = () => {
                     </div>
                     <Divider my={8} color="#f1f5f9" />
                     <Menu.Item
+                      leftSection={<IconUser size={16} />}
+                      onClick={() => navigate("/my-account")}
+                      className={classes.menuItem}
+                    >
+                      Profile Settings
+                    </Menu.Item>
+                    <Menu.Item
                       leftSection={<IconReceipt size={16} />}
                       onClick={handleOrderBtn}
                       className={classes.menuItem}
@@ -264,7 +271,7 @@ const NavBar = () => {
             <Burger
               opened={mobileMenuOpened}
               onClick={openMobileMenu}
-              hiddenFrom="sm"
+              hiddenFrom="md"
               size="sm"
               className={classes.burger}
             />
@@ -339,15 +346,18 @@ const NavBar = () => {
           {/* Mobile Auth */}
           {isAuthenticated ? (
             <Stack gap="xs">
-              <Group>
+              <Group
+                onClick={() => {
+                  navigate("/my-account");
+                  closeMobileMenu();
+                }}
+                style={{ cursor: "pointer" }}
+              >
                 <Avatar size="sm" src={avatarUrl} radius="xl">
                   <IconUser size={14} />
                 </Avatar>
-                <Text fw={600} size="sm">{user?.name}</Text>
+                <Text fw={600} size="sm">Settings</Text>
               </Group>
-              <Button variant="subtle" fullWidth onClick={handleOrderBtn} radius="md">
-                My Orders
-              </Button>
               <Button
                 variant="subtle"
                 fullWidth
