@@ -95,7 +95,10 @@ describe("Checkout Page", () => {
   });
 
   it("submits the order when proceed to pay is clicked and address is selected", async () => {
-    mockPostOrder.mockResolvedValueOnce({ data: { success: true } });
+    vi.useFakeTimers();
+    mockPostOrder.mockReturnValue({
+      unwrap: () => Promise.resolve({ success: true }),
+    });
     renderComponent();
 
     // Try submitting without selecting address first (button is 'Select Address First')
@@ -111,6 +114,17 @@ describe("Checkout Page", () => {
     const proceedPayBtn = screen.getByRole("button", { name: /Proceed to Pay/i });
     fireEvent.click(proceedPayBtn);
 
+    // Select COD option
+    const codBtn = screen.getByRole("button", { name: /COD/i });
+    fireEvent.click(codBtn);
+
+    // Click Confirm COD Order
+    const confirmBtn = screen.getByRole("button", { name: /Confirm COD Order/i });
+    fireEvent.click(confirmBtn);
+
+    // Advance timers by 3000ms
+    await vi.advanceTimersByTimeAsync(3000);
+
     expect(mockPostOrder).toHaveBeenCalledWith(expect.objectContaining({
       restaurantId: "restaurant1",
       totalAmount: 500,
@@ -120,5 +134,7 @@ describe("Checkout Page", () => {
       paymentStatus: "pending",
       deliveryAddress: "Flat 302, Green Valley Apartments, MG Road, Bangalore 560001",
     }));
+
+    vi.useRealTimers();
   });
 });

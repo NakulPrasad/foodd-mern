@@ -15,7 +15,6 @@ import {
   TextInput,
   Textarea,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import {
   IconAddressBook,
@@ -32,7 +31,6 @@ const Profile = () => {
     (state: RootState) => state.auth,
   );
   const navigate = useNavigate();
-  const theme = useMantineTheme();
 
   // Local state for editable profile fields (fallback to default value if empty)
   const [name, setName] = useState(user?.name || "Nakul Prasad Mahato");
@@ -175,7 +173,7 @@ const Profile = () => {
           <Tabs.Panel value="profile">
             <Grid gutter={{ base: "md", md: "xl" }}>
               <Grid.Col span={{ base: 12, md: 8 }}>
-                <Paper border="1px solid #e2e8f0" radius="lg" p="xl" bg="#ffffff">
+                <Paper withBorder radius="lg" p="xl" bg="#ffffff">
                   <Title order={3} mb="lg" c="#0f172a" fw={800}>
                     Personal Information
                   </Title>
@@ -244,7 +242,7 @@ const Profile = () => {
               </Grid.Col>
 
               <Grid.Col span={{ base: 12, md: 4 }}>
-                <Paper border="1px solid #e2e8f0" radius="lg" p="xl" bg="#ffffff">
+                <Paper withBorder radius="lg" p="xl" bg="#ffffff">
                   <Title order={3} mb="md" c="#0f172a" fw={800}>
                     Account Status
                   </Title>
@@ -282,7 +280,7 @@ const Profile = () => {
             </Flex>
 
             {showAddAddress && (
-              <Paper border="1px solid #e2e8f0" radius="lg" p="xl" mb="lg" bg="#ffffff">
+              <Paper withBorder radius="lg" p="xl" mb="lg" bg="#ffffff">
                 <Title order={4} mb="md">Add New Address</Title>
                 <form onSubmit={handleAddAddress}>
                   <Stack gap="md">
@@ -372,7 +370,7 @@ const Profile = () => {
 
           {/* ─── Preferences tab ─── */}
           <Tabs.Panel value="preferences">
-            <Paper border="1px solid #e2e8f0" radius="lg" p="xl" bg="#ffffff">
+            <Paper withBorder radius="lg" p="xl" bg="#ffffff">
               <Title order={3} mb="xl" c="#0f172a" fw={800}>
                 Communication Preferences
               </Title>
