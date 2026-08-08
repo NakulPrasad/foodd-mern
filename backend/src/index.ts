@@ -12,6 +12,10 @@ import rateLimiter from "./middleware/rateLimitter.js";
 
 const app = express();
 
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1); // for rate limiter in production
+}
+
 app.use(corsMiddleware);
 app.use(express.json());
 app.use(morgan("dev"));
