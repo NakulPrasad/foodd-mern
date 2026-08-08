@@ -127,9 +127,45 @@ html, body {
   font-weight: 700;
 }
 
+/* Drawer Modern UI Overrides */
+.mantine-Drawer-content {
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+.mantine-Drawer-header {
+  min-height: 54px;
+}
+
+.mantine-Drawer-close {
+  border-radius: 50%;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #64748b;
+}
+
+.mantine-Drawer-close:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  transform: rotate(90deg);
+}
+
+.mantine-Drawer-body {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.mantine-Drawer-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mantine-Drawer-body::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}
+
 /* Skeleton shimmer */
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
 

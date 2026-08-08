@@ -11,7 +11,8 @@ import {
   Menu,
   Stack,
   Text,
-  Badge,
+  Modal,
+  TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -25,8 +26,9 @@ import {
   IconLayoutDashboard,
   IconX,
   IconBuildingStore,
-  IconUtensils,
-  IconStarFilled,
+  IconToolsKitchen2,
+  IconCrosshair,
+  IconCheck,
 } from "@tabler/icons-react";
 import { memo, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -126,7 +128,43 @@ const NavBar = () => {
   };
 
   const avatarUrl = user?.avatarUrl;
-  const { city, getLocation, loading, error } = useLocation();
+  const [locationModalOpened, { open: openLocationModal, close: closeLocationModal }] =
+    useDisclosure(false);
+  const [customCityInput, setCustomCityInput] = useState("");
+
+  const { city, getLocation, loading, setCity } = useLocation();
+
+  const POPULAR_CITIES = [
+    "Hyderabad",
+    "Bangalore",
+    "Mumbai",
+    "Delhi NCR",
+    "Chennai",
+    "Pune",
+    "Kolkata",
+  ];
+
+  const handleSelectCity = (cityName: string) => {
+    if (!cityName.trim()) return;
+    setCity(cityName.trim());
+    toast.success(`Location set to ${cityName.trim()}`);
+    closeLocationModal();
+    setCustomCityInput("");
+  };
+
+  const handleAutoDetectGPS = async () => {
+    try {
+      await getLocation();
+      toast.success("Location auto-detected via GPS!");
+      closeLocationModal();
+    } catch (err: any) {
+      toast.error(err || "Failed to detect GPS location.");
+    }
+  };
+
+  const filteredCities = POPULAR_CITIES.filter((c) =>
+    c.toLowerCase().includes(customCityInput.trim().toLowerCase()),
+  );
 
   const handleOrderBtn = () => {
     navigate("/order");
@@ -138,6 +176,92 @@ const NavBar = () => {
 
   return (
     <>
+      {/* ─── Location Selector Modal ─── */}
+      <Modal
+        opened={locationModalOpened}
+        onClose={closeLocationModal}
+        title={
+          <Group gap="xs">
+            <IconMapPin size={20} color="#f97316" />
+            <Text fw={700} size="lg" c="dark.8">
+              Select Delivery Location
+            </Text>
+          </Group>
+        }
+        centered
+        radius="lg"
+        padding="lg"
+      >
+        <Stack gap="md">
+          {/* Auto-detect GPS button */}
+          <button
+            type="button"
+            className={classes.locationGpsBtn}
+            onClick={handleAutoDetectGPS}
+            disabled={loading}
+          >
+            <IconCrosshair size={18} />
+            <span>{loading ? "Detecting location..." : "Use Current Location (GPS)"}</span>
+            {loading && <Spinner />}
+          </button>
+
+          <Divider label="OR CHOOSE CITY" labelPosition="center" my="xs" />
+
+          {/* Search / Custom City Input */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (customCityInput.trim()) {
+                handleSelectCity(customCityInput);
+              }
+            }}
+          >
+            <TextInput
+              placeholder="Search or enter city name..."
+              leftSection={<IconSearch size={16} color="#94a3b8" />}
+              value={customCityInput}
+              onChange={(e) => setCustomCityInput(e.target.value)}
+              rightSection={
+                customCityInput.trim() ? (
+                  <Button
+                    size="xs"
+                    variant="filled"
+                    color="orange"
+                    onClick={() => handleSelectCity(customCityInput)}
+                  >
+                    Set
+                  </Button>
+                ) : null
+              }
+            />
+          </form>
+
+          {/* Popular Cities */}
+          <Box>
+            <Text size="xs" fw={700} c="dimmed" tt="uppercase" mb={6}>
+              Popular Cities
+            </Text>
+            <div className={classes.popularCityChips}>
+              {filteredCities.map((cityName) => {
+                const isActive = city.toLowerCase() === cityName.toLowerCase();
+                return (
+                  <button
+                    key={cityName}
+                    type="button"
+                    className={`${classes.popularCityChip} ${
+                      isActive ? classes.cityChipActive : ""
+                    }`}
+                    onClick={() => handleSelectCity(cityName)}
+                  >
+                    {cityName} {isActive && <IconCheck size={12} style={{ marginLeft: 4 }} />}
+                  </button>
+                );
+              })}
+            </div>
+          </Box>
+        </Stack>
+      </Modal>
+
       {/* ─── Sticky header ─── */}
       <header className={classes.header}>
         <div className={classes.inner}>
@@ -149,15 +273,14 @@ const NavBar = () => {
 
             <button
               className={classes.locationPill}
-              onClick={getLocation}
-              title="Update location"
+              onClick={openLocationModal}
+              title="Select location"
             >
               <IconMapPin size={14} stroke={2.5} className={classes.locationIcon} />
               <span className={classes.locationCity}>{city || "Set location"}</span>
               <IconChevronDown size={12} stroke={2} className={classes.locationChev} />
               {loading && <Spinner />}
             </button>
-            {error && toast.error(error)}
           </div>
 
           {/* CENTER — Interactive Live Search Bar */}
@@ -240,7 +363,7 @@ const NavBar = () => {
                     {searchResults.matchedDishes.length > 0 && (
                       <Box mb="xs">
                         <div className={classes.searchGroupTitle}>
-                          <IconUtensils size={12} style={{ verticalAlign: "middle", marginRight: 4 }} />
+                          <IconToolsKitchen2 size={12} style={{ verticalAlign: "middle", marginRight: 4 }} />
                           Dishes ({searchResults.matchedDishes.length})
                         </div>
                         {searchResults.matchedDishes.map((dish) => (
@@ -466,12 +589,26 @@ const NavBar = () => {
         size="xs"
         title={<Image src={Logo} className={classes.logo} alt="Foodd" />}
         padding="md"
+        radius="lg"
+        overlayProps={{ backgroundOpacity: 0.4, blur: 8 }}
+        styles={{
+          content: {
+            borderRadius: "20px 0 0 20px",
+          },
+        }}
       >
         <Stack gap="sm">
           {/* Location in drawer */}
-          <button className={classes.locationPillMobile} onClick={getLocation}>
-            <IconMapPin size={14} />
+          <button
+            className={classes.locationPillMobile}
+            onClick={() => {
+              closeMobileMenu();
+              openLocationModal();
+            }}
+          >
+            <IconMapPin size={14} color="#f97316" />
             <span>{city || "Set location"}</span>
+            <IconChevronDown size={12} style={{ marginLeft: "auto", color: "#94a3b8" }} />
           </button>
 
           {/* Mobile search */}

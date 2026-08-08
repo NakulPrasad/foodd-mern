@@ -64,10 +64,11 @@ const InputPasswordReq = ({form}:InputPasswordReqProps)=> {
         >
 
           <PasswordInput
-           id={form.key('password')}
+            id={form.key('password')}
             withAsterisk
-            label="Your password"
-            placeholder="Your password"
+            w="100%"
+            label="Password"
+            placeholder="••••••••"
             key={form.key('password')}
             {...form.getInputProps('password')}
           />

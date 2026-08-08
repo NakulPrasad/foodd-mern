@@ -120,25 +120,23 @@ class userService {
 
   async registerUserOAuth(
     user: userInterfaceOAuth,
-  ) {
-    // console.log(user);
-      const existingUser: userInterface | null = await User.findOne({
-      email: user.email,
-    });
+  ): Promise<any> {
+    const existingUser = await User.findOne({ email: user.email });
     if (existingUser) {
-      return 
+      return existingUser;
     }
     const salt = await genSalt(10);
     // Use a cryptographically random password — OAuth users never log in with a password
     const randomPassword = randomBytes(32).toString("hex");
     user.password = await hash(randomPassword, salt);
 
-    const sucess = await User.create(user);
-    if (!sucess) {
-      console.error("Failed to register user, can't update database");
-    
+    const createdUser = await User.create(user);
+    if (!createdUser) {
+      console.error("Failed to register OAuth user");
+      return null;
     }
-    console.log("User Added Successfull");
+    console.log("OAuth User Created Successfully");
+    return createdUser;
   }
 }
 

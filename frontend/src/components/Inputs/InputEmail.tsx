@@ -1,20 +1,21 @@
-import { TextInput } from '@mantine/core'
+import { TextInput } from '@mantine/core';
 
-interface InputEmailProps{
-  form : any
+interface InputEmailProps {
+  form: any;
 }
 
-const InputEmail = ({form} : InputEmailProps) => {
+const InputEmail = ({ form }: InputEmailProps) => {
   return (
     <TextInput
-    id={form.key('email')}
-    withAsterisk
-    label="Email"
-    placeholder="your@email.com"
-    key={form.key('email')}
-    {...form.getInputProps('email')}
-  />
-  )
-}
+      id={form.key('email')}
+      withAsterisk
+      w="100%"
+      label="Email Address"
+      placeholder="your@email.com"
+      key={form.key('email')}
+      {...form.getInputProps('email')}
+    />
+  );
+};
 
-export default InputEmail
+export default InputEmail;

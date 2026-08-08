@@ -2,12 +2,11 @@ import { describe, expect, it } from "vitest";
 import cartReducer, {
   addToCart,
   applyCoupon,
-  clearCart,
   removeCoupon,
   removeFromCart,
 } from "./cartSlice";
 
-const mockItem1 = {
+const mockItem1: any = {
   _id: "item1",
   restaurantId: "rest1",
   restaurantName: "Tasty Treats",
@@ -18,7 +17,7 @@ const mockItem1 = {
   is_veg: true,
 };
 
-const mockItem2 = {
+const mockItem2: any = {
   _id: "item2",
   restaurantId: "rest1",
   restaurantName: "Tasty Treats",

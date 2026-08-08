@@ -40,6 +40,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
+  flex-shrink: 0;
 }
 
 .text {
@@ -85,6 +86,7 @@
   justify-content: center;
   border-radius: 4px;
   transition: color 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
 }
 
 .closeButton:hover {
@@ -162,17 +164,52 @@
   border-radius: 4px;
 }
 
-@media (max-width: 640px) {
+/* Mobile Responsive Optimization */
+@media (max-width: 768px) {
   .announcementBar {
-    padding: 0.4rem 0.75rem;
+    padding: 0.5rem 0.75rem;
   }
+
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding-right: 28px; /* Leave space for top-right close button */
+  }
+
+  .leftSection {
+    justify-content: flex-start;
+    gap: 0.4rem;
+  }
+
   .text {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
+    line-height: 1.3;
   }
+
   .badge {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
+    padding: 0.15rem 0.5rem;
   }
+
+  .ctaButton {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.76rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+  }
+
   .scrollableRepoList {
-    max-height: 300px;
+    max-height: 320px;
+  }
+
+  .projectCard {
+    padding: 0.9rem;
   }
 }

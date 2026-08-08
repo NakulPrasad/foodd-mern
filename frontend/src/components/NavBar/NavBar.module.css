@@ -87,6 +87,61 @@
   flex-shrink: 0;
 }
 
+/* ── Location Selector Modal ── */
+.locationGpsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: #fff7ed;
+  border: 1.5px solid #ffedd5;
+  border-radius: 12px;
+  color: #ea580c;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.locationGpsBtn:hover {
+  background: #ffedd5;
+  border-color: #f97316;
+  transform: translateY(-1px);
+}
+
+.popularCityChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.popularCityChip {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.popularCityChip:hover {
+  background: #fff7ed;
+  border-color: #f97316;
+  color: #ea580c;
+}
+
+.cityChipActive {
+  background: #ea580c !important;
+  border-color: #ea580c !important;
+  color: #ffffff !important;
+}
+
 /* ── CENTER — Search ── */
 .searchWrap {
   flex: 1;

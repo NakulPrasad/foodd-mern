@@ -63,6 +63,8 @@ export const apiSlice = createApi({
         deliveryAddress: string;
         restaurantName: string;
         cartItems: any[];
+        couponCode?: string;
+        discountAmount?: number;
       }
     >({
       query: (body) => ({

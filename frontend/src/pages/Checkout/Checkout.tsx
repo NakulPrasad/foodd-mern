@@ -30,7 +30,6 @@ import {
   IconBrandStripe,
   IconTag,
   IconTicket,
-  IconX,
 } from "@tabler/icons-react";
 import AddressCard from "../../components/Cards/AddressCard/AddressCard";
 import CheckoutCard from "../../components/Cards/CheckoutCard/CheckoutCard";
@@ -81,7 +80,7 @@ const Checkout = () => {
   // Coupon state & API hooks
   const [couponCodeInput, setCouponCodeInput] = useState("");
   const [validateCoupon, { isLoading: isValidatingCoupon }] = useValidateCouponMutation();
-  const { data: availableCouponsData, isLoading: isLoadingCoupons } = useGetAvailableCouponsQuery();
+  const { data: availableCouponsData } = useGetAvailableCouponsQuery();
 
   // Modal control
   const [paymentModalOpened, setPaymentModalOpened] = useState(false);
@@ -512,7 +511,6 @@ const Checkout = () => {
         radius="lg"
         size="md"
         withCloseButton={paymentStep === "idle"}
-        withinPortal={false}
         transitionProps={{ duration: 0 }}
         overlayProps={{
           backgroundOpacity: 0.55,
@@ -529,7 +527,7 @@ const Checkout = () => {
                 onClick={() => setActiveTab("card")}
                 leftSection={<IconCreditCard size={18} />}
                 radius="md"
-                size="sm"
+                size="xs"
               >
                 Card
               </Button>
@@ -539,7 +537,7 @@ const Checkout = () => {
                 onClick={() => setActiveTab("upi")}
                 leftSection={<IconDeviceMobile size={18} />}
                 radius="md"
-                size="sm"
+                size="xs"
               >
                 UPI
               </Button>
@@ -549,7 +547,7 @@ const Checkout = () => {
                 onClick={() => setActiveTab("cod")}
                 leftSection={<IconTruckDelivery size={18} />}
                 radius="md"
-                size="sm"
+                size="xs"
               >
                 COD
               </Button>
@@ -564,11 +562,12 @@ const Checkout = () => {
                   <Flex
                     align="center"
                     gap="xs"
-                    p="md"
+                    p="sm"
                     style={{
                       background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
                       borderRadius: 12,
                       border: "1px solid #bae6fd",
+                      flexWrap: "wrap",
                     }}
                   >
                     <Box
@@ -582,8 +581,8 @@ const Checkout = () => {
                     >
                       <IconBrandStripe size={20} color="white" />
                     </Box>
-                    <Stack gap={2} style={{ flex: 1 }}>
-                      <Flex align="center" gap={6}>
+                    <Stack gap={2} style={{ flex: 1, minWidth: 200 }}>
+                      <Flex align="center" gap={6} wrap="wrap">
                         <Text fw={700} size="sm" c="#0f172a">
                           Pay securely with Stripe
                         </Text>
@@ -600,7 +599,7 @@ const Checkout = () => {
                   </Flex>
 
                   <Flex align="center" gap={6}>
-                    <IconShieldLock size={14} color="#64748b" />
+                    <IconShieldLock size={14} color="#64748b" style={{ flexShrink: 0 }} />
                     <Text size="xs" c="dimmed">
                       Your payment info is never stored on our servers. Stripe handles all card data securely.
                     </Text>
@@ -617,8 +616,8 @@ const Checkout = () => {
                     <Text size="xs" fw={700} c="#92400e" mb={2}>
                       🧪 Test Mode — Use test card:
                     </Text>
-                    <Text size="xs" c="#78350f" style={{ fontFamily: "monospace" }}>
-                      Card: 4242 4242 4242 4242 &nbsp;|&nbsp; Expiry: any future date &nbsp;|&nbsp; CVV: any 3 digits
+                    <Text size="xs" c="#78350f" style={{ fontFamily: "monospace", wordBreak: "break-word", lineHeight: 1.5 }}>
+                      Card: 4242 4242 4242 4242 &nbsp;|&nbsp; Expiry: any future date &nbsp;|&nbsp; CVV: 123
                     </Text>
                   </Box>
                 </Stack>

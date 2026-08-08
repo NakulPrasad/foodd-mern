@@ -1,29 +1,21 @@
 import { PasswordInput } from '@mantine/core';
-import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 
-interface InputPasswordProps{
-  form : any
+interface InputPasswordProps {
+  form: any;
 }
 
-const VisibilityToggleIcon = ({ reveal }: { reveal: boolean }) =>
-  reveal ? (
-    <IconEyeOff style={{ width: 'var(--psi-icon-size)', height: 'var(--psi-icon-size)' }} />
-  ) : (
-    <IconEyeCheck style={{ width: 'var(--psi-icon-size)', height: 'var(--psi-icon-size)' }} />
-  );
-
-const InputPassword = ({form}:InputPasswordProps)=> {
+const InputPassword = ({ form }: InputPasswordProps) => {
   return (
     <PasswordInput
-    id={form.key('password')}
-      mx="auto"
+      id={form.key('password')}
+      w="100%"
       label="Password"
-      placeholder='*****'
-      visibilityToggleIcon={VisibilityToggleIcon}
+      placeholder="••••••••"
       withAsterisk
+      key={form.key('password')}
       {...form.getInputProps('password')}
     />
   );
-}
+};
 
 export default InputPassword;

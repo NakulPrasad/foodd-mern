@@ -1,17 +1,21 @@
 import {
-  Anchor,
   Button,
-  Divider,
   Drawer,
-  Group,
   Image,
+  SegmentedControl,
+  Stack,
   Text,
   TextInput,
   Title,
 } from "@mantine/core";
 import { isEmail, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { IconUser } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconLock,
+  IconShieldCheck,
+  IconUser,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import URLs from "../../configs/URLs";
@@ -36,21 +40,16 @@ interface DrawerProps {
 
 const LoginDrawer = ({ variant, title }: DrawerProps) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [isNewUser, setIsNewUser] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
   const [loginRequest, { isLoading: isLoginLoading }] =
     useLoginRequestMutation();
   const [registerRequest, { isLoading: isRegisterLoading }] =
     useRegisterRequestMutation();
 
   const { addUser } = useUser();
-
   const { city } = useLocation();
-
   const dispatch = useAppDispatch();
 
-  const toggleIsLoggedIn = () => {
-    setIsNewUser((isNewUser) => !isNewUser);
-  };
   const form = useForm({
     mode: "controlled",
     initialValues: {
@@ -72,22 +71,7 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
     },
   });
 
-  const LoginUser = {
-    title: "Login",
-    subTitle: "create an account",
-    message:
-      "By clicking on Login, I accept the Terms & Conditions & Privacy Policy",
-  };
-
-  const RegisterUser = {
-    title: "Sign Up",
-    subTitle: "login to your account",
-    message:
-      "By creating an account, I accept the Terms & Conditions & Privacy Policy",
-  };
-
   const handleLoginBtn = async () => {
-    // console.log("Current values:", form.values);
     if (isNewUser) {
       await handleSignUp();
     } else {
@@ -104,22 +88,20 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
     if (response.data && response.data.authToken) {
       addUser(response.data.authToken);
       dispatch(setAuth(response.data));
-      console.log("User Login Successfully");
+      toast.success("Welcome back!");
       close();
     }
   };
 
   const handleLoginGoogle = () => {
-    // navigate("http://localhost:3000/auth/google");
-    // window.location.href = "http://localhost:3000/apiv1/auth/google";
     window.location.href = URLs.googleAuth;
   };
 
   const handleSignUp = async () => {
     const response = await registerRequest(form.values);
     if (response.data && response.data.message) {
-      // console.log("User Registered Successfully");
       toast.success("User Registered Successfully");
+      setIsNewUser(false);
     } else {
       toast.error("Failed to register user");
     }
@@ -127,61 +109,118 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
 
   return (
     <>
-      {isLoginLoading || (isRegisterLoading && <Spinner />)}
-      <Drawer opened={opened} onClose={close} position="right" padding={"xl"}>
-        <Title order={2}>
-          {isNewUser ? RegisterUser.title : LoginUser.title}
-        </Title>
-        <Text span size="xs">
-          or{" "}
-        </Text>
-        <Anchor
-          underline="never"
-          size="xs"
-          fw={800}
-          c={"orange"}
-          onClick={toggleIsLoggedIn}
-        >
-          {isNewUser ? RegisterUser.subTitle : LoginUser.subTitle}
-        </Anchor>
-        <Divider className={classes.my_4} />
+      {(isLoginLoading || isRegisterLoading) && <Spinner />}
+      <Drawer
+        opened={opened}
+        onClose={close}
+        position="right"
+        size="md"
+        padding="xl"
+        radius="lg"
+        overlayProps={{ backgroundOpacity: 0.4, blur: 8 }}
+        styles={{
+          content: {
+            borderRadius: "24px 0 0 24px",
+            overflow: "hidden",
+          },
+          header: {
+            paddingBottom: 0,
+          },
+        }}
+      >
+        {/* Modern Header Banner */}
+        <div className={classes.drawerHeader}>
+          <div className={classes.heroIconBadge}>
+            {isNewUser ? <IconUser size={28} /> : <IconLock size={28} />}
+          </div>
+          <Title order={2} className={classes.drawerTitle}>
+            {isNewUser ? "Create an Account" : "Welcome Back"}
+          </Title>
+          <Text className={classes.drawerSubtitle}>
+            {isNewUser
+              ? "Sign up to explore delicious food nearby"
+              : "Sign in to manage your orders & profile"}
+          </Text>
+        </div>
+
+        {/* Tabbed Auth Mode Switcher */}
+        <SegmentedControl
+          fullWidth
+          value={isNewUser ? "signup" : "login"}
+          onChange={(val) => setIsNewUser(val === "signup")}
+          data={[
+            { label: "Sign In", value: "login" },
+            { label: "Create Account", value: "signup" },
+          ]}
+          color="orange"
+          radius="md"
+          size="sm"
+          className={classes.segmentedControl}
+        />
+
+        {/* Form Container */}
         <form onSubmit={form.onSubmit(handleLoginBtn)}>
-          <InputEmail form={form} />
-          {!isNewUser && <InputPassword form={form} />}
-          {isNewUser && (
-            <>
+          <Stack gap="md">
+            {isNewUser && (
               <TextInput
-                label="Name"
+                label="Full Name"
                 withAsterisk
+                w="100%"
                 placeholder="John Doe"
                 key={form.key("name")}
                 id={form.key("name")}
                 {...form.getInputProps("name")}
               />
+            )}
+
+            <InputEmail form={form} />
+
+            {!isNewUser ? (
+              <InputPassword form={form} />
+            ) : (
               <InputPasswordReq form={form} />
-            </>
-          )}
-          <Group mt="md">
-            <Button fullWidth type="submit">
-              {isNewUser ? "CONTINUE" : "LOGIN"}
+            )}
+
+            <Button
+              fullWidth
+              type="submit"
+              className={classes.submitBtn}
+              loading={isLoginLoading || isRegisterLoading}
+              rightSection={<IconArrowRight size={18} />}
+            >
+              {isNewUser ? "CREATE ACCOUNT" : "SIGN IN"}
             </Button>
-            <Button fullWidth onClick={handleLoginGoogle}>
+
+            <div className={classes.dividerContainer}>OR</div>
+
+            <Button
+              fullWidth
+              onClick={handleLoginGoogle}
+              className={classes.googleBtn}
+            >
               <Image
                 src="https://developers.google.com/identity/images/g-logo.png"
                 alt="Google logo"
                 style={{
                   width: "18px",
                   height: "18px",
-                  marginRight: "8px",
+                  marginRight: "10px",
                 }}
               />
-              Login with Google
+              Continue with Google
             </Button>
 
-            <Text size="sm">
-              {isNewUser ? RegisterUser.message : LoginUser.message}
-            </Text>
-          </Group>
+            <div className={classes.footerDisclaimer}>
+              <IconShieldCheck
+                size={18}
+                color="#f97316"
+                style={{ flexShrink: 0, marginTop: 2 }}
+              />
+              <Text className={classes.footerDisclaimerText}>
+                By continuing, you agree to our Terms of Service & Privacy Policy.
+              </Text>
+            </div>
+          </Stack>
         </form>
       </Drawer>
 
@@ -194,3 +233,4 @@ const LoginDrawer = ({ variant, title }: DrawerProps) => {
 };
 
 export default LoginDrawer;
+

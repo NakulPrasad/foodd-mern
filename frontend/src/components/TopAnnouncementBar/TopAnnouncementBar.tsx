@@ -152,39 +152,37 @@ export const TopAnnouncementBar = () => {
     sessionStorage.setItem("dismissed_dev_banner", "true");
   };
 
-  if (!isVisible) {
-    return null;
-  }
-
   return (
     <>
-      <div className={classes.announcementBar}>
-        <div className={classes.container}>
-          <div className={classes.leftSection}>
-            <span className={classes.badge}>
-              <IconSparkles size={12} /> Recruiter Demo
-            </span>
-            <span className={classes.text}>
-              👋 Exploring <span className={classes.bold}>Foodd MERN</span>? Check out my live GitHub profile &amp; other projects.
-            </span>
-          </div>
+      {isVisible && (
+        <div className={classes.announcementBar}>
+          <div className={classes.container}>
+            <div className={classes.leftSection}>
+              <span className={classes.badge}>
+                <IconSparkles size={12} /> Recruiter Demo
+              </span>
+              <span className={classes.text}>
+                👋 Exploring <span className={classes.bold}>Foodd MERN</span>? Check out my live GitHub profile &amp; other projects.
+              </span>
+            </div>
 
-          <Group gap="xs" wrap="nowrap">
-            <button className={classes.ctaButton} onClick={openModal}>
-              <IconRocket size={14} /> View GitHub Projects ({projects.length || "5"})
-            </button>
-            <Tooltip label="Dismiss for this session" position="bottom" withArrow>
-              <button
-                className={classes.closeButton}
-                onClick={handleDismiss}
-                aria-label="Dismiss banner"
-              >
-                <IconX size={16} />
+            <Group gap="xs" wrap="nowrap">
+              <button className={classes.ctaButton} onClick={openModal}>
+                <IconRocket size={14} /> View GitHub Projects ({projects.length || "5"})
               </button>
-            </Tooltip>
-          </Group>
+              <Tooltip label="Dismiss for this session" position="bottom" withArrow>
+                <button
+                  className={classes.closeButton}
+                  onClick={handleDismiss}
+                  aria-label="Dismiss banner"
+                >
+                  <IconX size={16} />
+                </button>
+              </Tooltip>
+            </Group>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ─── Developer Projects & Portfolio Modal ─── */}
       <Modal

@@ -1,91 +1,135 @@
 .footer {
-    margin-top: 120px;
-    padding-top: calc(var() * 2);
-    padding-bottom: calc(var(--mantine-spacing-xl) * 2);
-    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
-    border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  margin-top: 80px;
+  padding-top: 48px;
+  padding-bottom: 32px;
+  background-color: #0f172a;
+  color: #94a3b8;
+  border-top: 1px solid #1e293b;
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .logo {
-    max-width: 200px;
-  
-    @media (max-width: $mantine-breakpoint-sm) {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-  
-  .description {
-    margin-top: 5px;
-  
-    @media (max-width: $mantine-breakpoint-sm) {
-      margin-top: var(--mantine-spacing-xs);
-      text-align: center;
-    }
-  }
-  
-  .inner {
-    display: flex;
-    justify-content: space-between;
-  
-    @media (max-width: $mantine-breakpoint-sm) {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-  
-  .groups {
-    display: flex;
+}
+
+.logoCol {
+  max-width: 320px;
+}
+
+.logoImage {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.description {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.devBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 82, 0, 0.12);
+  color: #ff7a00;
+  border: 1px solid rgba(255, 82, 0, 0.3);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 12px;
+}
+
+.groups {
+  display: flex;
+  gap: 48px;
+
+  @media (max-width: 768px) {
     flex-wrap: wrap;
-  
-    @media (max-width: $mantine-breakpoint-sm) {
-      display: none;
-    }
+    gap: 24px;
   }
-  
-  .wrapper {
-    width: 160px;
+}
+
+.wrapper {
+  min-width: 160px;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #cbd5e1;
+  font-size: 0.83rem;
+  padding: 4px 0;
+  text-decoration: none;
+  transition: color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    color: #ff5200;
+    transform: translateX(2px);
   }
-  
-  .link {
-    display: block;
-    color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-1));
-    font-size: var(--mantine-font-size-sm);
-    padding-top: 3px;
-    padding-bottom: 3px;
-  
-    &:hover {
-      text-decoration: underline;
-    }
+}
+
+.techTag {
+  display: inline-block;
+  background: #1e293b;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin: 3px 3px 3px 0;
+  border: 1px solid #334155;
+}
+
+.afterFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid #1e293b;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
   }
-  
-  .title {
-    font-size: var(--mantine-font-size-lg);
-    font-weight: 700;
-    font-family:
-      Greycliff CF,
-      var(--mantine-font-family);
-    margin-bottom: calc(var(--mantine-spacing-xs) / 2);
-    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+}
+
+.copyright {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.socialIcon {
+  color: #94a3b8;
+  transition: color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    color: #ff5200;
+    transform: translateY(-2px);
   }
-  
-  .afterFooter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: var(--mantine-spacing-xl);
-    padding-top: var(--mantine-spacing-xl);
-    padding-bottom: var(--mantine-spacing-xl);
-    border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
-  
-    @media (max-width: $mantine-breakpoint-sm) {
-      flex-direction: column;
-    }
-  }
-  
-  .social {
-    @media (max-width: $mantine-breakpoint-sm) {
-      margin-top: var(--mantine-spacing-xs);
-    }
-  }
+}

@@ -9,10 +9,11 @@ export interface ICartItem {
   restaurantName: string;
   restaurantImage?: string;
   name: string;
+  description?: string;
   price: number;
   image_url?: string;
   rating?: number;
   is_veg?: boolean;
-  options: IValue;
+  options?: IValue;
   quantity: number;
 }
