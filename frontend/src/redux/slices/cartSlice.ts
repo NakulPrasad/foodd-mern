@@ -2,6 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { ICartItem } from "../../types/cart.types";
 
+export interface IAppliedCoupon {
+  code: string;
+  title?: string;
+  discountType: "percentage" | "flat";
+  discountValue: number;
+  maxDiscount?: number | null;
+  minOrderAmount?: number;
+}
+
 interface ICartState {
   cartItems: ICartItem[];
   totalItems: number;
@@ -11,6 +20,8 @@ interface ICartState {
   selectedRestaurantImage: string | null;
   tax: number;
   deliveryFee: number;
+  appliedCoupon: IAppliedCoupon | null;
+  discountAmount: number;
 }
 
 const initialState: ICartState = {
@@ -22,6 +33,36 @@ const initialState: ICartState = {
   selectedRestaurantImage: null,
   tax: 0,
   deliveryFee: 0,
+  appliedCoupon: null,
+  discountAmount: 0,
+};
+
+const updateDiscountForSubtotal = (state: ICartState) => {
+  if (!state.appliedCoupon) {
+    state.discountAmount = 0;
+    return;
+  }
+
+  const { minOrderAmount = 0, discountType, discountValue, maxDiscount } = state.appliedCoupon;
+
+  if (state.totalPrice < minOrderAmount) {
+    state.appliedCoupon = null;
+    state.discountAmount = 0;
+    toast.info(`Coupon removed as cart subtotal dropped below ₹${minOrderAmount}`);
+    return;
+  }
+
+  let calc = 0;
+  if (discountType === "percentage") {
+    calc = (state.totalPrice * discountValue) / 100;
+    if (maxDiscount && maxDiscount > 0) {
+      calc = Math.min(calc, maxDiscount);
+    }
+  } else if (discountType === "flat") {
+    calc = Math.min(discountValue, state.totalPrice);
+  }
+
+  state.discountAmount = Math.round(calc * 100) / 100;
 };
 
 const cartSlice = createSlice({
@@ -63,7 +104,8 @@ const cartSlice = createSlice({
       }
       state.deliveryFee = state.totalPrice > 200 ? 0 : 30;
       state.tax = state.totalPrice * 0.18;
-      // console.log(state);
+
+      updateDiscountForSubtotal(state);
     },
     removeFromCart: (state, action) => {
       const { _id } = action.payload;
@@ -73,8 +115,6 @@ const cartSlice = createSlice({
 
       if (existingItem.quantity > 1) {
         existingItem.quantity -= 1;
-        // state.totalItems -= 1;
-        // state.totalPrice -= existingItem.price;
       } else {
         // Remove item if quantity becomes 0
         state.cartItems = state.cartItems.filter((item) => item._id !== _id);
@@ -86,8 +126,23 @@ const cartSlice = createSlice({
       state.tax = state.totalPrice * 0.18;
 
       if (state.cartItems.length === 0) {
-        clearCart();
+        Object.assign(state, initialState);
+      } else {
+        updateDiscountForSubtotal(state);
       }
+    },
+
+    applyCoupon: (
+      state,
+      action: PayloadAction<{ coupon: IAppliedCoupon; discountAmount: number }>,
+    ) => {
+      state.appliedCoupon = action.payload.coupon;
+      state.discountAmount = action.payload.discountAmount;
+    },
+
+    removeCoupon: (state) => {
+      state.appliedCoupon = null;
+      state.discountAmount = 0;
     },
 
     clearCart: (state) => {
@@ -96,6 +151,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } =
+export const { addToCart, removeFromCart, applyCoupon, removeCoupon, clearCart } =
   cartSlice.actions;
 export default cartSlice.reducer;

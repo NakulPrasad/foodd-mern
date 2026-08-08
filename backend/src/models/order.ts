@@ -21,6 +21,8 @@ export interface IOrderModel {
   deliveryAddress: string;
   deliveryFee: Number;
   gstAndCharges: Number;
+  couponCode?: string;
+  discountAmount?: number;
 }
 
 const OrderSchema = new Schema(
@@ -38,6 +40,8 @@ const OrderSchema = new Schema(
     deliveryFee: { type: Number, required: true },
     gstAndCharges: { type: Number, required: true },
     totalAmount: { type: Number, required: true },
+    couponCode: { type: String, default: null },
+    discountAmount: { type: Number, default: 0 },
 
     status: {
       type: String,

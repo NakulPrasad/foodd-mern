@@ -94,7 +94,7 @@ const renderComponent = () => {
 describe("Restaurant Page", () => {
   it("renders restaurant header and cover metadata details", () => {
     renderComponent();
-    expect(screen.getByText("The Artisan Burger Co")).toBeInTheDocument();
+    expect(screen.getAllByText("The Artisan Burger Co").length).toBeGreaterThan(0);
     expect(screen.getByText("Koramangala")).toBeInTheDocument();
     expect(screen.getAllByText("4.8").length).toBeGreaterThan(0);
   });

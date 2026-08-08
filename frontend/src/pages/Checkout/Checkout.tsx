@@ -15,6 +15,8 @@ import {
   Group,
   Center,
   Badge,
+  TextInput,
+  UnstyledButton,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,15 +28,21 @@ import {
   IconCheck,
   IconShieldLock,
   IconBrandStripe,
+  IconTag,
+  IconTicket,
+  IconX,
 } from "@tabler/icons-react";
 import AddressCard from "../../components/Cards/AddressCard/AddressCard";
 import CheckoutCard from "../../components/Cards/CheckoutCard/CheckoutCard";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useCart } from "../../hooks/useCart";
 import {
   usePostOrderMutation,
   useCreateCheckoutSessionMutation,
+  useValidateCouponMutation,
+  useGetAvailableCouponsQuery,
 } from "../../redux/slices/apiSlice";
+import { applyCoupon, removeCoupon } from "../../redux/slices/cartSlice";
 import { RootState } from "../../redux/store";
 import classes from "./Checkout.module.css";
 import Logo from "/img/logo/LOGO-bgremove.png";
@@ -65,12 +73,19 @@ const SAVED_ADDRESSES = [
 
 const Checkout = () => {
   const { cart, removeAllFromCart } = useCart();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const selectedRestaurant = useAppSelector((state: RootState) => state.restaurant.selected);
 
+  // Coupon state & API hooks
+  const [couponCodeInput, setCouponCodeInput] = useState("");
+  const [validateCoupon, { isLoading: isValidatingCoupon }] = useValidateCouponMutation();
+  const { data: availableCouponsData, isLoading: isLoadingCoupons } = useGetAvailableCouponsQuery();
+
   // Modal control
   const [paymentModalOpened, setPaymentModalOpened] = useState(false);
+  const [availableCouponsModalOpened, setAvailableCouponsModalOpened] = useState(false);
   const [activeTab, setActiveTab] = useState<"card" | "upi" | "cod">("card");
   const [paymentStep, setPaymentStep] = useState<"idle" | "processing" | "success">("idle");
   const [processingMsg, setProcessingMsg] = useState("");
@@ -95,6 +110,52 @@ const Checkout = () => {
   };
 
   /**
+   * Handle applying coupon code
+   */
+  const handleApplyCoupon = async (codeToApply?: string) => {
+    const code = (codeToApply || couponCodeInput).trim();
+    if (!code) {
+      toast.info("Please enter a promo code");
+      return;
+    }
+
+    try {
+      const res = await validateCoupon({
+        code,
+        itemTotal: cart.totalPrice,
+      }).unwrap();
+
+      if (res.valid) {
+        dispatch(
+          applyCoupon({
+            coupon: {
+              code: res.coupon.code,
+              title: res.coupon.title,
+              discountType: res.coupon.discountType,
+              discountValue: res.coupon.discountValue,
+              maxDiscount: res.coupon.maxDiscount,
+              minOrderAmount: res.coupon.minOrderAmount,
+            },
+            discountAmount: res.discountAmount,
+          }),
+        );
+        toast.success(res.message);
+        setCouponCodeInput("");
+        setAvailableCouponsModalOpened(false);
+      }
+    } catch (err: any) {
+      console.error("Coupon validation error:", err);
+      const errMsg = err?.data?.message || err?.message || "Invalid coupon code";
+      toast.error(errMsg);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    dispatch(removeCoupon());
+    toast.info("Coupon removed");
+  };
+
+  /**
    * Handles Stripe Checkout redirect for card/UPI.
    * Creates a pending order in the DB and opens Stripe hosted checkout.
    */
@@ -113,6 +174,8 @@ const Checkout = () => {
         gstAndCharges: cart.tax,
         deliveryAddress: selectedAddress,
         restaurantName: cart.selectedRestaurantName || "Restaurant",
+        couponCode: cart.appliedCoupon?.code,
+        discountAmount: cart.discountAmount,
         cartItems: cart.cartItems.map((item) => ({
           name: item.name,
           price: item.price,
@@ -123,7 +186,6 @@ const Checkout = () => {
 
       setProcessingMsg("Redirecting to Stripe Checkout...");
 
-      // Small delay so user sees the message before redirect
       setTimeout(() => {
         window.location.href = response.url;
       }, 600);
@@ -136,7 +198,7 @@ const Checkout = () => {
   };
 
   /**
-   * COD path — same simulated flow as before but without card inputs.
+   * COD path
    */
   const handleCODOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,6 +213,8 @@ const Checkout = () => {
         totalAmount: cart.totalPrice,
         deliveryFee: cart.deliveryFee,
         gstAndCharges: cart.tax,
+        couponCode: cart.appliedCoupon?.code,
+        discountAmount: cart.discountAmount,
         status: "confirmed",
         paymentStatus: "pending",
         deliveryAddress: selectedAddress,
@@ -189,7 +253,17 @@ const Checkout = () => {
   }, [cart.cartItems, navigate, paymentModalOpened]);
 
   const restaurantImage = cart.selectedRestaurantImage || (selectedRestaurant as any)?.image || Logo;
-  const totalAmountToPay = cart.totalPrice + cart.deliveryFee + cart.tax;
+  
+  // Grand total calculation: Item Total - Discount + Delivery Fee + GST
+  const netItemTotal = Math.max(0, cart.totalPrice - cart.discountAmount);
+  const totalAmountToPay = netItemTotal + cart.deliveryFee + cart.tax;
+
+  const availableCouponsList = availableCouponsData?.data || [
+    { code: "FOODD50", title: "50% OFF up to ₹100", minOrderAmount: 199, description: "On food orders above ₹199" },
+    { code: "FLAT100", title: "₹100 FLAT OFF", minOrderAmount: 399, description: "On orders above ₹399" },
+    { code: "WELCOME20", title: "20% OFF up to ₹60", minOrderAmount: 99, description: "On orders above ₹99" },
+    { code: "FREEDEL30", title: "₹30 Delivery Waiver", minOrderAmount: 150, description: "On orders above ₹150" },
+  ];
 
   return (
     <section id="checkout" className={classes.section}>
@@ -237,6 +311,75 @@ const Checkout = () => {
 
               <Divider my="xs" />
 
+              {/* ─── Coupon / Promo Code Section ─── */}
+              <Box bg="#fff7ed" p="sm" style={{ borderRadius: 12, border: "1px stroke #ffedd5" }}>
+                <Flex align="center" gap="xs" mb={8}>
+                  <IconTag size={18} color="#ea580c" />
+                  <Text fw={700} size="sm" c="#c2410c">Coupons &amp; Offers</Text>
+                </Flex>
+
+                {cart.appliedCoupon ? (
+                  <Flex
+                    align="center"
+                    justify="space-between"
+                    p="xs"
+                    bg="#f0fdf4"
+                    style={{ borderRadius: 8, border: "1px solid #bbf7d0" }}
+                  >
+                    <Flex align="center" gap={8}>
+                      <IconCheck size={18} color="#16a34a" />
+                      <Stack gap={0}>
+                        <Flex align="center" gap={6}>
+                          <Text fw={700} size="xs" c="#15803d">
+                            '{cart.appliedCoupon.code}' APPLIED
+                          </Text>
+                          <Badge color="green" size="xs" variant="light">
+                            -₹{cart.discountAmount}
+                          </Badge>
+                        </Flex>
+                        <Text size="xs" c="#166534">
+                          You saved ₹{cart.discountAmount} with this code!
+                        </Text>
+                      </Stack>
+                    </Flex>
+                    <UnstyledButton onClick={handleRemoveCoupon} style={{ color: "#ef4444", fontSize: 12, fontWeight: 600 }}>
+                      Remove
+                    </UnstyledButton>
+                  </Flex>
+                ) : (
+                  <Stack gap="xs">
+                    <Flex gap="xs">
+                      <TextInput
+                        placeholder="ENTER PROMO CODE (e.g. FOODD50)"
+                        value={couponCodeInput}
+                        onChange={(e) => setCouponCodeInput(e.currentTarget.value.toUpperCase())}
+                        style={{ flex: 1 }}
+                        size="xs"
+                        leftSection={<IconTicket size={14} color="#9a3412" />}
+                      />
+                      <Button
+                        color="orange"
+                        size="xs"
+                        onClick={() => handleApplyCoupon()}
+                        loading={isValidatingCoupon}
+                      >
+                        Apply
+                      </Button>
+                    </Flex>
+
+                    <Flex align="center" justify="space-between">
+                      <Text size="xs" c="#9a3412">Available offers from restaurant</Text>
+                      <UnstyledButton
+                        onClick={() => setAvailableCouponsModalOpened(true)}
+                        style={{ color: "#ea580c", fontSize: 12, fontWeight: 700 }}
+                      >
+                        View Offers ({availableCouponsList.length}) →
+                      </UnstyledButton>
+                    </Flex>
+                  </Stack>
+                )}
+              </Box>
+
               {/* No Contact Delivery Checkbox */}
               <Flex className={classes.infomsg} align="flex-start" gap="xs">
                 <Checkbox style={{ marginTop: 2 }} />
@@ -262,6 +405,14 @@ const Checkout = () => {
                   <span>Item Total</span>
                   <span>₹{cart.totalPrice}</span>
                 </div>
+
+                {cart.discountAmount > 0 && (
+                  <div className={classes.billRow} style={{ color: "#16a34a", fontWeight: 600 }}>
+                    <span>Coupon Discount ({cart.appliedCoupon?.code})</span>
+                    <span>- ₹{cart.discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
+
                 <div className={classes.billRow}>
                   <span>Delivery Fee</span>
                   <span>{cart.deliveryFee === 0 ? "FREE" : `₹${cart.deliveryFee}`}</span>
@@ -282,12 +433,75 @@ const Checkout = () => {
                 disabled={!selectedAddress}
                 mt="xs"
               >
-                {selectedAddress ? "Proceed To Pay" : "Select Address First"}
+                {selectedAddress ? `Proceed To Pay ₹${totalAmountToPay.toFixed(2)}` : "Select Address First"}
               </Button>
             </Stack>
           </Box>
         </Grid.Col>
       </Grid>
+
+      {/* ─── Available Coupons Modal ─── */}
+      <Modal
+        opened={availableCouponsModalOpened}
+        onClose={() => setAvailableCouponsModalOpened(false)}
+        title={
+          <Flex align="center" gap="xs">
+            <IconTag size={22} color="#ea580c" />
+            <Title order={4}>Available Promotional Coupons</Title>
+          </Flex>
+        }
+        centered
+        radius="lg"
+        size="md"
+      >
+        <Stack gap="md">
+          <Text size="xs" c="dimmed">
+            Click on any promo code to apply it directly to your cart:
+          </Text>
+          {availableCouponsList.map((cp: any) => {
+            const isEligible = cart.totalPrice >= (cp.minOrderAmount || 0);
+            return (
+              <Box
+                key={cp.code}
+                p="md"
+                style={{
+                  borderRadius: 12,
+                  border: isEligible ? "1px solid #fdba74" : "1px solid #e2e8f0",
+                  background: isEligible ? "#fff7ed" : "#f8fafc",
+                }}
+              >
+                <Flex justify="space-between" align="center" mb={4}>
+                  <Flex align="center" gap="xs">
+                    <Badge color="orange" size="lg" variant="filled">
+                      {cp.code}
+                    </Badge>
+                    <Text fw={700} size="sm" c="#0f172a">
+                      {cp.title}
+                    </Text>
+                  </Flex>
+                  <Button
+                    size="xs"
+                    color="orange"
+                    variant={isEligible ? "filled" : "outline"}
+                    disabled={!isEligible}
+                    onClick={() => handleApplyCoupon(cp.code)}
+                  >
+                    {isEligible ? "APPLY" : `Min ₹${cp.minOrderAmount}`}
+                  </Button>
+                </Flex>
+                <Text size="xs" c="#64748b">
+                  {cp.description}
+                </Text>
+                {!isEligible && (
+                  <Text size="xs" c="#dc2626" mt={4} fw={600}>
+                    Add ₹{((cp.minOrderAmount || 0) - cart.totalPrice).toFixed(0)} more items to unlock
+                  </Text>
+                )}
+              </Box>
+            );
+          })}
+        </Stack>
+      </Modal>
 
       {/* ─── Interactive Payment Modal ─── */}
       <Modal
@@ -347,7 +561,6 @@ const Checkout = () => {
               {/* Card & UPI — both go through Stripe Checkout */}
               {(activeTab === "card" || activeTab === "upi") && (
                 <Stack gap="sm">
-                  {/* Stripe badge */}
                   <Flex
                     align="center"
                     gap="xs"
@@ -393,7 +606,6 @@ const Checkout = () => {
                     </Text>
                   </Flex>
 
-                  {/* Test card hint */}
                   <Box
                     p="sm"
                     style={{

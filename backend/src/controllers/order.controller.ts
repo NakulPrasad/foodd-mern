@@ -49,6 +49,8 @@ export const addOrder = async (
     totalAmount: req.body.totalAmount,
     deliveryFee: req.body.deliveryFee,
     gstAndCharges: req.body.gstAndCharges,
+    couponCode: req.body.couponCode,
+    discountAmount: req.body.discountAmount,
     status: req.body.status,
     paymentStatus: req.body.paymentStatus,
     deliveryAddress: req.body.deliveryAddress,
@@ -82,13 +84,20 @@ export const createCheckoutSession = async (
       deliveryAddress,
       restaurantName,
       cartItems,
+      couponCode,
+      discountAmount = 0,
     } = req.body;
 
     console.log("[createCheckoutSession] Body parsed:");
     console.log("  restaurantId:", restaurantId);
-    console.log("  totalAmount:", totalAmount, "| deliveryFee:", deliveryFee, "| gst:", gstAndCharges);
+    console.log(
+      "  totalAmount:", totalAmount,
+      "| deliveryFee:", deliveryFee,
+      "| gst:", gstAndCharges,
+      "| couponCode:", couponCode,
+      "| discountAmount:", discountAmount
+    );
     console.log("  cartItems count:", cartItems?.length);
-    console.log("  cartItems:", JSON.stringify(cartItems, null, 2));
 
     const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
@@ -100,6 +109,8 @@ export const createCheckoutSession = async (
       totalAmount,
       deliveryFee,
       gstAndCharges,
+      couponCode,
+      discountAmount,
       status: "pending",
       paymentStatus: "pending",
       deliveryAddress,
@@ -115,16 +126,25 @@ export const createCheckoutSession = async (
     const orderId = (createdOrder as any)._id.toString();
     console.log("[createCheckoutSession] ✅ Pending order created, orderId:", orderId);
 
-    // 2. Build Stripe line items from cart items
+    // 2. Build Stripe line items from cart items (adjusting for discount if present)
     console.log("[createCheckoutSession] Step 2: Building Stripe line items...");
+    
+    // Calculate total raw items amount
+    const rawItemsSum = (cartItems as any[]).reduce((sum, i) => sum + Number(i.price) * Number(i.quantity), 0);
+    const discount = Number(discountAmount) || 0;
+    const discountRatio = rawItemsSum > 0 && discount > 0 ? Math.max(0, (rawItemsSum - discount) / rawItemsSum) : 1;
+
     const lineItems = (cartItems as any[]).map((item) => {
-      const unitAmount = Math.max(50, Math.round(Number(item.price) * 100));
-      console.log(`  Item: "${item.name}" | price: ₹${item.price} | unit_amount (paise): ${unitAmount} | qty: ${item.quantity}`);
+      const discountedItemPrice = Number(item.price) * discountRatio;
+      const unitAmount = Math.max(50, Math.round(discountedItemPrice * 100));
+      console.log(
+        `  Item: "${item.name}" | orig: ₹${item.price} | discounted: ₹${discountedItemPrice.toFixed(2)} | unit_amount (paise): ${unitAmount} | qty: ${item.quantity}`
+      );
       return {
         price_data: {
           currency: "inr",
           product_data: {
-            name: String(item.name || "Food Item"),
+            name: String(item.name || "Food Item") + (discount > 0 ? ` (${couponCode || "Discounted"})` : ""),
             ...(item.description ? { description: String(item.description) } : {}),
           },
           unit_amount: unitAmount,

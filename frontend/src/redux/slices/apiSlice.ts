@@ -81,6 +81,19 @@ export const apiSlice = createApi({
         body,
       }),
     }),
+    getAvailableCoupons: builder.query<{ message: string; data: any[] }, void>({
+      query: () => URLs.getAvailableCoupons,
+    }),
+    validateCoupon: builder.mutation<
+      { valid: boolean; message: string; discountAmount: number; coupon?: any },
+      { code: string; itemTotal: number }
+    >({
+      query: (body) => ({
+        url: URLs.validateCoupon,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -94,4 +107,6 @@ export const {
   usePostOrderMutation,
   useCreateCheckoutSessionMutation,
   useVerifyPaymentMutation,
+  useGetAvailableCouponsQuery,
+  useValidateCouponMutation,
 } = apiSlice;

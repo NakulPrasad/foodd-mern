@@ -11,6 +11,7 @@ import {
   Menu,
   Stack,
   Text,
+  Badge,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -22,19 +23,24 @@ import {
   IconLogout,
   IconReceipt,
   IconLayoutDashboard,
+  IconX,
+  IconBuildingStore,
+  IconUtensils,
+  IconStarFilled,
 } from "@tabler/icons-react";
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useCart } from "../../hooks/useCart";
 import { useLocation } from "../../hooks/useLocation";
 import { useUser } from "../../hooks/useUser";
+import { useGetAllRestaurantQuery } from "../../redux/slices/apiSlice";
 import { clearAuth } from "../../redux/slices/authSlice";
 import { RootState } from "../../redux/store";
+import { IRestaurant } from "../../types";
 import LoginDrawer from "../Drawer/LoginDrawer";
 import Spinner from "../Loader/Spinner";
-import { SubText } from "../Mantine/Subtext/SubText";
 import classes from "./NavBar.module.css";
 import IconNonVeg from "/icons/non-veg-icon.png";
 import IconVeg from "/icons/veg-icon.png";
@@ -51,7 +57,57 @@ const NavBar = () => {
     useDisclosure(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useAppDispatch();
+
+  // Fetch restaurants for live search suggestions
+  const { data: allRestaurantsData } = useGetAllRestaurantQuery();
+  const restaurants: IRestaurant[] = allRestaurantsData?.data || [];
+
+  // Live search matching logic
+  const searchResults = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) return { matchedRestaurants: [], matchedDishes: [] };
+
+    const matchedRestaurants = restaurants.filter(
+      (r) =>
+        r.name?.toLowerCase().includes(query) ||
+        r.cuisine?.some((c) => c.toLowerCase().includes(query)),
+    ).slice(0, 4);
+
+    const matchedDishes: any[] = [];
+    restaurants.forEach((r) => {
+      if (r.menu) {
+        r.menu.forEach((item) => {
+          if (
+            item.name?.toLowerCase().includes(query) ||
+            item.category?.toLowerCase().includes(query) ||
+            item.description?.toLowerCase().includes(query)
+          ) {
+            matchedDishes.push({
+              ...item,
+              restaurantId: r._id,
+              restaurantName: r.name,
+              restaurantImage: r.image,
+            });
+          }
+        });
+      }
+    });
+
+    return {
+      matchedRestaurants,
+      matchedDishes: matchedDishes.slice(0, 5),
+    };
+  }, [searchTerm, restaurants]);
+
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!searchTerm.trim()) return;
+    navigate(`/?search=${encodeURIComponent(searchTerm.trim())}`);
+    setSearchFocused(false);
+    closeMobileMenu();
+  };
 
   const handleLogoutBtn = () => {
     removeUser();
@@ -85,7 +141,6 @@ const NavBar = () => {
       {/* ─── Sticky header ─── */}
       <header className={classes.header}>
         <div className={classes.inner}>
-
           {/* LEFT — Logo + Location */}
           <div className={classes.leftSection}>
             <Link to="/" className={classes.logoWrap}>
@@ -105,20 +160,131 @@ const NavBar = () => {
             {error && toast.error(error)}
           </div>
 
-          {/* CENTER — Search */}
-          <div className={`${classes.searchWrap} ${searchFocused ? classes.searchFocused : ""}`}>
-            <IconSearch size={16} className={classes.searchIcon} />
-            <input
-              className={classes.searchInput}
-              placeholder="Search for restaurants, food…"
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-            />
+          {/* CENTER — Interactive Live Search Bar */}
+          <div style={{ position: "relative", flex: 1, maxWidth: 540 }}>
+            <form
+              onSubmit={handleSearchSubmit}
+              className={`${classes.searchWrap} ${
+                searchFocused ? classes.searchFocused : ""
+              }`}
+            >
+              <IconSearch size={16} className={classes.searchIcon} />
+              <input
+                className={classes.searchInput}
+                placeholder="Search for restaurants, dishes, or cuisines…"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  className={classes.clearSearchBtn}
+                  onClick={() => setSearchTerm("")}
+                  title="Clear search"
+                >
+                  <IconX size={14} />
+                </button>
+              )}
+            </form>
+
+            {/* ── Live Search Overlay Dropdown ── */}
+            {searchFocused && searchTerm.trim().length > 0 && (
+              <div
+                className={classes.searchDropdown}
+                onMouseDown={(e) => e.preventDefault()} // prevent blur on click
+              >
+                {searchResults.matchedRestaurants.length === 0 &&
+                searchResults.matchedDishes.length === 0 ? (
+                  <Box p="md" ta="center">
+                    <Text size="xs" c="dimmed">
+                      No matching restaurants or dishes for "{searchTerm}"
+                    </Text>
+                  </Box>
+                ) : (
+                  <>
+                    {/* Restaurants section */}
+                    {searchResults.matchedRestaurants.length > 0 && (
+                      <Box mb="xs">
+                        <div className={classes.searchGroupTitle}>
+                          <IconBuildingStore size={12} style={{ verticalAlign: "middle", marginRight: 4 }} />
+                          Restaurants ({searchResults.matchedRestaurants.length})
+                        </div>
+                        {searchResults.matchedRestaurants.map((r) => (
+                          <div
+                            key={r._id}
+                            className={classes.searchItemRow}
+                            onClick={() => {
+                              navigate(`/restaurant/${r._id}`);
+                              setSearchFocused(false);
+                              setSearchTerm("");
+                            }}
+                          >
+                            <img
+                              src={r.image || Logo}
+                              className={classes.searchItemImg}
+                              alt={r.name}
+                            />
+                            <div className={classes.searchItemInfo}>
+                              <div className={classes.searchItemTitle}>{r.name}</div>
+                              <div className={classes.searchItemSub}>
+                                ⭐ {r.rating || "4.2"} · {r.cuisine?.join(", ") || "Multi-cuisine"}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </Box>
+                    )}
+
+                    {/* Dishes section */}
+                    {searchResults.matchedDishes.length > 0 && (
+                      <Box mb="xs">
+                        <div className={classes.searchGroupTitle}>
+                          <IconUtensils size={12} style={{ verticalAlign: "middle", marginRight: 4 }} />
+                          Dishes ({searchResults.matchedDishes.length})
+                        </div>
+                        {searchResults.matchedDishes.map((dish) => (
+                          <div
+                            key={dish._id}
+                            className={classes.searchItemRow}
+                            onClick={() => {
+                              navigate(`/restaurant/${dish.restaurantId}`);
+                              setSearchFocused(false);
+                              setSearchTerm("");
+                            }}
+                          >
+                            <img
+                              src={dish.img_url || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=100"}
+                              className={classes.searchItemImg}
+                              alt={dish.name}
+                            />
+                            <div className={classes.searchItemInfo}>
+                              <div className={classes.searchItemTitle}>
+                                {dish.name} <span style={{ color: "#f97316", fontWeight: 700 }}>₹{dish.price}</span>
+                              </div>
+                              <div className={classes.searchItemSub}>
+                                from {dish.restaurantName}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </Box>
+                    )}
+
+                    <button
+                      className={classes.searchSeeAll}
+                      onClick={() => handleSearchSubmit()}
+                    >
+                      See all results for "{searchTerm}" →
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* RIGHT — Cart + Auth (desktop) */}
           <div className={classes.rightSection}>
-
             {/* Cart button with hover dropdown */}
             <div
               className={classes.cartWrap}
@@ -139,7 +305,9 @@ const NavBar = () => {
                   {cartCount === 0 ? (
                     <div className={classes.cartEmpty}>
                       <IconShoppingCart size={36} color="#cbd5e1" />
-                      <Text size="sm" fw={600} mt="xs" c="#64748b">Your cart is empty</Text>
+                      <Text size="sm" fw={600} mt="xs" c="#64748b">
+                        Your cart is empty
+                      </Text>
                       <Text size="xs" c="#94a3b8" ta="center" mt={4}>
                         Add items from a restaurant to get started
                       </Text>
@@ -154,7 +322,9 @@ const NavBar = () => {
                           alt="restaurant"
                         />
                         <div>
-                          <Text size="xs" c="#94a3b8" fw={600}>Ordering from</Text>
+                          <Text size="xs" c="#94a3b8" fw={600}>
+                            Ordering from
+                          </Text>
                           <Text size="sm" fw={700} c="#1e293b">
                             {cart.selectedRestaurantName || "Restaurant"}
                           </Text>
@@ -171,18 +341,27 @@ const NavBar = () => {
                               />
                               <Text size="sm" c="#334155">
                                 {item.name}
-                                <Text span size="xs" c="#94a3b8"> x{item.quantity}</Text>
+                                <Text span size="xs" c="#94a3b8">
+                                  {" "}
+                                  x{item.quantity}
+                                </Text>
                               </Text>
                             </div>
-                            <Text size="sm" fw={600} c="#334155">₹{item.price}</Text>
+                            <Text size="sm" fw={600} c="#334155">
+                              ₹{item.price}
+                            </Text>
                           </div>
                         ))}
                       </div>
                       <Divider my={8} color="#f1f5f9" />
                       <div className={classes.cartFooter}>
                         <div className={classes.cartTotal}>
-                          <Text size="sm" c="#64748b">Subtotal</Text>
-                          <Text size="sm" fw={700} c="#1e293b">₹{cartTotal}</Text>
+                          <Text size="sm" c="#64748b">
+                            Subtotal
+                          </Text>
+                          <Text size="sm" fw={700} c="#1e293b">
+                            ₹{cartTotal}
+                          </Text>
                         </div>
                         <button className={classes.checkoutBtn} onClick={handleCheckout}>
                           Checkout →
@@ -296,13 +475,24 @@ const NavBar = () => {
           </button>
 
           {/* Mobile search */}
-          <div className={classes.mobileSearchWrap}>
+          <form onSubmit={handleSearchSubmit} className={classes.mobileSearchWrap}>
             <IconSearch size={15} className={classes.searchIcon} />
             <input
               className={classes.mobileSearchInput}
               placeholder="Search restaurants, food…"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-          </div>
+            {searchTerm && (
+              <button
+                type="button"
+                className={classes.clearSearchBtn}
+                onClick={() => setSearchTerm("")}
+              >
+                <IconX size={14} />
+              </button>
+            )}
+          </form>
 
           <Divider />
 
@@ -321,7 +511,7 @@ const NavBar = () => {
               )}
             </Text>
             {cartCount === 0 ? (
-              <SubText>Your cart is empty</SubText>
+              <Text size="xs" c="dimmed">Your cart is empty</Text>
             ) : (
               <Stack gap="xs">
                 {cart.cartItems.map((item, i) => (

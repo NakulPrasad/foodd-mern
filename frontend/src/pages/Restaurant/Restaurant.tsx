@@ -8,7 +8,7 @@ import {
   Flex,
   Text,
 } from "@mantine/core";
-import { IconBike, IconClock, IconMapPin, IconSearch, IconStar, IconStarFilled } from "@tabler/icons-react";
+import { IconBike, IconClock, IconMapPin, IconSearch, IconStar, IconStarFilled, IconX } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
@@ -224,10 +224,28 @@ const Restaurant = () => {
             <IconSearch size={16} color="#94a3b8" />
             <input
               className={classes.menuSearchInput}
-              placeholder="Search for dishes..."
+              placeholder="Search for dishes in menu..."
               value={menuSearch}
               onChange={(e) => setMenuSearch(e.target.value)}
             />
+            {menuSearch && (
+              <button
+                type="button"
+                onClick={() => setMenuSearch("")}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#94a3b8",
+                  padding: "4px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                title="Clear menu search"
+              >
+                <IconX size={16} />
+              </button>
+            )}
           </div>
         </Flex>
 

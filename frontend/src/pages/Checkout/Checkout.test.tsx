@@ -6,13 +6,24 @@ import { describe, expect, it, vi } from "vitest";
 import store from "../../redux/store";
 import Checkout from "./Checkout";
 
-// Mock usePostOrderMutation
+// Mock API mutations & queries
 const mockPostOrder = vi.fn();
+const mockValidateCoupon = vi.fn();
+
 vi.mock("../../redux/slices/apiSlice", async () => {
   const actual = await vi.importActual("../../redux/slices/apiSlice");
   return {
     ...actual,
     usePostOrderMutation: () => [mockPostOrder, { isLoading: false }],
+    useValidateCouponMutation: () => [mockValidateCoupon, { isLoading: false }],
+    useGetAvailableCouponsQuery: () => ({
+      data: {
+        data: [
+          { code: "FOODD50", title: "50% OFF up to ₹100", minOrderAmount: 199, description: "On food orders" },
+        ],
+      },
+      isLoading: false,
+    }),
   };
 });
 
@@ -40,6 +51,8 @@ mockUseCart.mockReturnValue({
     totalPrice: 500,
     deliveryFee: 40,
     tax: 30,
+    appliedCoupon: null,
+    discountAmount: 0,
   },
   removeAllFromCart: mockRemoveAllFromCart,
 });
@@ -83,6 +96,12 @@ describe("Checkout Page", () => {
     expect(screen.getByText("₹570.00")).toBeInTheDocument(); // grand total (500 + 40 + 30.00)
   });
 
+  it("renders coupon section and input field", () => {
+    renderComponent();
+    expect(screen.getByText("Coupons & Offers")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/ENTER PROMO CODE/i)).toBeInTheDocument();
+  });
+
   it("allows selecting a delivery address from the list", () => {
     renderComponent();
     
@@ -91,7 +110,6 @@ describe("Checkout Page", () => {
     expect(homeAddressCard).toBeInTheDocument();
     
     fireEvent.click(screen.getByText("Home"));
-    // Verify check styling or state change implicitly
   });
 
   it("submits the order when proceed to pay is clicked and address is selected", async () => {
@@ -111,7 +129,7 @@ describe("Checkout Page", () => {
     fireEvent.click(selectAddrBtn);
 
     // The payment button should now be updated to "Proceed to Pay"
-    const proceedPayBtn = screen.getByRole("button", { name: /Proceed to Pay/i });
+    const proceedPayBtn = screen.getByRole("button", { name: /Proceed To Pay/i });
     fireEvent.click(proceedPayBtn);
 
     // Select COD option

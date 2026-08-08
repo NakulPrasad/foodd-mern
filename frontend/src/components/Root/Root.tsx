@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import NavBar from "../NavBar/NavBar";
+import TopAnnouncementBar from "../TopAnnouncementBar/TopAnnouncementBar";
 
 /**
  * Displays navbar in other components and handles google authentication
@@ -28,6 +29,7 @@ const Root = () => {
 
   return (
     <>
+      <TopAnnouncementBar />
       <NavBar />
       <Outlet />
     </>

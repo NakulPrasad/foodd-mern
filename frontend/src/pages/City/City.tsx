@@ -1,7 +1,8 @@
 import { Carousel } from "@mantine/carousel";
 import { Divider, SimpleGrid } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import CollectionCard from "../../components/Cards/CollectionCard/CollectionCard";
 import MenuCard from "../../components/Cards/MenuCard/MenuCard";
@@ -43,10 +44,39 @@ const FILTER_TABS = ["All", "Fast Delivery", "Veg Only", "Rating 4+", "Under ₹
 
 const City = () => {
   const { city } = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { allRestaurantJson, isLoading, error } = useRestaurant();
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMindCategory, setSelectedMindCategory] = useState<string | null>(null);
+
+  // Sync search input with URL query parameter ?search=...
+  useEffect(() => {
+    const urlQuery = searchParams.get("search");
+    if (urlQuery !== null) {
+      setSearchQuery(urlQuery);
+      if (urlQuery.trim()) {
+        setTimeout(() => {
+          document.getElementById("restaurants")?.scrollIntoView({ behavior: "smooth" });
+        }, 150);
+      }
+    }
+  }, [searchParams]);
+
+  const handleHeroSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setSearchParams({ search: searchQuery.trim() });
+    } else {
+      setSearchParams({});
+    }
+    document.getElementById("restaurants")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setSearchParams({});
+  };
 
   useEffect(() => {
     if (error) {
@@ -88,13 +118,23 @@ const City = () => {
   }, [restaurants, selectedMindCategory]);
 
   const filteredRestaurants = restaurants.filter((r) => {
-    if (searchQuery) {
-      return (
-        r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.cuisine.some((c) => c.toLowerCase().includes(searchQuery.toLowerCase()))
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchName = r.name?.toLowerCase().includes(q);
+      const matchCuisine = r.cuisine?.some((c) => c.toLowerCase().includes(q));
+      const matchMenu = r.menu?.some(
+        (m) =>
+          m.name?.toLowerCase().includes(q) ||
+          m.category?.toLowerCase().includes(q) ||
+          m.description?.toLowerCase().includes(q),
       );
+      if (!matchName && !matchCuisine && !matchMenu) {
+        return false;
+      }
     }
-    if (activeFilter === "Veg Only") return true; // would filter by veg flag
+    if (activeFilter === "Veg Only") {
+      return r.menu?.some((m) => m.is_veg);
+    }
     if (activeFilter === "Rating 4+") return (r.rating || 0) >= 4;
     return true;
   });
@@ -116,17 +156,36 @@ const City = () => {
               From your favourite restaurants, delivered hot and fast to your door.
             </p>
 
-            {/* Inline search */}
-            <div className={classes.searchBar}>
+            {/* Inline search form */}
+            <form onSubmit={handleHeroSearchSubmit} className={classes.searchBar}>
               <IconSearch size={18} color="#94a3b8" />
               <input
                 className={classes.searchInput}
-                placeholder={`Search "${city}" restaurants or cuisines...`}
+                placeholder={`Search "${city}" restaurants, dishes or cuisines...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button className={classes.searchBtn}>Search</button>
-            </div>
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "4px",
+                    color: "#94a3b8",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: "4px",
+                  }}
+                  title="Clear search"
+                >
+                  <IconX size={16} />
+                </button>
+              )}
+              <button type="submit" className={classes.searchBtn}>Search</button>
+            </form>
 
             {/* Stats strip */}
             <div className={classes.heroStats}>

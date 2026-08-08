@@ -29,8 +29,9 @@ const URLs = {
   createCheckoutSession: `${BASE_URL}/order/create-checkout-session`,
   verifyPayment: `${BASE_URL}/order/verify-payment`,
 
-
-
+  // Coupons
+  getAvailableCoupons: `${BASE_URL}/coupon/available`,
+  validateCoupon: `${BASE_URL}/coupon/validate`,
 }
 
 
