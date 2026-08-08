@@ -8,6 +8,7 @@ interface ICartState {
   totalPrice: number;
   selectedRestaurantId: string | null;
   selectedRestaurantName: string;
+  selectedRestaurantImage: string | null;
   tax: number;
   deliveryFee: number;
 }
@@ -18,6 +19,7 @@ const initialState: ICartState = {
   totalPrice: 0,
   selectedRestaurantId: null,
   selectedRestaurantName: "{RestaurantName}",
+  selectedRestaurantImage: null,
   tax: 0,
   deliveryFee: 0,
 };
@@ -27,7 +29,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<ICartItem>) => {
-      const { _id, price, restaurantId, restaurantName } = action.payload;
+      const { _id, price, restaurantId, restaurantName, restaurantImage } = action.payload;
       const existingItem = state.cartItems.find((item) => item._id === _id);
 
       // Validate restaurant context
@@ -44,7 +46,6 @@ const cartSlice = createSlice({
 
       if (existingItem) {
         existingItem.quantity += 1;
-        // state.totalPrice += existingItem.price;
       } else {
         state.cartItems.push({
           ...action.payload,
@@ -57,6 +58,9 @@ const cartSlice = createSlice({
       state.totalItems += 1;
       state.selectedRestaurantId = restaurantId;
       state.selectedRestaurantName = restaurantName;
+      if (restaurantImage) {
+        state.selectedRestaurantImage = restaurantImage;
+      }
       state.deliveryFee = state.totalPrice > 200 ? 0 : 30;
       state.tax = state.totalPrice * 0.18;
       // console.log(state);

@@ -1,7 +1,8 @@
 import {
+  Box,
   Button,
   Checkbox,
-  Container,
+  Divider,
   Flex,
   Grid,
   Group,
@@ -16,11 +17,13 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AddressCard from "../../components/Cards/AddressCard/AddressCard";
 import CheckoutCard from "../../components/Cards/CheckoutCard/CheckoutCard";
+import { useAppSelector } from "../../hooks/reduxHooks";
 import { useCart } from "../../hooks/useCart";
 import { usePostOrderMutation } from "../../redux/slices/apiSlice";
+import { RootState } from "../../redux/store";
 import classes from "./Checkout.module.css";
 import IconVeg from "/icons/veg-icon.png";
-import RestrauntLogo from "/img/restaurant/pizzahut.jpg";
+import Logo from "/img/logo/LOGO-bgremove.png";
 
 // Saved addresses — in a real app these come from the user's profile API
 const SAVED_ADDRESSES = [
@@ -41,7 +44,7 @@ const SAVED_ADDRESSES = [
   },
   {
     label: "Other",
-    address: "Mukunda Jwellers, KPHB, Hyderabad 500072",
+    address: "Mukunda Jewellers, KPHB, Hyderabad 500072",
     deliveryTime: "71 Mins",
   },
 ];
@@ -50,6 +53,7 @@ const Checkout = () => {
   const { cart, removeAllFromCart } = useCart();
   const navigate = useNavigate();
   const [selectedAddress, setSelectedAddress] = useState<string>("");
+  const selectedRestaurant = useAppSelector((state: RootState) => state.restaurant.selected);
 
   // Transform `items`
   const flattenedItems = cart.cartItems.map((item) => ({
@@ -80,7 +84,7 @@ const Checkout = () => {
     const response = await postOrder(placeOrderJson);
 
     if (!isPostOrderLoading && response) {
-      toast.success("Order Placed Successfully");
+      toast.success("Order Placed Successfully!");
       removeAllFromCart();
     }
   };
@@ -91,100 +95,103 @@ const Checkout = () => {
     }
   }, [cart.cartItems, navigate]);
 
+  const restaurantImage = cart.selectedRestaurantImage || selectedRestaurant?.image || Logo;
+
   return (
     <section id="checkout" className={classes.section}>
-      <Grid justify="space-between" className={classes.rootGrid}>
-        <Grid.Col
-          span={{ base: 12, md: 8, lg: 8 }}
-          className={classes.gridColumn}
-        >
-          <Container>
-            <Title order={3}>Choose a delivery address</Title>
-            <Title order={5}>Multiple addresses in this location</Title>
-          </Container>
-          <SimpleGrid cols={{ base: 1, sm: 2 }} className={classes.addressGrid}>
-            {SAVED_ADDRESSES.map((addr) => (
-              <AddressCard
-                key={addr.label}
-                label={addr.label}
-                address={addr.address}
-                deliveryTime={addr.deliveryTime}
-                isSelected={selectedAddress === addr.address}
-                onSelect={setSelectedAddress}
-              />
-            ))}
-          </SimpleGrid>
+      <Grid gutter="xl" className={classes.rootGrid}>
+        {/* Left Column - Delivery Addresses */}
+        <Grid.Col span={{ base: 12, md: 7, lg: 7.5 }}>
+          <Box className={classes.leftCard}>
+            <Title order={3} mb={4}>Choose a Delivery Address</Title>
+            <Text size="sm" c="dimmed" mb="md">
+              Select your preferred address for fast doorstep delivery
+            </Text>
+            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md" className={classes.addressGrid}>
+              {SAVED_ADDRESSES.map((addr) => (
+                <AddressCard
+                  key={addr.label}
+                  label={addr.label}
+                  address={addr.address}
+                  deliveryTime={addr.deliveryTime}
+                  isSelected={selectedAddress === addr.address}
+                  onSelect={setSelectedAddress}
+                />
+              ))}
+            </SimpleGrid>
+          </Box>
         </Grid.Col>
 
-        {/* Second Column - Items */}
-        <Grid.Col
-          span={{ base: 12, md: 5.5, lg: 3.5 }}
-          className={classes.gridColumn}
-        >
-          <Stack>
-            <Flex align={"center"} justify={"start"}>
-              <Image src={RestrauntLogo} className={classes.restaurantLogo} />
-              <Flex direction={"column"}>
-                <Title order={3}>{cart.selectedRestaurantName}</Title>
-                <Title order={5}>Hyderabad</Title>
+        {/* Right Column - Order Summary & Bill Details */}
+        <Grid.Col span={{ base: 12, md: 5, lg: 4.5 }}>
+          <Box className={classes.rightCard}>
+            <Stack gap="sm">
+              <Flex align="center" className={classes.restaurantHeader}>
+                <Image src={restaurantImage} className={classes.restaurantLogo} alt="Restaurant" />
+                <Flex direction="column">
+                  <Title order={4}>{cart.selectedRestaurantName || "Selected Restaurant"}</Title>
+                  <Text size="xs" c="dimmed">Order Summary</Text>
+                </Flex>
               </Flex>
-            </Flex>
-            {cart.cartItems.map((item) => (
-              <CheckoutCard key={item._id} item={item} />
-            ))}
-            <Flex className={classes.infomsg}>
-              <Checkbox />
-              <Stack>
-                <Title order={5}>Opt in for No-contact Delivery</Title>
-                <Text>
-                  Unwell, or avoiding contact? Please select no-contact
-                  delivery. Partner will safely place the order outside your
-                  door (not for COD)
-                </Text>
+
+              {/* Items List */}
+              <Stack gap="xs">
+                {cart.cartItems.map((item) => (
+                  <CheckoutCard key={item._id} item={item} />
+                ))}
               </Stack>
-            </Flex>
 
-            <Group>
-              <Image src={IconVeg} className={"foodIcon"} />
-              <Text>Apply Coupon</Text>
-            </Group>
+              <Divider my="xs" />
 
-            {selectedAddress && (
-              <Flex direction="column">
-                <Title order={5}>Delivering to</Title>
-                <Text size="sm" c="dimmed">{selectedAddress}</Text>
+              {/* No Contact Delivery Checkbox */}
+              <Flex className={classes.infomsg} align="flex-start" gap="xs">
+                <Checkbox style={{ marginTop: 2 }} />
+                <Stack gap={2}>
+                  <Text fw={600} size="sm">Opt in for No-Contact Delivery</Text>
+                  <Text size="xs" c="dimmed">
+                    Unwell, or avoiding contact? Delivery partner will safely place the order outside your door.
+                  </Text>
+                </Stack>
               </Flex>
-            )}
 
-            <Title order={4}>Bill Details</Title>
-            <Group justify="space-between">
-              <Text>Item Total</Text>
-              <Text>₹{cart.totalPrice}</Text>
-            </Group>
-            <Group justify="space-between">
-              <Text>Delivery Fee</Text>
-              <Text>{cart.deliveryFee === 0 ? "FREE" : `₹${cart.deliveryFee}`}</Text>
-            </Group>
-            <Group justify="space-between">
-              <Text>GST &amp; Other Charges</Text>
-              <Text>₹{cart.tax.toFixed(2)}</Text>
-            </Group>
-            <Group justify="space-between">
-              <Title order={5}>Total</Title>
-              <Title order={5}>
-                ₹{(cart.totalPrice + cart.deliveryFee + cart.tax).toFixed(2)}
-              </Title>
-            </Group>
-            <Flex justify={"center"}>
+              {selectedAddress && (
+                <Box bg="#f1f5f9" p="xs" style={{ borderRadius: 10 }}>
+                  <Text size="xs" fw={700} c="#475569">DELIVERING TO:</Text>
+                  <Text size="xs" c="#334155" style={{ wordBreak: "break-word" }}>{selectedAddress}</Text>
+                </Box>
+              )}
+
+              {/* Bill Details */}
+              <Box className={classes.billDetails}>
+                <Title order={5} mb="xs">Bill Details</Title>
+                <div className={classes.billRow}>
+                  <span>Item Total</span>
+                  <span>₹{cart.totalPrice}</span>
+                </div>
+                <div className={classes.billRow}>
+                  <span>Delivery Fee</span>
+                  <span>{cart.deliveryFee === 0 ? "FREE" : `₹${cart.deliveryFee}`}</span>
+                </div>
+                <div className={classes.billRow}>
+                  <span>GST &amp; Taxes</span>
+                  <span>₹{cart.tax.toFixed(2)}</span>
+                </div>
+                <div className={classes.billTotal}>
+                  <span>To Pay</span>
+                  <span>₹{(cart.totalPrice + cart.deliveryFee + cart.tax).toFixed(2)}</span>
+                </div>
+              </Box>
+
               <Button
                 onClick={handleProceeedToPay}
                 className={classes.payButton}
                 disabled={!selectedAddress}
+                mt="xs"
               >
                 {selectedAddress ? "Proceed To Pay" : "Select Address First"}
               </Button>
-            </Flex>
-          </Stack>
+            </Stack>
+          </Box>
         </Grid.Col>
       </Grid>
     </section>

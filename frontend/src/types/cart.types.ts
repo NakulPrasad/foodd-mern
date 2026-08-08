@@ -7,6 +7,7 @@ export interface ICartItem {
   _id: string;
   restaurantId: string;
   restaurantName: string;
+  restaurantImage?: string;
   name: string;
   price: number;
   image_url?: string;

@@ -1,14 +1,13 @@
 import {
+  Box,
   Button,
-  Container,
   Flex,
-  Image,
+  Group,
+  Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
-import { SubText } from "../../Mantine/Subtext/SubText";
+import { IconBriefcase, IconHome, IconMapPin } from "@tabler/icons-react";
 import classes from "./AddressCard.module.css";
-import IconHome from "/icons/veg-icon.png";
 
 interface AddressCardProps {
   label: string;
@@ -25,31 +24,54 @@ const AddressCard = ({
   isSelected,
   onSelect,
 }: AddressCardProps) => {
-  const theme = useMantineTheme();
+  const getIcon = () => {
+    switch (label.toLowerCase()) {
+      case "home":
+        return <IconHome size={20} color="#ff5200" />;
+      case "work":
+        return <IconBriefcase size={20} color="#ff5200" />;
+      default:
+        return <IconMapPin size={20} color="#ff5200" />;
+    }
+  };
 
   return (
-    <Flex
-      align={"flex-start"}
-      justify={"space-around"}
+    <Box
       className={`${classes.main} ${isSelected ? classes.selected : ""}`}
+      onClick={() => onSelect(address)}
     >
-      <Image src={IconHome} className={"foodIcon"} mx={8} />
-      <Container>
-        <Title order={4} mb={theme.spacing.xs}>
-          {label}
-        </Title>
-        <SubText>{address}</SubText>
-        {deliveryTime && <Title order={5}>{deliveryTime}</Title>}
+      <Box>
+        <Group justify="space-between" align="center" mb={6}>
+          <Group gap="xs">
+            {getIcon()}
+            <Title order={4}>{label}</Title>
+          </Group>
+          {deliveryTime && (
+            <Text size="xs" fw={700} c="#16a34a" bg="#dcfce7" px={8} py={2} style={{ borderRadius: 6 }}>
+              {deliveryTime}
+            </Text>
+          )}
+        </Group>
+        <Text size="xs" c="dimmed" style={{ lineHeight: 1.4 }}>
+          {address}
+        </Text>
+      </Box>
+      <Flex mt="md">
         <Button
-          color={isSelected ? "green" : "gray"}
+          fullWidth
+          size="xs"
+          color={isSelected ? "orange" : "gray"}
           variant={isSelected ? "filled" : "outline"}
-          mt={theme.spacing.xs}
-          onClick={() => onSelect(address)}
+          className={classes.addressBtn}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect(address);
+          }}
         >
-          {isSelected ? "✓ Selected" : "Deliver Here"}
+          {isSelected ? "✓ DELIVER HERE" : "SELECT ADDRESS"}
         </Button>
-      </Container>
-    </Flex>
+      </Flex>
+    </Box>
   );
 };
 

@@ -16,13 +16,17 @@ import { IFoodItem } from "../../types";
 import { IValue } from "../../types/cart.types";
 import classes from "./ModalCart.module.css";
 
+import { useAppSelector } from "../../hooks/reduxHooks";
+import { RootState } from "../../redux/store";
+
 interface IModalCartProps {
   item: IFoodItem;
 }
 
 const ModalCart = (props: IModalCartProps) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { addItem} = useCart();
+  const { addItem } = useCart();
+  const selectedRestaurant = useAppSelector((state: RootState) => state.restaurant.selected);
 
   const title = (
     <Flex direction={"column"}>
@@ -37,12 +41,12 @@ const ModalCart = (props: IModalCartProps) => {
     Record<string, IValue | IValue[] | number>
   >({});
   const [totalPrice, setTotalPrice] = useState(0);
-  // const dispatch = useAppDispatch();
 
   const cartItem = {
     _id: props.item._id,
     restaurantId: props.item.restaurantId,
     restaurantName: props.item.restaurantName,
+    restaurantImage: selectedRestaurant?.image || (props.item as any).restaurantImage,
     name: props.item.name,
     price: totalPrice,
     options: value,

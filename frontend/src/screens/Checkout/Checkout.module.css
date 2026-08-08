@@ -1,88 +1,100 @@
 .section {
-  background-color: var(--mantine-color-gray-4);
-  padding: var(--padding-sm);
-  min-height: 100vh;
+  width: 100%;
+  max-width: var(--max-width-container);
+  margin: 1.5rem auto 3rem auto;
+  padding: 0 var(--container-padding);
 }
 
 .rootGrid {
-  margin: var(--margin-sm) 0;
+  align-items: flex-start;
 }
 
-.gridColumn {
-  background-color: var(--mantine-color-gray-0);
-  padding: var(--padding-md);
-  border-radius: var(--mantine-radius-md);
+.leftCard {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.rightCard {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.restaurantHeader {
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #cbd5e1;
+  margin-bottom: 1rem;
 }
 
 .restaurantLogo {
-  height: var(--icon-h-md);
-  margin-right: var(--margin-md);
-  border-radius: var(--mantine-radius-sm);
-}
-
-.icon {
-  height: var(--icon-veg-h);
-  width: var(--icon-veg-w);
-}
-
-.infomsg {
-  padding: var(--padding-sm);
-  gap: var(--padding-sm);
+  height: 52px;
+  width: 52px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-right: 1rem;
 }
 
 .addressGrid {
-  margin: var(--margin-sm) 0;
+  margin-top: 1.25rem;
+}
+
+.infomsg {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+}
+
+.billDetails {
+  background-color: #f8fafc;
+  border-radius: 14px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.billRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #475569;
+  padding: 4px 0;
+}
+
+.billTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  padding-top: 8px;
+  border-top: 1px solid #cbd5e1;
+  margin-top: 8px;
 }
 
 .payButton {
-  background-color: green;
-  border-radius: 0%;
-  margin: var(--margin-sm) 0;
+  background-color: #ff5200 !important;
+  border-radius: 12px !important;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 700;
   width: 100%;
+  transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
-@media (min-width: 768px) {
-  .rootGrid {
-    margin: var(--margin-md);
-  }
-
-  .section {
-    padding: var(--padding-md);
-  }
-
-  .infomsg {
-    padding: var(--padding-md);
-  }
-
-  .addressGrid {
-    margin: var(--margin-md) 0;
-  }
+.payButton:hover:not(:disabled) {
+  background-color: #e04200 !important;
+  transform: translateY(-1px);
 }
 
-@media (min-width: 1024px) {
-  .rootGrid {
-    margin: var(--margin-lg);
-  }
-
-  .section {
-    padding: var(--padding-lg);
-  }
-
-  .infomsg {
-    padding: var(--padding-lg);
-  }
-
-  .gridColumn {
-    padding: var(--padding-lg);
-  }
-
-  .addressGrid {
-    margin: var(--margin-lg) 0;
-  }
-
-  .payButton {
-    background-color: green;
-    border-radius: 0%;
-    margin: var(--margin-lg) 0;
-  }
+.payButton:disabled {
+  background-color: #cbd5e1 !important;
+  cursor: not-allowed;
 }

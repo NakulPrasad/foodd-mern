@@ -1,22 +1,28 @@
 .main {
-  padding: var(--padding-sm);
-  border: 2px solid transparent;
-  border-radius: var(--mantine-radius-md);
-  transition: border-color 0.2s ease;
+  padding: 1.25rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .selected {
-  border-color: var(--mantine-color-green-6);
-  background-color: var(--mantine-color-green-0);
+  border-color: #ff5200 !important;
+  background-color: #fff5f0 !important;
+  box-shadow: 0 4px 14px rgba(255, 82, 0, 0.12) !important;
 }
 
-@media (min-width: 768px) {
-  .main {
-    padding: var(--padding-md);
-  }
-}
-@media (min-width: 1024px) {
-  .main {
-    padding: var(--padding-lg);
-  }
+.addressBtn {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
 }

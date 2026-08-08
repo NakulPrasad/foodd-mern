@@ -1,62 +1,59 @@
-.itemImage {
-  height: 6rem;
-  width: 8rem;
-}
-
-.mainContainer {
-  background-color: #37718e;
+.section {
   width: 100%;
-  min-height: 100vh;
+  max-width: var(--max-width-container);
+  margin: 1.5rem auto 3rem auto;
+  padding: 0 var(--container-padding);
 }
 
-.subContainer1 {
-  color: white !important;
-  padding: var(--padding-sm);
-  max-width: 100%;
-  width: 100%;
+.profileCard {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 20px;
+  padding: 1.75rem;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
 }
 
-.subContainer2 {
-  background-color: white;
-  max-width: 100%;
-  width: 100%;
+.goldBadge {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 12px;
 }
 
-.subContainer2 > .itemCard {
-  padding: var(--padding-sm);
+.editBtn {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 10px !important;
+  transition: background-color 0.2s ease;
 }
 
-@media (min-width: 768px) {
-  .mainContainer {
-    padding: var(--padding-md);
-  }
-
-  .subContainer1 {
-    max-width: 720px;
-    padding: var(--padding-md);
-  }
-
-  .subContainer2 {
-    max-width: 720px;
-  }
-
-  .subContainer2 > .itemCard {
-    padding: var(--padding-md);
-  }
+.editBtn:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
 }
 
-@media (min-width: 1024px) {
-  .subContainer1 {
-    max-width: 960px;
-    padding: var(--padding-lg);
-  }
+.tabBtn {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease;
+}
 
-  .subContainer2 {
-    max-width: 960px;
-    padding: var(--padding-lg);
-  }
+.filterPill {
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+}
 
-  .subContainer2 > .itemCard {
-    padding: var(--padding-lg);
-  }
+.emptyState {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
 }

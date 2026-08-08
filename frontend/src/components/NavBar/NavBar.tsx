@@ -159,8 +159,8 @@ const NavBar = () => {
               {cart.cartItems.length > 0 && (
                 <Box className={classes.dropdownFooter_sm}>
                   <Flex direction={"column"}>
-                    <Flex justify={"space-between"} pb={theme.spacing.sm}>
-                      <Image src={KFC} className={classes.img} />
+                    <Flex justify={"space-between"} align="center" pb={theme.spacing.sm}>
+                      <Image src={cart.selectedRestaurantImage || selectedRestaurant?.image || Logo} className={classes.img} radius="md" />
                       <Title order={5}>{cart.selectedRestaurantName}</Title>
                     </Flex>
                     <Divider p={theme.spacing.sm} />

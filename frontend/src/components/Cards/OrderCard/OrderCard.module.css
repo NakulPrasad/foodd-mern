@@ -1,47 +1,102 @@
-.itemImage {
-  height: 6rem;
-  width: 8rem;
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.mainContainer {
-  margin: var(--margin-sm) 0;
+.card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
 }
 
-.subContainer1 {
-  color: white !important;
-  padding: var(--padding-sm);
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 1rem;
 }
 
-.subContainer2 {
-  background-color: white;
+.restImage {
+  height: 52px;
+  width: 52px;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
-.subContainer2 >.itemCard {
-  padding: var(--padding-sm);
+.statusBadgeDelivered {
+  background-color: #dcfce7;
+  color: #15803d;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-@media (min-width: $mantine-breakpoint-md) {
-  .mainContainer {
-    padding: var(--padding-md);
-  }
-
-  .subContainer2 >.itemCard  {
-    padding: var(--padding-md);
-  }
-
+.statusBadgeProgress {
+  background-color: #fff7ed;
+  color: #c2410c;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-@media (min-width: $mantine-breakpoint-lg) {
-  .subContainer1 {
-    padding: var(--padding-lg);
-  }
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #f1f5f9;
+}
 
-  .subContainer2 {
-    padding: var(--padding-lg);
-  }
+.itemImg {
+  height: 48px;
+  width: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 0.75rem;
+}
 
-  .subContainer2 >.itemCard  {
-    padding: var(--padding-lg);
-  }
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
 
+.reorderBtn {
+  background-color: #ff5200 !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  transition: transform 0.15s ease;
+}
+
+.reorderBtn:hover {
+  background-color: #e04200 !important;
+  transform: translateY(-1px);
+}
+
+.actionBtn {
+  border-radius: 10px !important;
+  color: #475569 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.actionBtn:hover {
+  background-color: #f8fafc !important;
 }
