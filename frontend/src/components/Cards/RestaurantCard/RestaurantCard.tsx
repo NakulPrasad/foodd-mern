@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import IconStar from "../../../assets/icons/starFilled.svg?react";
 import { useRestaurant } from "../../../hooks/useRestaurant";
-import { setSelectedRestaurant } from "../../../redux/slices/restaurantSlie";
+import { setSelectedRestaurant } from "../../../redux/slices/restaurantSlice";
 import { IRestaurant } from "../../../types";
 import classes from "./RestaurantCard.module.css";
 

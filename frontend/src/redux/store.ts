@@ -3,7 +3,7 @@ import { apiSlice } from "./slices/apiSlice";
 import authReducer from "./slices/authSlice";
 import cartReducer from "./slices/cartSlice";
 import locationReducer from "./slices/locationSlice";
-import restaurantReducer from "./slices/restaurantSlie";
+import restaurantReducer from "./slices/restaurantSlice";
 
 const store = configureStore({
   reducer: {

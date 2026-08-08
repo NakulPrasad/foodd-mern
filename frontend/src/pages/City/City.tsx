@@ -272,6 +272,7 @@ const City = () => {
           <SimpleGrid
             cols={{ base: 1, xs: 2, sm: 2, md: 3, lg: 4 }}
             spacing={{ base: "md", md: "lg" }}
+            data-testid="restaurant-grid"
           >
             {filteredRestaurants.map((restaurant) => (
               <RestaurantCard restaurant={restaurant} key={restaurant._id} />

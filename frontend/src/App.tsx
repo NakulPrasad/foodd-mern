@@ -12,14 +12,14 @@ import "./App.css";
 import Root from "./components/Root/Root";
 import { useAuth } from "./hooks/useAuth";
 import store from "./redux/store";
-import Auth from "./screens/Auth/Auth";
-import Checkout from "./screens/Checkout/Checkout";
-import Error from "./screens/Error/Error";
-import Home from "./screens/Home/Home";
-import Order from "./screens/Order/Order";
-import Partner from "./screens/Partner/Partner";
-import Profile from "./screens/Profile/Profile";
-import Restaurant from "./screens/Restaurant/Restaurant";
+import Auth from "./pages/Auth/Auth";
+import Checkout from "./pages/Checkout/Checkout";
+import Error from "./pages/Error/Error";
+import Home from "./pages/Home/Home";
+import Order from "./pages/Order/Order";
+import Partner from "./pages/Partner/Partner";
+import Profile from "./pages/Profile/Profile";
+import Restaurant from "./pages/Restaurant/Restaurant";
 import Theme from "./theme/theme";
 
 interface PrivateRouteProps {
