@@ -30,17 +30,33 @@ export default class orderService {
     }
   }
 
-  async addOrder(order: IOrderModel): Promise<boolean> {
+  async addOrder(order: IOrderModel): Promise<(typeof OrderModel.prototype) | false> {
     try {
-      
       const orderAdded = await OrderModel.create(order);
       if (!orderAdded) {
         console.error("Can't Create Order");
         return false;
       }
-      return true;
+      return orderAdded;
     } catch (error: any) {
       console.error("Error while creating order", error.message);
+      return false;
+    }
+  }
+
+  async updateOrderPaymentStatus(
+    orderId: string,
+    paymentStatus: "pending" | "paid" | "failed" | "refunded",
+    status: "pending" | "confirmed" | "preparing" | "out_for_delivery" | "delivered" | "cancelled",
+  ): Promise<boolean> {
+    try {
+      const result = await OrderModel.findByIdAndUpdate(orderId, {
+        paymentStatus,
+        status,
+      });
+      return !!result;
+    } catch (error: any) {
+      console.error("Error while updating order payment status", error.message);
       return false;
     }
   }

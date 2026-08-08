@@ -20,6 +20,7 @@ import Order from "./pages/Order/Order";
 import Partner from "./pages/Partner/Partner";
 import Profile from "./pages/Profile/Profile";
 import Restaurant from "./pages/Restaurant/Restaurant";
+import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
 import Theme from "./theme/theme";
 
 interface PrivateRouteProps {
@@ -77,9 +78,16 @@ const router = createBrowserRouter([
     ],
   },
   {
+    // /payment-success must NOT be inside PrivateRoute —
+    // Stripe's redirect resets the Redux store, so isAuthenticated
+    // would be false on landing. The component handles auth itself.
     element: <Root />,
     errorElement: <Error />,
     children: [
+      {
+        path: "/payment-success",
+        element: <PaymentSuccess />,
+      },
       {
         path: "/auth",
         element: <Auth />,

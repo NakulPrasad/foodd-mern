@@ -26,6 +26,8 @@ const URLs = {
   // Orders
   postOrder: `${BASE_URL}/order/addOrder`,
   getOrders: `${BASE_URL}/order/getMyOrders`,
+  createCheckoutSession: `${BASE_URL}/order/create-checkout-session`,
+  verifyPayment: `${BASE_URL}/order/verify-payment`,
 
 
 

@@ -52,6 +52,35 @@ export const apiSlice = createApi({
         body: order,
       }),
     }),
+    createCheckoutSession: builder.mutation<
+      { url: string; sessionId: string; orderId: string },
+      {
+        restaurantId: string;
+        items: any[];
+        totalAmount: number;
+        deliveryFee: number;
+        gstAndCharges: number;
+        deliveryAddress: string;
+        restaurantName: string;
+        cartItems: any[];
+      }
+    >({
+      query: (body) => ({
+        url: URLs.createCheckoutSession,
+        method: "POST",
+        body,
+      }),
+    }),
+    verifyPayment: builder.mutation<
+      { message: string; orderId: string; paymentStatus: string },
+      { sessionId: string }
+    >({
+      query: (body) => ({
+        url: URLs.verifyPayment,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -63,4 +92,6 @@ export const {
   useGetRestaurantByIdQuery,
   useGetMyOrdersQuery,
   usePostOrderMutation,
+  useCreateCheckoutSessionMutation,
+  useVerifyPaymentMutation,
 } = apiSlice;

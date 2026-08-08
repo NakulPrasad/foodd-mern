@@ -12,19 +12,29 @@ import {
   Title,
   Modal,
   Loader,
-  TextInput,
   Group,
   Center,
+  Badge,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { IconCreditCard, IconDeviceMobile, IconTruckDelivery, IconCheck } from "@tabler/icons-react";
+import {
+  IconCreditCard,
+  IconDeviceMobile,
+  IconTruckDelivery,
+  IconCheck,
+  IconShieldLock,
+  IconBrandStripe,
+} from "@tabler/icons-react";
 import AddressCard from "../../components/Cards/AddressCard/AddressCard";
 import CheckoutCard from "../../components/Cards/CheckoutCard/CheckoutCard";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import { useCart } from "../../hooks/useCart";
-import { usePostOrderMutation } from "../../redux/slices/apiSlice";
+import {
+  usePostOrderMutation,
+  useCreateCheckoutSessionMutation,
+} from "../../redux/slices/apiSlice";
 import { RootState } from "../../redux/store";
 import classes from "./Checkout.module.css";
 import Logo from "/img/logo/LOGO-bgremove.png";
@@ -65,15 +75,6 @@ const Checkout = () => {
   const [paymentStep, setPaymentStep] = useState<"idle" | "processing" | "success">("idle");
   const [processingMsg, setProcessingMsg] = useState("");
 
-  // Card input states
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvv, setCvv] = useState("");
-  const [cardHolder, setCardHolder] = useState("");
-
-  // UPI input states
-  const [upiId, setUpiId] = useState("");
-
   // Transform `items`
   const flattenedItems = cart.cartItems.map((item) => ({
     foodItemId: item._id,
@@ -82,6 +83,8 @@ const Checkout = () => {
   }));
 
   const [postOrder, { isLoading: isPostOrderLoading }] = usePostOrderMutation();
+  const [createCheckoutSession, { isLoading: isCheckoutLoading }] =
+    useCreateCheckoutSessionMutation();
 
   const handleProceeedToPay = () => {
     if (!selectedAddress) {
@@ -91,67 +94,55 @@ const Checkout = () => {
     setPaymentModalOpened(true);
   };
 
-  const handleCardNumberChange = (value: string) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 16);
-    const parts = [];
-    for (let i = 0; i < cleaned.length; i += 4) {
-      parts.push(cleaned.slice(i, i + 4));
-    }
-    setCardNumber(parts.join(" "));
-  };
-
-  const handleExpiryChange = (value: string) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 4);
-    if (cleaned.length >= 2) {
-      setExpiry(`${cleaned.slice(0, 2)}/${cleaned.slice(2)}`);
-    } else {
-      setExpiry(cleaned);
-    }
-  };
-
-  const handlePaymentSubmit = async (e: React.FormEvent) => {
+  /**
+   * Handles Stripe Checkout redirect for card/UPI.
+   * Creates a pending order in the DB and opens Stripe hosted checkout.
+   */
+  const handleStripeCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (activeTab === "card") {
-      const cleanCard = cardNumber.replace(/\s/g, "");
-      if (cleanCard.length !== 16) {
-        toast.warning("Please enter a valid 16-digit card number.");
-        return;
-      }
-      if (expiry.length !== 5) {
-        toast.warning("Please enter card expiry as MM/YY.");
-        return;
-      }
-      if (cvv.length !== 3) {
-        toast.warning("Please enter a valid 3-digit CVV.");
-        return;
-      }
-      if (!cardHolder.trim()) {
-        toast.warning("Please enter cardholder name.");
-        return;
-      }
-    } else if (activeTab === "upi") {
-      if (!upiId.includes("@") || upiId.length < 5) {
-        toast.warning("Please enter a valid UPI ID (e.g. user@okaxis).");
-        return;
-      }
-    }
-
-    // Begin Simulated processing
     setPaymentStep("processing");
-    setProcessingMsg("Initializing secure payment gateway...");
+    setProcessingMsg("Initializing secure Stripe payment gateway...");
 
-    setTimeout(() => {
-      setProcessingMsg("Contacting bank authentication servers...");
-    }, 700);
+    try {
+      const response = await createCheckoutSession({
+        restaurantId: cart.selectedRestaurantId as string,
+        items: flattenedItems,
+        totalAmount: cart.totalPrice,
+        deliveryFee: cart.deliveryFee,
+        gstAndCharges: cart.tax,
+        deliveryAddress: selectedAddress,
+        restaurantName: cart.selectedRestaurantName || "Restaurant",
+        cartItems: cart.cartItems.map((item) => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          description: item.description || undefined,
+        })),
+      }).unwrap();
 
-    setTimeout(() => {
-      setProcessingMsg("Authorizing secure transaction amount...");
-    }, 1400);
+      setProcessingMsg("Redirecting to Stripe Checkout...");
 
-    setTimeout(() => {
-      setProcessingMsg("Securing payment confirmation...");
-    }, 2100);
+      // Small delay so user sees the message before redirect
+      setTimeout(() => {
+        window.location.href = response.url;
+      }, 600);
+    } catch (error: any) {
+      console.error("Failed to create checkout session:", error);
+      const errMsg = error?.data?.message || error?.message || "Failed to initiate payment. Please try again.";
+      toast.error(errMsg);
+      setPaymentStep("idle");
+    }
+  };
+
+  /**
+   * COD path — same simulated flow as before but without card inputs.
+   */
+  const handleCODOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setPaymentStep("processing");
+    setProcessingMsg("Placing your COD order...");
 
     setTimeout(async () => {
       const placeOrderJson = {
@@ -161,32 +152,34 @@ const Checkout = () => {
         deliveryFee: cart.deliveryFee,
         gstAndCharges: cart.tax,
         status: "confirmed",
-        paymentStatus: activeTab === "cod" ? "pending" : "paid",
+        paymentStatus: "pending",
         deliveryAddress: selectedAddress,
       };
 
       try {
-        const response = await postOrder(placeOrderJson).unwrap();
+        await postOrder(placeOrderJson).unwrap();
         setPaymentStep("success");
-        toast.success("Order Placed Successfully!");
+        toast.success("COD Order Placed Successfully!");
         removeAllFromCart();
 
         setTimeout(() => {
           setPaymentModalOpened(false);
           setPaymentStep("idle");
-          setCardNumber("");
-          setExpiry("");
-          setCvv("");
-          setCardHolder("");
-          setUpiId("");
           navigate("/order");
         }, 1500);
       } catch (error) {
-        console.error("Failed to place order:", error);
+        console.error("Failed to place COD order:", error);
         toast.error("Failed to create order. Please try again.");
         setPaymentStep("idle");
       }
-    }, 2800);
+    }, 1200);
+  };
+
+  const handlePaymentSubmit = (e: React.FormEvent) => {
+    if (activeTab === "cod") {
+      return handleCODOrder(e);
+    }
+    return handleStripeCheckout(e);
   };
 
   useEffect(() => {
@@ -351,61 +344,71 @@ const Checkout = () => {
             <Divider color="#f1f5f9" />
 
             <form onSubmit={handlePaymentSubmit}>
-              {activeTab === "card" && (
+              {/* Card & UPI — both go through Stripe Checkout */}
+              {(activeTab === "card" || activeTab === "upi") && (
                 <Stack gap="sm">
-                  <TextInput
-                    label="Card Number"
-                    placeholder="4111 2222 3333 4444"
-                    value={cardNumber}
-                    onChange={(e) => handleCardNumberChange(e.target.value)}
-                    required
-                    radius="md"
-                  />
-                  <Group grow gap="sm">
-                    <TextInput
-                      label="Expiry Date"
-                      placeholder="MM/YY"
-                      value={expiry}
-                      onChange={(e) => handleExpiryChange(e.target.value)}
-                      maxLength={5}
-                      required
-                      radius="md"
-                    />
-                    <TextInput
-                      label="CVV"
-                      placeholder="123"
-                      value={cvv}
-                      onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))}
-                      maxLength={3}
-                      type="password"
-                      required
-                      radius="md"
-                    />
-                  </Group>
-                  <TextInput
-                    label="Cardholder Name"
-                    placeholder="John Doe"
-                    value={cardHolder}
-                    onChange={(e) => setCardHolder(e.target.value)}
-                    required
-                    radius="md"
-                  />
-                </Stack>
-              )}
+                  {/* Stripe badge */}
+                  <Flex
+                    align="center"
+                    gap="xs"
+                    p="md"
+                    style={{
+                      background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
+                      borderRadius: 12,
+                      border: "1px solid #bae6fd",
+                    }}
+                  >
+                    <Box
+                      style={{
+                        background: "#635BFF",
+                        borderRadius: 8,
+                        padding: "6px 8px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <IconBrandStripe size={20} color="white" />
+                    </Box>
+                    <Stack gap={2} style={{ flex: 1 }}>
+                      <Flex align="center" gap={6}>
+                        <Text fw={700} size="sm" c="#0f172a">
+                          Pay securely with Stripe
+                        </Text>
+                        <Badge color="green" size="xs" variant="light">
+                          Test Mode
+                        </Badge>
+                      </Flex>
+                      <Text size="xs" c="#475569">
+                        {activeTab === "card"
+                          ? "You'll be redirected to Stripe's secure hosted checkout to enter your card details."
+                          : "You'll be redirected to Stripe's secure hosted checkout to complete UPI payment."}
+                      </Text>
+                    </Stack>
+                  </Flex>
 
-              {activeTab === "upi" && (
-                <Stack gap="sm">
-                  <Text size="xs" c="dimmed">
-                    Enter your UPI ID linked to your bank account to initiate request.
-                  </Text>
-                  <TextInput
-                    label="UPI ID"
-                    placeholder="username@okaxis"
-                    value={upiId}
-                    onChange={(e) => setUpiId(e.target.value)}
-                    required
-                    radius="md"
-                  />
+                  <Flex align="center" gap={6}>
+                    <IconShieldLock size={14} color="#64748b" />
+                    <Text size="xs" c="dimmed">
+                      Your payment info is never stored on our servers. Stripe handles all card data securely.
+                    </Text>
+                  </Flex>
+
+                  {/* Test card hint */}
+                  <Box
+                    p="sm"
+                    style={{
+                      background: "#fffbeb",
+                      borderRadius: 8,
+                      border: "1px solid #fde68a",
+                    }}
+                  >
+                    <Text size="xs" fw={700} c="#92400e" mb={2}>
+                      🧪 Test Mode — Use test card:
+                    </Text>
+                    <Text size="xs" c="#78350f" style={{ fontFamily: "monospace" }}>
+                      Card: 4242 4242 4242 4242 &nbsp;|&nbsp; Expiry: any future date &nbsp;|&nbsp; CVV: any 3 digits
+                    </Text>
+                  </Box>
                 </Stack>
               )}
 
@@ -421,13 +424,18 @@ const Checkout = () => {
               <Button
                 type="submit"
                 fullWidth
-                color="orange"
+                color={activeTab === "cod" ? "orange" : "#635BFF"}
                 radius="md"
                 size="md"
                 mt="xl"
-                loading={isPostOrderLoading}
+                loading={isCheckoutLoading || isPostOrderLoading}
+                leftSection={
+                  activeTab !== "cod" ? <IconBrandStripe size={18} /> : undefined
+                }
               >
-                {activeTab === "cod" ? "Confirm COD Order" : `Pay ₹${totalAmountToPay.toFixed(2)}`}
+                {activeTab === "cod"
+                  ? "Confirm COD Order"
+                  : `Pay ₹${totalAmountToPay.toFixed(2)} with Stripe`}
               </Button>
             </form>
           </Stack>
@@ -454,10 +462,10 @@ const Checkout = () => {
                 <IconCheck size={40} stroke={3} className={classes.checkmark} />
               </div>
               <Title order={3} c="#22c55e" mt="md">
-                Payment Successful!
+                Order Placed!
               </Title>
               <Text size="sm" c="dimmed">
-                Your order is confirmed and is being prepared.
+                Your COD order is confirmed and is being prepared.
               </Text>
             </Stack>
           </Center>
