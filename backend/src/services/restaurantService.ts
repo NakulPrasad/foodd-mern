@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import RestaurantModel, { IRestaurant } from "../models/restaurantModel.js";
+import RestaurantModel, { IRestaurant } from "../models/restaurant.js";
 import { Response } from "express";
 
 

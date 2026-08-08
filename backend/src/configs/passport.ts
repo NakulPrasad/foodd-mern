@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import authenticateToken from "../middleware/authMiddleware.js";
+import authenticateToken from "../middleware/jwtAuth.js";
 import authService from "../services/authService.js";
 import userService from "../services/userService.js";
 import { IGoogleOAuthLoginRequest } from "../types/auth.js";

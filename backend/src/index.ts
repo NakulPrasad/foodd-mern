@@ -7,11 +7,11 @@ import MongoStore from "connect-mongo";
 import express from "express";
 import session from "express-session";
 import morgan from "morgan";
-import { apiRouter } from "./Routes/apiRouter.js";
-import passport, { passportRoutes } from "./configs/passportConfig.js";
-import dbConfig from "./configs/dbConfig2.js";
-import corsMiddleware from "./middleware/corsMiddleware.js";
-import rateLimiter from "./middleware/rateLimitter.js";
+import { apiRouter } from "./routes/api.router.js";
+import passport, { passportRoutes } from "./configs/passport.js";
+import dbConfig from "./configs/db.js";
+import corsMiddleware from "./middleware/cors.js";
+import rateLimiter from "./middleware/rate-limiter.js";
 
 const app = express();
 

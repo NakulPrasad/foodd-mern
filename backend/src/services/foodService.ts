@@ -1,8 +1,8 @@
 import { Response } from "express";
 import { ObjectId, Types } from "mongoose";
 import FoodCategory, { foodCategoryInterface } from "../models/foodCategory.js";
-import FoodItem, { IFoodItem } from "../models/foodModel.js";
-import restaurantModel from "../models/restaurantModel.js";
+import FoodItem, { IFoodItem } from "../models/food.js";
+import restaurantModel from "../models/restaurant.js";
 import restaurantService from "./restaurantService.js";
 
 const RestaurantService = restaurantService.getInstance();

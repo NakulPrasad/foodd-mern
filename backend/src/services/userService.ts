@@ -2,7 +2,7 @@ import { genSalt, hash } from "bcrypt";
 import { randomBytes } from "crypto";
 import { Response } from "express";
 import { checkSchema, validationResult } from "express-validator";
-import User, { userInterface, userInterfaceOAuth } from "../models/userModel.js";
+import User, { userInterface, userInterfaceOAuth } from "../models/user.js";
 import { Types } from "mongoose";
 
 class userService {

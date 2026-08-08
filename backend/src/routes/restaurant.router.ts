@@ -4,8 +4,8 @@ import {
   getAllRestaurant,
   getRestaurantById,
   test,
-} from "../../controllers/restaurantRouterController/restaurantRouterController.js";
-import authenticateToken from "../../middleware/authMiddleware.js";
+} from "../controllers/restaurant.controller.js";
+import authenticateToken from "../middleware/jwtAuth.js";
 
 export const restaurantRouter = express.Router();
 

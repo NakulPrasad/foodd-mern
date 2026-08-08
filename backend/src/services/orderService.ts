@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import OrderModel, { IOrderModel } from "../models/orderModel.js";
+import OrderModel, { IOrderModel } from "../models/order.js";
 
 export default class orderService {
   private static instance: orderService;

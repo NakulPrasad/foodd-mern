@@ -1,6 +1,6 @@
 import express from "express";
-import { getLocation, homeTest } from "../../controllers/homeRouterController/homeRouterController.js";
-import authenticateToken from "../../middleware/authMiddleware.js";
+import { getLocation, homeTest } from "../controllers/home.controller.js";
+import authenticateToken from "../middleware/jwtAuth.js";
 
 export const homeRouter = express.Router();
 // homeRouter.use(authenticateToken);

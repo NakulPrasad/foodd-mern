@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import restaurantService from "../../services/restaurantService.js";
+import restaurantService from "../services/restaurantService.js";
 
 const RestaurantService = restaurantService.getInstance();
 

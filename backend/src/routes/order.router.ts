@@ -3,9 +3,9 @@ import {
   addOrder,
   getMyOrders,
   orderTest,
-} from "../../controllers/orderRouterController/orderRouterController.js";
+} from "../controllers/order.controller.js";
 
-import authenticateToken from "../../middleware/authMiddleware.js";
+import authenticateToken from "../middleware/jwtAuth.js";
 export const orderRouter = express.Router();
 orderRouter.use(authenticateToken);
 orderRouter.get("/test", orderTest);

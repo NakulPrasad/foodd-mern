@@ -4,8 +4,8 @@ import {
   getUserById,
   loginUser,
   removeUser,
-} from "../../controllers/userRouterController/userRouterController.js";
-import authenticateToken from "../../middleware/authMiddleware.js";
+} from "../controllers/user.controller.js";
+import authenticateToken from "../middleware/jwtAuth.js";
 
 export const userRouter = express.Router();
 userRouter.post("/login", loginUser);

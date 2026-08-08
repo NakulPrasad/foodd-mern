@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { IFoodItem } from "../../models/foodModel.js";
-import foodService from "../../services/foodService.js";
+import { IFoodItem } from "../models/food.js";
+import foodService from "../services/foodService.js";
 
 const FoodService = foodService.getInstance();
 

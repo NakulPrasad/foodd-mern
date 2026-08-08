@@ -1,7 +1,7 @@
-import User, { userInterface } from "../../models/userModel.js";
+import User, { userInterface } from "../models/user.js";
 import { Request, Response } from "express";
-import authService from "../../services/authService.js";
-import userService from "../../services/userService.js";
+import authService from "../services/authService.js";
+import userService from "../services/userService.js";
 import { Types } from "mongoose";
 
 const UserService = userService.getInstance();

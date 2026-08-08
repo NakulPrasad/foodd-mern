@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { IOrderModel } from "../../models/orderModel.js";
-import authService from "../../services/authService.js";
-import orderService from "../../services/orderService.js";
-import { IAuthenticatedRequest } from "../../types/auth.js";
+import { IOrderModel } from "../models/order.js";
+import authService from "../services/authService.js";
+import orderService from "../services/orderService.js";
+import { IAuthenticatedRequest } from "../types/auth.js";
 
 const OrderService = orderService.getInstance();
 const AuthService = authService.getInstance();

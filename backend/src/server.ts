@@ -1,5 +1,5 @@
 import app from "./index.js";
-import dbConfig from "./configs/dbConfig2.js";
+import dbConfig from "./configs/db.js";
 
 const PORT = process.env.PORT || 3000;
 

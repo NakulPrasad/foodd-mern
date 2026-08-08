@@ -2,7 +2,7 @@
   import { Request, Response } from "express";
   import { checkSchema, validationResult } from "express-validator";
   import jwt from "jsonwebtoken";
-  import User, { userInterface } from "../models/userModel.js";
+  import User, { userInterface } from "../models/user.js";
   interface userLogin {
     email: string;
     password: string;

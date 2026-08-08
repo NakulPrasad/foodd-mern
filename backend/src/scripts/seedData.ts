@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import FoodCategory from "../models/foodCategory.js";
-import FoodItem from "../models/foodModel.js";
-import Restaurant from "../models/restaurantModel.js";
+import FoodItem from "../models/food.js";
+import Restaurant from "../models/restaurant.js";
 
 dotenv.config({ path: ".env.development" });
 dotenv.config();

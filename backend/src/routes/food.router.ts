@@ -8,8 +8,8 @@ import {
   foodTest,
   getAllFoodCategory,
   getAllFoodItemByRestaurantId,
-} from "../../controllers/foodRouterController/foodRouterController.js";
-import authenticateToken from "../../middleware/authMiddleware.js";
+} from "../controllers/food.controller.js";
+import authenticateToken from "../middleware/jwtAuth.js";
 
 export const foodRouter = express.Router();
 foodRouter.use(authenticateToken);
