@@ -35,7 +35,7 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ element }: PrivateRouteProps) => {
   const { isAuthenticated } = useAuth();
 
-  return isAuthenticated() ? element : <Navigate to="/" />;
+  return isAuthenticated ? element : <Navigate to="/" />;
 };
 
 const router = createBrowserRouter([

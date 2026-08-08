@@ -21,7 +21,7 @@ const Root = () => {
 
     if (token) {
       setAuthToken(token);
-      window.location.href = "/"; // Redirect to a clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
     checkAuth();
   }, []);
