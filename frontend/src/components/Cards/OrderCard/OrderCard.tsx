@@ -6,6 +6,7 @@ import {
   Image,
   Rating,
   Stack,
+  Stepper,
   Text,
   Title,
 } from "@mantine/core";
@@ -86,6 +87,35 @@ const OrderCard = ({ order }: OrderCardProps) => {
           )}
         </Box>
       </Flex>
+
+      {/* Live Order Tracker Stepper */}
+      <Box
+        my="md"
+        p="sm"
+        style={{
+          borderRadius: 12,
+          background: isDelivered ? "var(--mantine-color-body)" : "#fff7ed",
+          border: isDelivered ? "1px solid var(--mantine-color-default-border)" : "1px solid #ffedd5",
+        }}
+      >
+        <Stepper
+          active={isDelivered ? 4 : 2}
+          size="xs"
+          color="orange"
+          iconSize={22}
+          styles={{
+            stepIcon: { fontWeight: 700 },
+            stepLabel: { fontSize: 12, fontWeight: 700 },
+            stepDescription: { fontSize: 10 },
+          }}
+        >
+          <Stepper.Step label="Placed" description="Order received" />
+          <Stepper.Step label="Confirmed" description="Kitchen accepted" />
+          <Stepper.Step label="Preparing" description="Cooking meal" />
+          <Stepper.Step label="On the Way" description="Out for delivery" />
+          <Stepper.Step label="Delivered" description="Doorstep delivery" />
+        </Stepper>
+      </Box>
 
       {/* Order Items Breakdown */}
       <Stack gap="xs">

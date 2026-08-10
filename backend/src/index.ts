@@ -12,6 +12,7 @@ import passport, { passportRoutes } from "./configs/passport.js";
 import dbConfig from "./configs/db.js";
 import corsMiddleware from "./middleware/cors.js";
 import rateLimiter from "./middleware/rate-limiter.js";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -66,8 +67,18 @@ app.use(passport.session());
 /**
  * Base status checking route
  */
+// Health & Status check route
 app.get("/", (req, res) => {
   res.send("FOOD-MERN BACKEND WORKING FINE");
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "FOOD-MERN BACKEND ONLINE",
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV || "development",
+  });
 });
 
 // REST API V1 Routing Entry Point
@@ -75,5 +86,11 @@ app.use("/apiv1", apiRouter);
 
 // Passport Authentication endpoints routing
 passportRoutes(app);
+
+// 404 Not Found Handler
+app.use(notFoundHandler);
+
+// Global Error Handler
+app.use(errorHandler as any);
 
 export default app;

@@ -148,9 +148,25 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       Object.assign(state, initialState);
     },
+
+    replaceCartWithItem: (state, action: PayloadAction<ICartItem>) => {
+      const { price, restaurantId, restaurantName, restaurantImage } = action.payload;
+      state.cartItems = [{ ...action.payload, quantity: 1, price }];
+      state.totalItems = 1;
+      state.totalPrice = price;
+      state.selectedRestaurantId = restaurantId;
+      state.selectedRestaurantName = restaurantName;
+      if (restaurantImage) {
+        state.selectedRestaurantImage = restaurantImage;
+      }
+      state.deliveryFee = price > 200 ? 0 : 30;
+      state.tax = price * 0.18;
+      state.appliedCoupon = null;
+      state.discountAmount = 0;
+    },
   },
 });
 
-export const { addToCart, removeFromCart, applyCoupon, removeCoupon, clearCart } =
+export const { addToCart, removeFromCart, applyCoupon, removeCoupon, clearCart, replaceCartWithItem } =
   cartSlice.actions;
 export default cartSlice.reducer;

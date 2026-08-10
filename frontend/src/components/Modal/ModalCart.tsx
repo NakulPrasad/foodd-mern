@@ -1,10 +1,11 @@
-import { Button, Divider, Image, Modal, ScrollArea, Text } from "@mantine/core";
+import { Button, Divider, Image, Modal, ScrollArea, Text, Group, Stack, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconCheck, IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import { IconCheck, IconChevronDown, IconChevronUp, IconAlertTriangle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useCart } from "../../hooks/useCart";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { replaceCartWithItem } from "../../redux/slices/cartSlice";
 import { IFoodItem } from "../../types";
 import { IValue } from "../../types/cart.types";
 import { RootState } from "../../redux/store";
@@ -19,7 +20,9 @@ interface IModalCartProps {
 
 const ModalCart = (props: IModalCartProps) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { addItem } = useCart();
+  const dispatch = useAppDispatch();
+  const { cart, addItem } = useCart();
+  const [conflictModalOpened, { open: openConflictModal, close: closeConflictModal }] = useDisclosure(false);
   const selectedRestaurant = useAppSelector(
     (state: RootState) => state.restaurant.selected,
   ) as any;
@@ -94,7 +97,25 @@ const ModalCart = (props: IModalCartProps) => {
     quantity: 1,
   };
 
+  const handleConfirmReplaceCart = () => {
+    dispatch(replaceCartWithItem(cartItem as any));
+    toast.info(`Cart updated with items from ${cartItem.restaurantName || "new restaurant"}`);
+    closeConflictModal();
+    if (opened) {
+      close();
+      resetState();
+    }
+  };
+
   const handleAddToCart = () => {
+    if (
+      cart.selectedRestaurantId &&
+      cart.selectedRestaurantId !== cartItem.restaurantId &&
+      cart.cartItems.length > 0
+    ) {
+      openConflictModal();
+      return;
+    }
     addItem(cartItem as any);
     toast.success(`${props.item.name} added to cart! 🎉`);
     close();
@@ -112,6 +133,15 @@ const ModalCart = (props: IModalCartProps) => {
   };
 
   const handleAddClick = () => {
+    if (
+      cart.selectedRestaurantId &&
+      cart.selectedRestaurantId !== cartItem.restaurantId &&
+      cart.cartItems.length > 0
+    ) {
+      openConflictModal();
+      return;
+    }
+
     if (!props.item.options || props.item.options.length < 1) {
       // No customisation needed — add directly
       addItem(cartItem as any);
@@ -326,6 +356,35 @@ const ModalCart = (props: IModalCartProps) => {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      {/* ── Multi-Restaurant Cart Conflict Modal ── */}
+      <Modal
+        opened={conflictModalOpened}
+        onClose={closeConflictModal}
+        title={
+          <Group gap="xs">
+            <IconAlertTriangle size={22} color="#ea580c" />
+            <Title order={4}>Replace cart items?</Title>
+          </Group>
+        }
+        centered
+        radius="lg"
+        size="md"
+      >
+        <Stack gap="md">
+          <Text size="sm" c="dimmed">
+            Your cart contains items from <b>{cart.selectedRestaurantName || "another restaurant"}</b>. Would you like to discard those items and start a new order from <b>{cartItem.restaurantName || "this restaurant"}</b>?
+          </Text>
+          <Group justify="flex-end" gap="xs">
+            <Button variant="default" onClick={closeConflictModal}>
+              Cancel
+            </Button>
+            <Button color="orange" onClick={handleConfirmReplaceCart}>
+              Discard &amp; Add
+            </Button>
+          </Group>
+        </Stack>
       </Modal>
 
       {/* ── ADD trigger button on the MenuCard ── */}

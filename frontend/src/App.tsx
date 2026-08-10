@@ -99,7 +99,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <Provider store={store}>
-      <MantineProvider theme={Theme}>
+      <MantineProvider theme={Theme} defaultColorScheme="auto">
         <RouterProvider router={router} />
       </MantineProvider>
     </Provider>

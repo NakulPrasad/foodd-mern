@@ -13,6 +13,9 @@ import {
   Text,
   Modal,
   TextInput,
+  ActionIcon,
+  useMantineColorScheme,
+  useComputedColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -29,6 +32,8 @@ import {
   IconToolsKitchen2,
   IconCrosshair,
   IconCheck,
+  IconSun,
+  IconMoon,
 } from "@tabler/icons-react";
 import { memo, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -42,6 +47,7 @@ import { clearAuth } from "../../redux/slices/authSlice";
 import { RootState } from "../../redux/store";
 import { IRestaurant } from "../../types";
 import LoginDrawer from "../Drawer/LoginDrawer";
+import CartDrawer from "../Drawer/CartDrawer";
 import Spinner from "../Loader/Spinner";
 import classes from "./NavBar.module.css";
 import IconNonVeg from "/icons/non-veg-icon.png";
@@ -49,6 +55,10 @@ import IconVeg from "/icons/veg-icon.png";
 import Logo from "/img/logo/LOGO-bgremove.png";
 
 const NavBar = () => {
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light");
+  const toggleColorScheme = () =>
+    setColorScheme(computedColorScheme === "dark" ? "light" : "dark");
   const { removeUser } = useUser();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAppSelector(
@@ -56,6 +66,8 @@ const NavBar = () => {
   );
   const { cart } = useCart();
   const [mobileMenuOpened, { open: openMobileMenu, close: closeMobileMenu }] =
+    useDisclosure(false);
+  const [cartDrawerOpened, { open: openCartDrawer, close: closeCartDrawer }] =
     useDisclosure(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
@@ -408,13 +420,26 @@ const NavBar = () => {
 
           {/* RIGHT — Cart + Auth (desktop) */}
           <div className={classes.rightSection}>
+            {/* Theme Mode Toggle */}
+            <ActionIcon
+              variant="light"
+              color="orange"
+              onClick={() => toggleColorScheme()}
+              title="Toggle Dark / Light Mode"
+              size="lg"
+              radius="md"
+              aria-label="Toggle theme"
+            >
+              {computedColorScheme === "dark" ? <IconSun size={18} /> : <IconMoon size={18} />}
+            </ActionIcon>
+
             {/* Cart button with hover dropdown */}
             <div
               className={classes.cartWrap}
               onMouseEnter={() => setCartOpen(true)}
               onMouseLeave={() => setCartOpen(false)}
             >
-              <button className={classes.cartBtn}>
+              <button className={classes.cartBtn} onClick={openCartDrawer}>
                 <IconShoppingCart size={20} stroke={1.8} />
                 <span className={classes.cartLabel}>Cart</span>
                 {cartCount > 0 && (
@@ -702,6 +727,9 @@ const NavBar = () => {
           )}
         </Stack>
       </Drawer>
+
+      {/* ── Slide-in Cart Drawer ── */}
+      <CartDrawer opened={cartDrawerOpened} onClose={closeCartDrawer} />
     </>
   );
 };

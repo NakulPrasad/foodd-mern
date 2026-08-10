@@ -51,15 +51,23 @@
   }
 }
 
+body {
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
 h1, .h1 {
   letter-spacing: -0.03em;
-  color: #0f172a;
+  color: var(--mantine-color-text);
   font-weight: 800;
 }
 
 h2, h3, h4, h5 {
   letter-spacing: -0.02em;
-  color: #1e293b;
+  color: var(--mantine-color-text);
 }
 
 /* ── Modern React-Toastify Notification Override ── */
@@ -121,4 +129,32 @@ h2, h3, h4, h5 {
 
 .Toastify__close-button:hover {
   opacity: 1 !important;
+}
+
+/* ── Keyframes & Micro-Animations ── */
+@keyframes bump {
+  0% { transform: scale(1); }
+  10% { transform: scale(1.25); }
+  30% { transform: scale(0.9); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+
+button, a {
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.97);
 }
