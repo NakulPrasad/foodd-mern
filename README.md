@@ -1,8 +1,4 @@
 <br/>
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/7c93c911-9faa-4d5d-b4c9-a5d4709596f1" alt="Foodd Banner" width="100%" />
-</p>
-
 <h1 align="center">🍔 Foodd — Full-Stack Food Delivery Platform</h1>
 
 <p align="center">
