@@ -29,7 +29,7 @@ passport.use(
     {
       clientID: getGoogleClientId() || "placeholder_client_id.apps.googleusercontent.com",
       clientSecret: getGoogleClientSecret() || "placeholder_client_secret",
-      callbackURL: `${getBackendUrl()}/auth/google/callback`,
+      callbackURL: "/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       done(null, profile);
@@ -119,7 +119,14 @@ export const passportRoutes = (app: any) => {
       });
     }
 
-    passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
+    const host = req.get("host");
+    const protocol = req.protocol;
+    const dynamicCallbackURL = `${protocol}://${host}/auth/google/callback`;
+
+    passport.authenticate("google", {
+      scope: ["profile", "email"],
+      callbackURL: dynamicCallbackURL,
+    } as any)(req, res, next);
   };
 
   app.get("/apiv1/auth/google", initiateGoogleAuth);
@@ -127,9 +134,14 @@ export const passportRoutes = (app: any) => {
 
   // Google OAuth Callback middleware
   const handleGoogleCallbackMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const host = req.get("host");
+    const protocol = req.protocol;
+    const dynamicCallbackURL = `${protocol}://${host}/auth/google/callback`;
+
     passport.authenticate("google", {
       failureRedirect: `${getFrontendUrl()}?error=google_oauth_failed`,
-    })(req, res, next);
+      callbackURL: dynamicCallbackURL,
+    } as any)(req, res, next);
   };
 
   app.get("/auth/google/callback", handleGoogleCallbackMiddleware, handleOAuthCallback);
