@@ -6,7 +6,7 @@
 <h1 align="center">🍔 Foodd — Full-Stack Food Delivery Platform</h1>
 
 <p align="center">
-  A production-grade, full-stack food delivery web application built with the MERN stack, featuring real-time cart management, Google OAuth, GraphQL, and a fully mobile-responsive UI.
+  A production-grade, full-stack food delivery web application built with the MERN stack, featuring real-time cart management, Google OAuth, Stripe payments, slide-in cart drawer, live order tracking, and a fully mobile-responsive dark/light UI.
 </p>
 
 <p align="center">
@@ -27,9 +27,9 @@
 
 ## 📌 About The Project
 
-**Foodd** is a fully-featured, production-ready food delivery platform inspired by Swiggy/Zomato. Users can browse restaurants, explore menus, customize orders, manage their cart across sessions, and complete checkout — all with a seamless, mobile-first experience.
+**Foodd** is a fully-featured, production-ready food delivery platform inspired by Swiggy/Zomato. Users can browse restaurants, explore menus, customise orders with portion size variants, manage their cart with a slide-in drawer, apply coupon codes, and complete checkout via Stripe or COD — all with a seamless, mobile-first dark/light experience.
 
-The project demonstrates expertise across the entire stack: from a stateless JWT + Google OAuth authentication system, to a GraphQL-enabled Express API, to a responsive React UI with global state management via Redux Toolkit.
+The project demonstrates expertise across the entire stack: from a stateless JWT + Google OAuth authentication system, to an Express REST API with centralised error handling, to a responsive React UI with global state management via Redux Toolkit.
 
 ---
 
@@ -48,31 +48,47 @@ The project demonstrates expertise across the entire stack: from a stateless JWT
 - Veg / Non-veg indicators on all food items
 - Coupon / Deals carousel per restaurant
 
-### 🛒 Cart & Order Management
-- **Persistent Redux cart** — add, remove, update quantity of items
-- Real-time cart summary in the NavBar dropdown (desktop) and mobile drawer
+### 🛒 Advanced Cart & Drawer
+- **Slide-in Cart Drawer** (Mantine Drawer) — full-height interactive drawer with quantity `+`/`−` controls and per-item custom cooking instructions
+- **Multi-restaurant conflict guard** — modal warning when adding items from a different restaurant, with option to clear and replace cart
+- Persistent Redux cart — add, remove, update quantity of items
 - Cart auto-clears on successful order placement
-- Full order history on the Orders / Profile page
-- Supports **Google OAuth users** — `customerId` stored as string (not ObjectId) to handle both auth providers
+- Real-time itemised bill (Item Total · Delivery Fee · GST · Discount · **To Pay**)
+
+### 📦 Checkout & Payments
+- Multi-address delivery selection with visual highlight of selected address
+- **Coupon code input** with live discount application and success feedback
+- **Visual bill breakdown** — GST, delivery fee, coupon discount, and grand total
+- No-contact delivery opt-in option
+- **Stripe card payments** (test mode) + COD option
+- Pay button gated — disabled until a delivery address is selected
+
+### 📋 Order Tracking
+- Full order history on the Orders / Profile page with status filters (All · Delivered · In Progress)
+- **Live Order Tracker Stepper** — 5-step timeline: Placed → Confirmed → Preparing → On the Way → Delivered
+- Receipt, Help, and Reorder actions per order
+- Star rating displayed per order
 
 ### 📍 Location
 - **Geolocation-based city detection** using the browser Geolocation API + reverse geocoding
 - Restaurants filtered and displayed per city
 
-### 📦 Checkout
-- Multi-address delivery selection with visual highlight of selected address
-- Pay button gated — disabled until a delivery address is selected
-- Bill breakdown: item total, delivery fee, GST, grand total
-- No-contact delivery opt-in option
+### 🌓 Dark / Light Mode
+- System-aware colour scheme (`defaultColorScheme="auto"`) via Mantine v7
+- Toggle button in navbar persisted to `localStorage`
+- All surfaces (body, headings, cards) follow Mantine CSS variables
 
 ### 📱 Mobile Responsive UI
 - Hamburger menu → slide-in drawer with full nav + cart + auth on mobile
 - Responsive grid: 1 col (mobile) → 2 (tablet) → 4 (desktop) for restaurants
 - Mobile-first CSS variables that scale up at breakpoints
-- Overflow and box-model fixes (`overflow-x: hidden`, `box-sizing: border-box` globally)
+- CSS micro-animations: `bump`, `shimmer`, `pulseGlow` keyframes on interactive elements
 
 ### ⚙️ Backend / API
 - **REST API** (primary) + **GraphQL** endpoint via `graphql-http` (dev UI via `ruru`)
+- **Centralised error handling middleware** — standard `{ success, message }` JSON error responses
+- **404 Not Found handler** for unknown API routes
+- **Health check endpoint** — `GET /health` returns uptime and environment
 - Request logging with `morgan`
 - CORS with custom origin validation (blocks unknown origins)
 - Rate limiting via `express-rate-limit` (100 req/min per IP)
@@ -86,9 +102,10 @@ The project demonstrates expertise across the entire stack: from a stateless JWT
 | Layer | Technology |
 |---|---|
 | **Frontend** | React 18, TypeScript, Vite, Redux Toolkit (RTK Query), Mantine UI v7, React Router v7 |
-| **Backend** | Node.js, Express.js, TypeScript (ESM), Passport.js |
+| **Backend** | Node.js 24.x, Express.js, TypeScript (ESM), Passport.js |
 | **Database** | MongoDB Atlas, Mongoose ODM |
 | **Auth** | JWT (`jsonwebtoken`), Google OAuth 2.0, bcrypt |
+| **Payments** | Stripe (Checkout Sessions + Webhook verification) |
 | **API** | REST + GraphQL (`graphql-http`, `graphql-yoga`) |
 | **Testing** | Vitest, React Testing Library |
 | **Deployment** | Vercel (Frontend + Backend), MongoDB Atlas |
@@ -105,36 +122,62 @@ The project demonstrates expertise across the entire stack: from a stateless JWT
 | **Passport.js as OAuth abstraction** | Isolated Google OAuth callback from core auth logic. Both credential and OAuth logins produce the same JWT payload, so all downstream routes are auth-method agnostic. |
 | **customerId as String in Order model** | Google OAuth IDs are long numeric strings, not valid MongoDB ObjectIds. Storing as `String` makes the order system work for both auth providers without a join or lookup. |
 | **DB connect at server startup** | Previous per-request reconnect was unawaited and could race with incoming requests. `await db.connect()` before `app.listen()` guarantees DB is ready before serving traffic. |
+| **Centralised error middleware** | A single `errorHandler` + `notFoundHandler` at the bottom of `index.ts` prevents accidental stack trace leaks in production and standardises all error JSON shapes. |
 | **Mobile-first CSS variables** | Section margin CSS variables start at `1rem` on mobile and scale up via `@media` breakpoints, letting all screens use the same class names without `!important` overrides. |
 
 ---
 
 ## 🖼️ Screenshots
 
-<img width="1916" height="1077" alt="Home" src="https://github.com/user-attachments/assets/2418c6e8-2218-4ea5-b336-b26e26424cfd" />
-<br/>
-<img width="1919" height="1078" alt="Restaurant Menu" src="https://github.com/user-attachments/assets/5bf9a997-030c-43c4-a3f3-384eb44bc0a9" />
-<br/>
-<img width="1919" height="937" alt="Checkout" src="https://github.com/user-attachments/assets/576b8abb-9df7-4cef-b867-d2b7e657a3b7" />
-<br/>
-<img width="1918" height="1067" alt="Orders" src="https://github.com/user-attachments/assets/602c67e8-f54d-4a80-976d-00b7a8b2a748" />
+### 🏠 Home — Hero, Cuisine Filter & Restaurant Cards
+![Home Page](./screenshots/Screenshot%202026-08-26%20215130.png)
+
+### 🍽️ Home — Top Chains & Explore by Cuisine
+![Restaurant Cards & Cuisine Grid](./screenshots/Screenshot%202026-08-26%20215141.png)
+
+### 🏪 Restaurant Page — Hero, Info Card & Deals Carousel
+![Restaurant Page](./screenshots/Screenshot%202026-08-26%20215200.png)
+
+### 🧾 Customise Your Order — Portion Size Variants Modal
+![Order Customisation Modal](./screenshots/Screenshot%202026-08-26%20215214.png)
+
+### 🛒 Slide-in Cart Drawer — Bill Breakdown & Checkout CTA
+![Cart Drawer](./screenshots/Screenshot%202026-08-26%20215228.png)
+
+### 📦 Checkout — Address Selection, Coupon Applied & Bill Details
+![Checkout Page](./screenshots/Screenshot%202026-08-26%20215340.png)
+
+### 💳 Payment Modal — Stripe / UPI / COD Selection
+![Payment Modal](./screenshots/Screenshot%202026-08-26%20215351.png)
+
+### 📋 Orders & Profile — Live Order Tracker Stepper
+![Order History & Tracker](./screenshots/Screenshot%202026-08-26%20215405.png)
 
 ---
 
-## 🗺️ Roadmap — Features To Be Added
+## 🗺️ Roadmap
 
-- [ ] **Real payment gateway** — Razorpay / Stripe integration for actual payment processing
-- [ ] **Live order tracking** — WebSocket-based real-time delivery status updates (Confirmed → Preparing → Out for Delivery → Delivered)
+### ✅ Completed
+- [x] Google OAuth 2.0 + Email/Password dual auth
+- [x] Stripe payment integration (Checkout Sessions)
+- [x] Slide-in Cart Drawer with quantity controls & custom cooking instructions
+- [x] Multi-restaurant cart conflict guard
+- [x] Coupon code system with live discount
+- [x] Visual bill breakdown (GST · Delivery · Discount · Total)
+- [x] Live Order Tracker 5-step stepper
+- [x] Dark / Light mode (system-aware + manual toggle)
+- [x] CSS micro-animations (bump, shimmer, pulseGlow)
+- [x] Centralised error handling + 404 handler + health check
+
+### 🔜 Planned
+- [ ] **Real-time order status** — WebSocket-based updates pushed from backend
 - [ ] **User profile management** — Edit name, phone, saved addresses, and avatar
 - [ ] **Push notifications** — Browser/PWA push for order status updates
-- [ ] **Search & discovery** — Full-text search across restaurants and food items
 - [ ] **Ratings & reviews** — Post-delivery restaurant and item ratings
-- [ ] **Coupon system** — Backend-validated coupon codes with discount application at checkout
-- [ ] **Admin dashboard** — Separate role-gated dashboard to manage restaurants, food items, and orders (separate repo scaffolded)
+- [ ] **Admin dashboard** — Role-gated dashboard to manage restaurants, food items, and orders
 - [ ] **Refresh token mechanism** — Rotate JWTs silently instead of forcing re-login on expiry
 - [ ] **PWA support** — Installable, offline-capable progressive web app
-- [ ] **Dark mode** — Mantine color scheme toggle persisted to localStorage
-- [ ] **E2E tests** — Playwright test suite for the critical user journeys (login → order → checkout)
+- [ ] **E2E tests** — Playwright test suite for critical user journeys (login → order → checkout)
 
 ---
 
@@ -145,6 +188,7 @@ The project demonstrates expertise across the entire stack: from a stateless JWT
 - Node.js 18+
 - MongoDB Atlas account (or local MongoDB)
 - Google Cloud Console project with OAuth 2.0 credentials
+- Stripe account (for payment integration)
 
 ### Installation
 
@@ -169,6 +213,8 @@ SESSION_SECRET=your_session_secret_here
 SECRET_JWT=your_jwt_secret_here
 GOOGLE_CLIENTID=your_google_client_id
 GOOGLE_CLIENTSECRET=your_google_client_secret
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 BACKEND_URL=http://localhost:3000
 FRONTEND_URL=http://localhost:5173
 PORT=3000
